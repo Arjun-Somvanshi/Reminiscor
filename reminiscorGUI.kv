@@ -1,0 +1,161 @@
+Screen_Manager:
+	LoginWindow:
+	MainWindow:
+<Password_Size_Popup>: #    Main Window Password Error
+	Label:
+		text: 'Hello error'
+		size_hint: (.1,.1 )
+		pos_hint: {'center_x': 0.5,'center_y': 0.5 }
+<UserError>:
+	Label:
+		text: 'This PC already has a user!'
+		size_hint: (.1, .1)
+		pos_hint: {'center_x': 0.5, 'center_y':0.5}
+<SignUp_Pop>:
+	user:user
+	p1:p1
+	p2:p2
+	cred_error:cred_error
+	signup:signup
+	Label:
+		markup: True
+		text: 'This is the Sign-Up page. A user [color=#e8c209]doesn\'t[/color] exist!\nPlease remember your [color=#e8c209]Master Password[/color] and [color=#e8c209]Username[/color]'
+		font_size: 15
+		size_hint: (.1, .1)
+		pos_hint: {'center_x': 0.5,'top': 1 }	
+	Label:
+		id: cred_error
+		text:''
+		pos_hint: {'center_x': 0.3,'center_y':0.1}
+		size_hint: (0.1, 0.1)
+		color: [1,0,0,1]
+	TextInput: 
+		id: user
+		hint_text: 'Username'
+		multiline: False
+		pos_hint: {'center_x': 0.3, 'top': 0.8}
+		size_hint: (0.50, 0.09)
+	TextInput:
+		id: p1
+		hint_text: 'Master Password' 
+		multiline: False
+		pos_hint: {'center_x': 0.3, 'top': 0.6}
+		size_hint: (0.50, 0.09)
+	TextInput:
+		id: p2
+		hint_text: 'Confirm Master Password' 
+		multiline: False
+		pos_hint: {'center_x': 0.3, 'top': 0.4}
+		size_hint: (0.50, 0.09)
+	Button:
+		id:signup
+		text:'Sign-Up!'
+		pos_hint: {'center_x': 0.8, 'center_y': 0.1}
+		size_hint: (0.3, 0.1)
+		on_release:
+			root.check()
+
+<LoginWindow>:
+	username:username
+	p:p
+	errortext:errortext
+	user_check:user_check
+	name: 'Login'
+	FloatLayout:
+		Label:
+			id:errortext 
+			text: ''
+			pos_hint: {'center_x': 0.5,'center_y': 0.9}
+			size_hint: (.1, .1)
+		TextInput:
+			id:username 
+			hint_text: 'Username'
+			multiline: False
+			pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+			size_hint: (0.20, 0.06)
+		TextInput:
+			id: p
+			hint_text: 'Master Password' 
+			multiline: False
+			pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+			size_hint: (0.20, 0.06)
+		Button:
+			text: 'Submit'
+			pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
+			size_hint: (0.20, 0.06)
+			on_release:
+				app.root.current='Main' if root.Login_Authenticate() else 'Login'
+				root.manager.transition.direction= "left"
+		Button:
+			text: 'Sign-Up'
+			pos_hint: {'center_x': 0.5 ,'center_y': 0.2 }
+			size_hint: (0.20, 0.06)
+			on_release:
+				root.signup_check()
+		Label:
+			id:user_check
+			text: ''
+			pos_hint: {'center_x': 0.5,'center_y': 0.8}
+			size_hint: (.1, .1)
+			color:[1,0,0,1]
+
+<MainWindow>:
+	name: 'Main'
+	passw:passw
+	description:description
+	username:username
+	n:n
+	notes:notes
+	FloatLayout:
+		TextInput:
+			id: description
+			hint_text: 'Entry Title'
+			multiline: False
+			pos_hint: {'center_x': 0.75 ,'center_y': 0.65 }
+			size_hint: (0.35, 0.08)
+		TextInput:
+			id: username
+			hint_text: 'Username'
+			multiline: False
+			pos_hint: {'center_x': 0.75 ,'center_y': 0.55 }
+			size_hint: (0.35, 0.08)
+		TextInput:
+			id: passw
+			hint_text: 'Password'
+			multiline: False
+			pos_hint: {'center_x': 0.75 ,'center_y': 0.35 }
+			size_hint: (0.35, 0.08)
+		TextInput:
+			id: notes
+			halign: 'center' 
+			hint_text: 'Notes'
+			multiline: True
+			pos_hint: {'center_x': 0.75 ,'center_y': 0.22 }
+			size_hint: (0.35, 0.15)
+		TextInput:
+			id: n
+			hint_text: 'Password\nSize'
+			multiline: False
+			pos_hint: {'center_x': 0.87,'center_y': 0.45}
+			size_hint: (0.1, 0.08)
+		Button: 
+			text: 'Generate Password'
+			pos_hint: {'center_x': 0.68 ,'center_y': 0.45 }
+			size_hint: (0.20, 0.06)
+			on_release:
+				root.random_password()
+		Button:
+			text: 'Save Password'
+			pos_hint: {'center_x': 0.85 ,'center_y': 0.1 }
+			size_hint: (0.15, 0.06)
+			on_release:
+				root.Add_New_Password()
+				
+		Button: 
+			text: 'Back to Login Screen'
+			pos_hint: {'x': 0 ,'top': 1 }
+			size_hint: (0.20, 0.06)
+			on_release:
+				app.root.current='Login'
+				root.manager.transition.direction= "right"
+
