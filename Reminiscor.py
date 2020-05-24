@@ -1,8 +1,13 @@
-import kivy
+
 from kivy.config import Config
+Config.set('graphics', 'width',  800)
+Config.set('graphics', 'height', 600)
+Config.set('graphics', 'resizable', False)
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from PassGen import *
@@ -15,6 +20,11 @@ from EnigmaModule import *
 from FileHandling import *
 import os
 from kivy.clock import Clock
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
+from kivy.core.window import Window
+from functools import partial
 
 MonitorData2=None
 if os.path.isfile(HomeDir('Data2.txt')):
@@ -156,6 +166,39 @@ class MainWindow(Screen):
 			ColorChange(self.description,True,'Invalid Add')
 			ColorChange(self.n,True,'Invalid\nAdd')
 			ColorChange(self.passw,True,'Invalid Add')
+	def screen3(self):
+		x=Password_Screen()
+class Password_Screen(Screen):
+	passn=None
+	def __init__(self, **kwargs):
+		super(Password_Screen,self).__init__(**kwargs)
+		password_list=ReadDecrypt(HomeDir('Data3.txt'))
+		pass_len=len(password_list)
+		layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
+		searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'center_x':0.5,'top':0},halign='center')
+		layout.add_widget(searchbar)
+		layout.bind(minimum_height=layout.setter('height'))
+		if pass_len>0:
+			for i in password_list:
+				entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
+				btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
+				layout.add_widget(btn)
+			root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
+			root.add_widget(layout)
+			self.add_widget(root)
+		else:
+			btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
+			self.add_widget(btn)
+	def poppassword(self,entrydata,*args):
+		design=passwordpopup()
+		design.ids.title.text+=entrydata[0]
+		design.ids.username.text+=entrydata[1]
+		design.ids.password.text+=entrydata[2]
+		design.ids.notes.text+=entrydata[3]
+		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400))
+		entry.open()
+class passwordpopup(FloatLayout):
+	pass
 class Screen_Manager(ScreenManager):
 	pass
 kv=Builder.load_file("reminiscorGUI.kv")

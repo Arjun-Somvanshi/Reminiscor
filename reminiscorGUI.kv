@@ -1,6 +1,7 @@
 Screen_Manager:
 	LoginWindow:
 	MainWindow:
+	Password_Screen:
 <Password_Size_Popup>: #    Main Window Password Error
 	Label:
 		text: 'Hello error'
@@ -129,9 +130,9 @@ Screen_Manager:
 			id: notes
 			halign: 'center' 
 			hint_text: 'Notes'
-			multiline: True
+			multiline: False
 			pos_hint: {'center_x': 0.75 ,'center_y': 0.22 }
-			size_hint: (0.35, 0.15)
+			size_hint: (0.35, 0.08)
 		TextInput:
 			id: n
 			hint_text: 'Password\nSize'
@@ -158,4 +159,45 @@ Screen_Manager:
 			on_release:
 				app.root.current='Login'
 				root.manager.transition.direction= "right"
+		Button: 
+			text: 'View Passwords'
+			pos_hint: {'x': 0.8 ,'top': 1 }
+			size_hint: (0.20, 0.06)
+			on_release:
+				app.root.current='PassDisp'
+				root.manager.transition.direction= "left"
+				root.screen3()
+
+<Password_Screen>:
+	name: 'PassDisp'
+	FloatLayout:
+		Button:
+			text:'Go Back'
+			size_hint: (0.2,0.06)
+			pos_hint: {'x': 0 ,'top': 1 }
+			on_release:
+				app.root.current='Main'
+				root.manager.transition.direction= "right"
+<passwordpopup>:
+	Label:
+		id: title
+		text:'Title: '
+		size_hint:(.1,.1)
+		pos_hint: {'center_x': 0.5, 'top': 0.8}
+	Label:
+		id: username
+		text:'Username: '
+		size_hint:(.1,.1)
+		pos_hint: {'center_x': 0.5, 'top': 0.7}
+	Label:
+		id: password
+		text:'Password: '
+		size_hint:(.1,.1)
+		pos_hint: {'center_x': 0.5, 'top': 0.6}
+	Label:
+		id:notes
+		text:'Notes: '
+		size_hint:(.1,.1)
+		pos_hint: {'center_x': 0.5, 'top': 0.5}
+
 
