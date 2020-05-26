@@ -170,34 +170,31 @@ Screen_Manager:
 
 <Password_Screen>:
 	name: 'PassDisp'
-	FloatLayout:
-		Button:
-			text:'Go Back'
-			size_hint: (0.2,0.06)
-			pos_hint: {'x': 0 ,'top': 1 }
-			on_release:
-				app.root.current='Main'
-				root.manager.transition.direction= "right"
 <passwordpopup>:
 	Label:
 		id: title
 		text:'Title: '
 		size_hint:(.1,.1)
-		pos_hint: {'center_x': 0.5, 'top': 0.8}
+		pos_hint: {'x': 0.2, 'top': 0.8}
 	Label:
 		id: username
 		text:'Username: '
 		size_hint:(.1,.1)
-		pos_hint: {'center_x': 0.5, 'top': 0.7}
+		pos_hint: {'x': 0.2, 'top': 0.7}
 	Label:
-		id: password
 		text:'Password: '
 		size_hint:(.1,.1)
-		pos_hint: {'center_x': 0.5, 'top': 0.6}
+		pos_hint: {'x': 0.2, 'top': 0.6}
+	TextInput:
+		id: password
+		multiline: False
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.6, 'top': 0.6}
 	Label:
 		id:notes
 		text:'Notes: '
 		size_hint:(.1,.1)
-		pos_hint: {'center_x': 0.5, 'top': 0.5}
+		pos_hint: {'x': 0.2, 'top': 0.5}
 
 

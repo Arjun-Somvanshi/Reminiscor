@@ -172,23 +172,45 @@ class Password_Screen(Screen):
 	passn=None
 	def __init__(self, **kwargs):
 		super(Password_Screen,self).__init__(**kwargs)
-		password_list=ReadDecrypt(HomeDir('Data3.txt'))
-		pass_len=len(password_list)
-		layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
-		searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'center_x':0.5,'top':0},halign='center')
-		layout.add_widget(searchbar)
-		layout.bind(minimum_height=layout.setter('height'))
-		if pass_len>0:
-			for i in password_list:
-				entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
-				btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
-				layout.add_widget(btn)
-			root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
-			root.add_widget(layout)
-			self.add_widget(root)
-		else:
-			btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
-			self.add_widget(btn)
+		def showlist(instance):
+			if len(mainlayout.children)>1:
+				a=0
+				for i in mainlayout.children:
+					if a==0:
+						mainlayout.remove_widget(i)
+			password_list=ReadDecrypt(HomeDir('Data3.txt'))
+			pass_len=len(password_list)
+			layout1 = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
+			layout1.bind(minimum_height=layout1.setter('height'))
+			if pass_len>0:
+				for i in password_list:
+					entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
+					btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
+					layout1.add_widget(btn)
+				root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
+				root.add_widget(layout1)
+				mainlayout.add_widget(root)
+			else:
+				btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
+				layout1.add_widget(btn)
+				root.add_widget(layout1)
+				mainlayout.add_widget(root)
+		
+		mainlayout=BoxLayout(orientation='horizontal',spacing=10)
+		layout0=FloatLayout()
+
+		searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'center_x':0.5,'top':1},halign='center')
+		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
+		Refreshbtn=Button(text='Refresh List', size_hint=(.3,.08), pos_hint={'x':0.5,'y':0},on_release=showlist)
+		layout0.add_widget(Refreshbtn)
+		layout0.add_widget(Backbtn)
+		layout0.add_widget(searchbar)
+		mainlayout.add_widget(layout0)
+		self.add_widget(mainlayout)
+		
+	def screenswitch(self,instance):
+		self.manager.current = 'Main'
+		self.manager.transition.direction='right'
 	def poppassword(self,entrydata,*args):
 		design=passwordpopup()
 		design.ids.title.text+=entrydata[0]
@@ -209,6 +231,8 @@ class ReminiscorApp(App):
 			if CheckModified(MonitorData2,ModifiedFileTime(HomeDir('Data2.txt'))) and not MonitorData2==None:
 				self.get_running_app().stop()
 	def build(self):
+		root=Password_Screen()
+		root.add_widget(Password_Screen(name='PassDisp'))
 		Clock.schedule_interval(self.destruct, 1.0/60.0)
 		return kv
 if __name__ == '__main__':
