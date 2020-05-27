@@ -172,7 +172,7 @@ class Password_Screen(Screen):
 	passn=None
 	def __init__(self, **kwargs):
 		super(Password_Screen,self).__init__(**kwargs)
-		def showlist(instance):
+		def showlist(*args):
 			if len(mainlayout.children)>1:
 				a=0
 				for i in mainlayout.children:
@@ -192,13 +192,13 @@ class Password_Screen(Screen):
 				mainlayout.add_widget(root)
 			else:
 				btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
+				root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 				layout1.add_widget(btn)
 				root.add_widget(layout1)
 				mainlayout.add_widget(root)
 		
 		mainlayout=BoxLayout(orientation='horizontal',spacing=10)
 		layout0=FloatLayout()
-
 		searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'center_x':0.5,'top':1},halign='center')
 		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
 		Refreshbtn=Button(text='Refresh List', size_hint=(.3,.08), pos_hint={'x':0.5,'y':0},on_release=showlist)
@@ -206,6 +206,8 @@ class Password_Screen(Screen):
 		layout0.add_widget(Backbtn)
 		layout0.add_widget(searchbar)
 		mainlayout.add_widget(layout0)
+		if os.path.isfile(HomeDir('Data3.txt')):
+			showlist()
 		self.add_widget(mainlayout)
 		
 	def screenswitch(self,instance):
@@ -231,8 +233,6 @@ class ReminiscorApp(App):
 			if CheckModified(MonitorData2,ModifiedFileTime(HomeDir('Data2.txt'))) and not MonitorData2==None:
 				self.get_running_app().stop()
 	def build(self):
-		root=Password_Screen()
-		root.add_widget(Password_Screen(name='PassDisp'))
 		Clock.schedule_interval(self.destruct, 1.0/60.0)
 		return kv
 if __name__ == '__main__':
