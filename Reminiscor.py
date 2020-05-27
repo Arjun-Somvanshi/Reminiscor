@@ -6,6 +6,7 @@ Config.set('graphics', 'resizable', False)
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.properties import ObjectProperty
@@ -31,6 +32,8 @@ if os.path.isfile(HomeDir('Data2.txt')):
 	MonitorData2=ModifiedFileTime(HomeDir('Data2.txt'))
 else:
 	MonitorData2=None
+class signup_error(FloatLayout):
+	pass
 class Password_Added(FloatLayout):
 	pass
 class UserError(FloatLayout):
@@ -59,15 +62,17 @@ class SignUp_Pop(FloatLayout):
 			file.close()
 			HideFile(HomeDir('Data3.txt'))
 			WriteEncrypt(HomeDir('Data1.txt'),self.user.text+sep+self.p1.text)
-			self.cred_error.text='You\'ve successfully signed up!'
-			self.cred_error.color=[1,1,1,1]
+			label=Label(text='You\'ve successfully signed up!', size_hint=(0.1,0.1), pos_hint={'center_x':0.5,'center_y':0.225})
+			self.add_widget(label)
 			ColorChange(self.user,False,'Username')
 			ColorChange(self.p1,False,'Master Password')
 			ColorChange(self.p2,False,'Confirm Master Passwords')
 			return True
 		else:
-			self.cred_error.color=[1,0,0,1]
-			self.cred_error.text='A Username should contain 8 characters.\nPasswords should match and contain atleast 10 characters.'
+			errorpop=signup_error()
+			error_win=Popup(title='Sign-Up Failed', content=errorpop,size_hint=(None,None),size=(400,250))
+			error_win.open()
+			errorpop.ids.close.bind(on_release=error_win.dismiss)
 			ColorChange(self.user,True,'Invalid')
 			ColorChange(self.p1,True,'Invalid')
 			ColorChange(self.p2,True,'Invalid')
@@ -78,14 +83,16 @@ class LoginWindow(Screen):
 	p=ObjectProperty()
 	errortext=ObjectProperty()
 	user_check=ObjectProperty()
+	def close(self):
+		self.win.dismiss()
 	def user_error_popup(self):
 		design=UserError()
 		UserExists=Popup(title='User Error Encountered!',title_align='center',content=design,size_hint=(None,None),size=(400,200))
 		UserExists.open()
 	def signup_pop(self):
 		design=SignUp_Pop()
-		win=Popup(title='Sign-Up Screen',title_align='center',content=design,size_hint=(None,None),size=(400,450))
-		win.open()
+		self.win=Popup(title='Sign-Up Screen',title_align='center',content=design,size_hint=(None,None),size=(400,450))
+		self.win.open()
 	def signup_check(self):
 		if not CheckUser():
 			self.signup_pop()
@@ -200,9 +207,11 @@ class Password_Screen(Screen):
 		mainlayout=BoxLayout(orientation='horizontal',spacing=10)
 		layout0=FloatLayout()
 		searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'center_x':0.5,'top':1},halign='center')
+		searchbtn=Button(text='Q', size_hint=(None,None),size =(40,40),pos_hint={'center_x':0.87,'top':1},halign='center')
 		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
 		Refreshbtn=Button(text='Refresh List', size_hint=(.3,.08), pos_hint={'x':0.5,'y':0},on_release=showlist)
 		layout0.add_widget(Refreshbtn)
+		layout0.add_widget(searchbtn)
 		layout0.add_widget(Backbtn)
 		layout0.add_widget(searchbar)
 		mainlayout.add_widget(layout0)

@@ -12,11 +12,25 @@ Screen_Manager:
 		text: 'This PC already has a user!'
 		size_hint: (.1, .1)
 		pos_hint: {'center_x': 0.5, 'center_y':0.5}
+<signup_error>:
+	Label:
+		markup: True
+		text:'The username and password protect [color=#e8c209]all your passwords in Reminiscor.[/color]\n\nTo keep your data safe on your device we have set the default allowable username size to [color=#e8c209]eight characters[/color] and the password size to [color=#e8c209]ten characters.[/color]'
+		text_size:(self.width,None)
+		size_hint: (None, .1)
+		width:350
+		pos_hint: {'center_x': 0.5, 'center_y': 0.66}
+	Button:
+		id: close
+		text:'Back to Signup'
+		halign: 'center'
+		text_size: (self.width,None)
+		pos_hint: {'center_x':0.8,'center_y':0.1}
+		size_hint:(0.3,0.18)
 <SignUp_Pop>:
 	user:user
 	p1:p1
 	p2:p2
-	cred_error:cred_error
 	signup:signup
 	Label:
 		markup: True
@@ -24,12 +38,6 @@ Screen_Manager:
 		font_size: 15
 		size_hint: (.1, .1)
 		pos_hint: {'center_x': 0.5,'top': 1 }	
-	Label:
-		id: cred_error
-		text:''
-		pos_hint: {'center_x': 0.3,'center_y':0.1}
-		size_hint: (0.1, 0.1)
-		color: [1,0,0,1]
 	TextInput: 
 		id: user
 		hint_text: 'Username'
@@ -55,6 +63,16 @@ Screen_Manager:
 		size_hint: (0.3, 0.1)
 		on_release:
 			root.check()
+	Button:
+		id:close
+		text:'Back to Login Screen'
+		font_size: 14
+		text_size: (self.width, None)
+		halign: 'center'
+		pos_hint: {'center_x': 0.2, 'center_y': 0.1}
+		size_hint: (0.3, 0.1)
+		on_release:
+			on_release: app.root.get_screen('Login').close()
 
 <LoginWindow>:
 	username:username
