@@ -27,8 +27,7 @@ def WriteEncrypt(fileName, paswrd): #This encrypts paswrd and stores passwrd and
 	WriteLine(file, Nstr)
 	file.close()
 
-#WriteEncrypt("Passwords.txt", "Manu2002")
-def ReadDecrypt(filename):
+def ReadDecrypt(filename): #Reads a file and decrypts it using userkey. Returns list.
 	userkeyFile = open(HomeDir('Data2.txt') , "r")
 	listofkeys = ReadFile(userkeyFile)
 	userkeyFile.close()
@@ -47,7 +46,24 @@ def ReadDecrypt(filename):
 		decp.append(EnigmaMachine(p[0:randKeyIndex],deckey))
 	return decp
 
-#print(ReadDecrypt(HomeDir('Data3.txt')))
+def SearchFile(Str): #searches for passwords in data3,txt and returns all information of required password. 
+	newList = []
+	List = ReadDecrypt(HomeDir('Data3.txt'))
+	for ele in List:
+		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
+		newList.append(Sublist)
+	print(newList)
+	for sublist in newList:
+		if sublist[0].lower() == Str.lower():
+			ind = newList.index(sublist)
+			break
+		else:
+			ind = None
+	if ind == None:
+		return []
+	else:
+		return newList[ind]
+
 
 
 
