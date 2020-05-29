@@ -52,7 +52,6 @@ def SearchFile(Str): #searches for passwords in data3,txt and returns all inform
 	for ele in List:
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newList.append(Sublist)
-	print(newList)
 	for sublist in newList:
 		if sublist[0].lower() == Str.lower():
 			ind = newList.index(sublist)

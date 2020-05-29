@@ -1,29 +1,35 @@
 #Module which generates password
 import string
 from random import randint
-
-def ColorChange(n,error,error_text=''):
+from Password_Read_Write import *
+from FileHandling import *
+def ColorChange(n,error,error_text='',color=(45/255,45/255,45/255,1)):
 	if error:
 		n.background_color=(235/255, 31/255, 20/255,1)				
 		n.hint_text_color=(0.2,0.2,0.2,1)
 		n.cursor_color=(0,0,0,1)
 		n.hint_text=error_text 
 	else:
-		n.background_color=(1,1,1,1)
+		n.background_color=color
 		n.hint_text_color=(0.5, 0.5, 0.5, 1.0)
-		n.cursor_color=(1,0,0,1)
+		n.cursor_color=(0,171/255,174/255,1)
 		n.hint_text=error_text
 
 
 def DescriptionCheck(description):
+	used=False
+	entrylist=ReadDecrypt(HomeDir('Data3.txt'))
+	for entry in entrylist:
+		title=entry.split('qwertyuiop***asdfghjklzxcvbnm')
+		if description.text.lower()==title[0].lower():
+			used=True
+			break	
 	minimum_size=3
 	maximum_size=30
-	if len(description.text)<minimum_size or len(description.text)>maximum_size:
+	if len(description.text)<minimum_size or len(description.text)>maximum_size or used:
 		return True
 	else:
 		return False
-
-
 def PassCheck(n):
 	minimum_size=8
 	maximum_size=30

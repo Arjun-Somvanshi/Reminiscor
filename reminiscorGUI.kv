@@ -27,6 +27,34 @@ Screen_Manager:
 		text_size: (self.width,None)
 		pos_hint: {'center_x':0.8,'center_y':0.1}
 		size_hint:(0.3,0.18)
+<search_popup>:
+	Label:
+		id: title
+		text:''
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.8}
+	Label:
+		id: username
+		text:''
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.7}
+	Label:
+		id: passtext
+		text:''
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.6}
+	TextInput:
+		id: password
+		multiline: False
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.6, 'top': 0.6}
+	Label:
+		id:notes
+		text:''
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.5}
+
 <SignUp_Pop>:
 	user:user
 	p1:p1
@@ -80,6 +108,12 @@ Screen_Manager:
 	errortext:errortext
 	user_check:user_check
 	name: 'Login'
+	canvas:
+	    Color:
+	        rgba:30/255,30/255, 30/255, 1
+	    Rectangle: 
+	        size: self.size
+	        pos: self.pos
 	FloatLayout:
 		Label:
 			id:errortext 
@@ -89,24 +123,38 @@ Screen_Manager:
 		TextInput:
 			id:username 
 			hint_text: 'Username'
+			foreground_color:(0.7,0.7,0.7,1)
+			color:(0.7,0.7,0.7)
+			cursor_color:(0,171/255,174/255,1)
+			background_color:(45/255,45/255,45/255,1)
 			multiline: False
 			pos_hint: {'center_x': 0.5, 'center_y': 0.6}
 			size_hint: (0.20, 0.06)
 		TextInput:
 			id: p
 			hint_text: 'Master Password' 
+			foreground_color:(0.7,0.7,0.7,1)
+			password: True
+			cursor_color:(0,171/255,174/255,1)
+			background_color:(45/255,45/255,45/255,1)
 			multiline: False
 			pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 			size_hint: (0.20, 0.06)
 		Button:
 			text: 'Submit'
+			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
 			size_hint: (0.20, 0.06)
+			background_normal: 'button for login.png'
+			background_down: 'on down login.png'
 			on_release:
 				app.root.current='Main' if root.Login_Authenticate() else 'Login'
 				root.manager.transition.direction= "left"
 		Button:
 			text: 'Sign-Up'
+			color: (0.5, 0.5, 0.5, 1)
+			background_normal: 'button for login.png'
+			background_down: 'on down login.png'
 			pos_hint: {'center_x': 0.5 ,'center_y': 0.2 }
 			size_hint: (0.20, 0.06)
 			on_release:
