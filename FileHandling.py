@@ -1,6 +1,7 @@
 import win32api, win32con, os, os.path
 def EOF(file): #This checks if pointer has reached end of file
 	if(file.read() == ''):
+		file.seek(0)
 		return True
 	else:
 		return False
@@ -46,3 +47,13 @@ def CheckModified(a , b):
 	else:
 		return True
 
+def Import_Export_Dir(filename):
+	homedir = os.path.expanduser('~')
+	if os.path.isdir(homedir + '\\Documents\\Reminiscor Export_Import\\'):	
+		newdir = homedir + '\\Documents\\Reminiscor Export_Import\\'+ filename
+	else:
+		File_dir = os.path.expanduser('~') + '\\Documents'
+		direc = "Reminiscor Export_Import"
+		os.mkdir(os.path.join(File_dir, direc))
+		newdir = homedir + '\\Documents\\Reminiscor Export_Import\\'+ filename
+	return newdir

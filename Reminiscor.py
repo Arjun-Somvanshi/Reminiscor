@@ -51,6 +51,9 @@ class SignUp_Pop(FloatLayout):
 			parent_dir = os.path.expanduser('~') + '\\AppData\\Roaming'
 			directory = "Reminiscor"
 			os.mkdir(os.path.join(parent_dir, directory))
+			File_dir = os.path.expanduser('~') + '\\Documents'
+			direc = "Reminiscor Export_Import"
+			os.mkdir(os.path.join(File_dir, direc))
 			Default_Unique_User_EnigmaSettings()
 			global MonitorData2 
 			MonitorData2=ModifiedFileTime(HomeDir('Data2.txt'))

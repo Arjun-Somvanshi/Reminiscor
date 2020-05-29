@@ -52,7 +52,6 @@ def SearchFile(Str): #searches for passwords in data3,txt and returns all inform
 	for ele in List:
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newList.append(Sublist)
-	print(newList)
 	for sublist in newList:
 		if sublist[0].lower() == Str.lower():
 			ind = newList.index(sublist)
@@ -65,9 +64,51 @@ def SearchFile(Str): #searches for passwords in data3,txt and returns all inform
 		return newList[ind]
 
 
+def Export():
+	newList = []
+	List = ReadDecrypt(HomeDir('Data3.txt'))
+	for ele in List:
+		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
+		newList.append(Sublist)
+	file = open(Import_Export_Dir('Export File.txt'),'w')
+	for ele in newList:
+		for sublist in ele:
+			file.write(sublist+'&')
+		file.write('\n')
+	file.close()
+#Export()
+def Import():
+	newList = []
+	newListData3 = []
+	file = open(Import_Export_Dir('Import File.txt'), 'r')
+	List = ReadFile(file)
+	del List[len(List)-1]
+	for ele in List:
+		newList.append(ele.split('&'))
+	file.close()
+	pass_file = open(HomeDir('Data3.txt'), 'r')
+	Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
+	for ele in Data3_List:
+		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
+		newListData3.append(Sublist)
+	pass_file.close()
+	file_new = open(HomeDir('Data3.txt'), 'a')
+	for ele1 in newList:
+		for ele2 in newListData3:
+			if ele1[0].lower() == ele2[0].lower():
+				temp = True
+				break
+			else:
+				temp = False
+		if temp == False:
+			password = ''
+			for subele in ele1:
+				password += subele + 'qwertyuiop***asdfghjklzxcvbnm'
+			#print(password)
+			WriteEncrypt(HomeDir('Data3.txt'), password)
+	file_new.close()
 
-
-
+#Import()
 
 
 
