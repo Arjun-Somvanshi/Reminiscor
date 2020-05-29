@@ -42,6 +42,14 @@ class UserError(FloatLayout):
 	pass
 class Password_Size_Popup(FloatLayout):
 	pass
+class Login_Popup_importexport(FloatLayout):
+	auth=None
+	def authenticate(self):
+		if(CheckUser):
+			if(CheckCredentials(self.ids.username,self.ids.p)):
+				self.auth=True
+		else:
+				self.auth=False
 class SignUp_Pop(FloatLayout):
 	user=ObjectProperty()
 	p1=ObjectProperty()
@@ -132,6 +140,22 @@ class MainWindow(Screen):
 	description=ObjectProperty()
 	username=ObjectProperty()
 	notes=ObjectProperty()
+	def Import_Passwords(self):
+		design=Login_Popup_importexport()
+		explain=Label(text='This is an import process of passwords, they will be added to your list if any.', text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
+		design.add_widget(explain)
+		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450))
+		win.open()
+		if design.auth==True:
+			Import()
+	def Export_Passwords(self):
+		design=Login_Popup_importexport()
+		explain=Label(text='This process will decrypt and export your passwords.', text_size=(design.width,None),size_hint= (None, .1),width=350,pos_hint= {'center_x': 0.5, 'top': 0.9})
+		design.add_widget(explain)
+		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450))
+		win.open()
+		if design.auth==True:
+			Export()
 	def p_size_popup(self):
 		design=Password_Size_Popup()
 		win=Popup(title='Error',content=design,size_hint=(None,None),size=(400,400))

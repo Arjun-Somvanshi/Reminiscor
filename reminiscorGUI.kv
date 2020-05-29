@@ -27,6 +27,42 @@ Screen_Manager:
 		text_size: (self.width,None)
 		pos_hint: {'center_x':0.8,'center_y':0.1}
 		size_hint:(0.3,0.18)
+<Login_Popup_importexport>:
+	Label:
+		text:'Enter Credentials to authenticate the process: '
+		text_size:(self.width,None)
+		size_hint: (None, .1)
+		width:350
+		pos_hint: {'center_x': 0.5, 'top': 0.8}
+	TextInput:
+		id:username 
+		hint_text: 'Username'
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		multiline: False
+		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+		size_hint: (0.35, 0.1)
+	TextInput:
+		id: p
+		hint_text: 'Master Password' 
+		foreground_color:(0.7,0.7,0.7,1)
+		password: True
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		multiline: False
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+		size_hint: (0.35, 0.1)
+	Button:
+		text: 'Authenticate'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
+		size_hint: (0.35, 0.1)
+		background_normal: 'button for login.png'
+		background_down: 'on down login.png'
+		on_release:
+			root.authenticate()
 <search_popup>:
 	Label:
 		id: title
@@ -220,14 +256,24 @@ Screen_Manager:
 				
 		Button: 
 			text: 'Back to Login Screen'
-			pos_hint: {'x': 0 ,'top': 1 }
+			pos_hint: {'x': 0 ,'top': 0.2 }
 			size_hint: (0.20, 0.06)
 			on_release:
 				app.root.current='Login'
 				root.manager.transition.direction= "right"
+		Button:
+			text: 'Import Passwords'
+			pos_hint: {'x': 0 ,'top': 0.6 }
+			size_hint: (0.20, 0.06)
+			on_release: root.Import_Passwords()
+		Button:
+			text: 'Export Passwords'
+			pos_hint: {'x': 0 ,'top': 0.5 }
+			size_hint: (0.20, 0.06)
+			on_release: root.Export_Passwords()
 		Button: 
 			text: 'View Passwords'
-			pos_hint: {'x': 0.8 ,'top': 1 }
+			pos_hint: {'x': 0 ,'top': 0.7 }
 			size_hint: (0.20, 0.06)
 			on_release:
 				app.root.current='PassDisp'
