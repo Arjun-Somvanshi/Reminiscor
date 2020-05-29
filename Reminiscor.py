@@ -32,6 +32,8 @@ if os.path.isfile(HomeDir('Data2.txt')):
 	MonitorData2=ModifiedFileTime(HomeDir('Data2.txt'))
 else:
 	MonitorData2=None
+class search_popup(FloatLayout):
+	pass
 class signup_error(FloatLayout):
 	pass
 class Password_Added(FloatLayout):
@@ -148,7 +150,7 @@ class MainWindow(Screen):
 		elif d_check is True and pass_check is False:
 			self.p_size_popup()
 			ColorChange(self.n,False)
-			ColorChange(self.description,True,'Invalid Size')
+			ColorChange(self.description,True,'Invalid Size/Title')
 		else:
 			ColorChange(self.n,False,'Password\nSize')
 			ColorChange(self.description,False,'Entry Title')
@@ -209,19 +211,34 @@ class Password_Screen(Screen):
 		
 		mainlayout=BoxLayout(orientation='horizontal',spacing=10)
 		layout0=FloatLayout()
-		searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'center_x':0.5,'top':1},halign='center')
-		searchbtn=Button(text='Q', size_hint=(None,None),size =(40,40),pos_hint={'center_x':0.87,'top':1},halign='center')
+		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'center_x':0.5,'top':1},halign='center')
+		searchbtn=Button(text='Q', size_hint=(None,None),size =(40,40),pos_hint={'center_x':0.87,'top':1},halign='center',on_release=self.searchresult)
 		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
 		Refreshbtn=Button(text='Refresh List', size_hint=(.3,.08), pos_hint={'x':0.5,'y':0},on_release=showlist)
 		layout0.add_widget(Refreshbtn)
 		layout0.add_widget(searchbtn)
 		layout0.add_widget(Backbtn)
-		layout0.add_widget(searchbar)
+		layout0.add_widget(self.searchbar)
 		mainlayout.add_widget(layout0)
 		if os.path.isfile(HomeDir('Data3.txt')):
 			showlist()
 		self.add_widget(mainlayout)
-		
+	def searchresult(self,instance):
+		result=SearchFile(self.searchbar.text)
+		if result==[]:
+			design=search_popup()
+			design.ids.title.text='No such entry exists'
+			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400))
+			search.open()
+		else:
+			design=search_popup()
+			design.ids.title.text='Title: '+result[0]
+			design.ids.username.text='Title: '+result[1]
+			design.ids.passtext.text='Password: '
+			design.ids.password.text=result[2]
+			design.ids.notes.text='Notes: '+result[3]
+			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400))
+			search.open()
 	def screenswitch(self,instance):
 		self.manager.current = 'Main'
 		self.manager.transition.direction='right'
