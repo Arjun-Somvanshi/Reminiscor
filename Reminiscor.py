@@ -25,6 +25,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
+Window.clearcolor = (30/255, 30/255, 30/255, 1)
 from functools import partial
 
 MonitorData2=None
@@ -42,14 +43,27 @@ class UserError(FloatLayout):
 	pass
 class Password_Size_Popup(FloatLayout):
 	pass
-class Login_Popup_importexport(FloatLayout):
-	auth=None
+class Login_Popup_export(FloatLayout):
 	def authenticate(self):
-		if(CheckUser):
-			if(CheckCredentials(self.ids.username,self.ids.p)):
-				self.auth=True
-		else:
-				self.auth=False
+		if(CheckUser()):
+			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
+				label=Label(text='Export Successful.',size_hint=(None,0.1), width=400, text_size=(350, None), pos_hint={'center_x':0.8,'center_y':0.15})
+				self.add_widget(label)
+				Export()
+			else:
+				label=Label(text='Authentication Failed',size_hint=(None,0.1), width=400, text_size=(350, None),pos_hint={'center_x':0.8,'center_y':0.15},color=[1,0,0,1])
+				self.add_widget(label)
+class Login_Popup_import(FloatLayout):
+	def authenticate(self):
+		if(CheckUser()):
+			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
+				label=Label(text='Import Successful.',size_hint=(None,0.1), width=400, text_size=(350, None),pos_hint={'center_x':0.8,'center_y':0.15},color=[1,0,0,1])
+				self.add_widget(label)
+				Import()
+			else:
+				label=Label(text='Authentication Failed',size_hint=(None,0.1), width=400, text_size=(350, None),pos_hint={'center_x':0.8,'center_y':0.15})
+				self.add_widget(label)
+	
 class SignUp_Pop(FloatLayout):
 	user=ObjectProperty()
 	p1=ObjectProperty()
@@ -61,7 +75,7 @@ class SignUp_Pop(FloatLayout):
 			parent_dir = os.path.expanduser('~') + '\\AppData\\Roaming'
 			directory = "Reminiscor"
 			os.mkdir(os.path.join(parent_dir, directory))
-			File_dir = os.path.expanduser('~') + '\\Documents'
+			File_dir = os.path.expanduser('~') + '\\Desktop'
 			direc = "Reminiscor Export_Import"
 			os.mkdir(os.path.join(File_dir, direc))
 			Default_Unique_User_EnigmaSettings()
@@ -141,21 +155,17 @@ class MainWindow(Screen):
 	username=ObjectProperty()
 	notes=ObjectProperty()
 	def Import_Passwords(self):
-		design=Login_Popup_importexport()
+		design=Login_Popup_import()
 		explain=Label(text='This is an import process of passwords, they will be added to your list if any.', text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
 		design.add_widget(explain)
 		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450))
 		win.open()
-		if design.auth==True:
-			Import()
 	def Export_Passwords(self):
-		design=Login_Popup_importexport()
-		explain=Label(text='This process will decrypt and export your passwords.', text_size=(design.width,None),size_hint= (None, .1),width=350,pos_hint= {'center_x': 0.5, 'top': 0.9})
+		design=Login_Popup_export()
+		explain=Label(text='This process will decrypt and export your passwords.', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.9})
 		design.add_widget(explain)
 		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450))
 		win.open()
-		if design.auth==True:
-			Export()
 	def p_size_popup(self):
 		design=Password_Size_Popup()
 		win=Popup(title='Error',content=design,size_hint=(None,None),size=(400,400))
@@ -214,18 +224,28 @@ class Password_Screen(Screen):
 				for i in mainlayout.children:
 					if a==0:
 						mainlayout.remove_widget(i)
-			password_list=ReadDecrypt(HomeDir('Data3.txt'))
-			pass_len=len(password_list)
 			layout1 = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
 			layout1.bind(minimum_height=layout1.setter('height'))
-			if pass_len>0:
-				for i in password_list:
-					entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
-					btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
+			if os.path.isfile(HomeDir('Data3.txt')):
+				password_list=ReadDecrypt(HomeDir('Data3.txt'))
+				pass_len=len(password_list)
+				if pass_len>0:
+					for i in password_list:
+						entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
+						btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
+						btn.background_normal='Main Window Button.png'
+						layout1.add_widget(btn)
+					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
+					root.add_widget(layout1)
+					mainlayout.add_widget(root)
+				else:
+					btn = Button(text='No passwords yet!',size_hint_y=None, height=60,color=[1,0,0,1])
+					btn.background_normal='Main Window Button.png'
+					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 					layout1.add_widget(btn)
-				root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
-				root.add_widget(layout1)
-				mainlayout.add_widget(root)
+					root.add_widget(layout1)
+					mainlayout.add_widget(root)
+
 			else:
 				btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
 				root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
@@ -244,8 +264,7 @@ class Password_Screen(Screen):
 		layout0.add_widget(Backbtn)
 		layout0.add_widget(self.searchbar)
 		mainlayout.add_widget(layout0)
-		if os.path.isfile(HomeDir('Data3.txt')):
-			showlist()
+		showlist()
 		self.add_widget(mainlayout)
 	def searchresult(self,instance):
 		result=SearchFile(self.searchbar.text)

@@ -49,11 +49,11 @@ def CheckModified(a , b):
 
 def Import_Export_Dir(filename):
 	homedir = os.path.expanduser('~')
-	if os.path.isdir(homedir + '\\Documents\\Reminiscor Export_Import\\'):	
-		newdir = homedir + '\\Documents\\Reminiscor Export_Import\\'+ filename
+	if os.path.isdir(homedir + '\\Desktop\\Reminiscor Export_Import\\'):	
+		newdir = homedir + '\\Desktop\\Reminiscor Export_Import\\'+ filename
 	else:
-		File_dir = os.path.expanduser('~') + '\\Documents'
+		File_dir = os.path.expanduser('~') + '\\Desktop'
 		direc = "Reminiscor Export_Import"
 		os.mkdir(os.path.join(File_dir, direc))
-		newdir = homedir + '\\Documents\\Reminiscor Export_Import\\'+ filename
+		newdir = homedir + '\\Desktop\\Reminiscor Export_Import\\'+ filename
 	return newdir
