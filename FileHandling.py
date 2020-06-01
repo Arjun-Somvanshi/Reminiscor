@@ -54,6 +54,6 @@ def Import_Export_Dir(filename):
 	else:
 		File_dir = os.path.expanduser('~') + '\\Desktop'
 		direc = "Reminiscor Export_Import"
-		os.mkdir(os.path.join(File_dir, direc))
+		os.makedirs(os.path.join(File_dir, direc))
 		newdir = homedir + '\\Desktop\\Reminiscor Export_Import\\'+ filename
 	return newdir
