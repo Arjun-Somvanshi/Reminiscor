@@ -34,6 +34,13 @@ Screen_Manager:
 		size_hint: (None, .1)
 		width:350
 		pos_hint: {'center_x': 0.5, 'top': 0.8}
+	Label:
+		id: label
+		text:''
+		pos_hint:{'center_x':0.8,'center_y':0.15}
+		size_hint:(None,0.1)
+		width:400
+		text_size:(350, None)
 	TextInput:
 		id:username 
 		hint_text: 'Username'
@@ -72,6 +79,13 @@ Screen_Manager:
 		size_hint: (None, .1)
 		width:350
 		pos_hint: {'center_x': 0.5, 'top': 0.8}
+	Label:
+		id: label
+		text:''
+		pos_hint:{'center_x':0.8,'center_y':0.15}
+		size_hint:(None,0.1)
+		width:400
+		text_size:(350, None)
 	TextInput:
 		id:username 
 		hint_text: 'Username'
@@ -371,29 +385,44 @@ Screen_Manager:
 	name: 'PassDisp'
 <passwordpopup>:
 	Label:
-		id: title
 		text:'Title: '
 		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.8}
+		pos_hint: {'x': 0.2, 'top': 0.9}
 	Label:
-		id: username
+		id: title
+		text:''
+		size_hint:(None,.1)
+		width:self.width
+		pos_hint: {'x': 0.4, 'top': 0.9}
+	Label:
 		text:'Username: '
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.7}
 	Label:
+		id: username
+		text:''
+		size_hint:(None,.1)
+		width:self.width
+		pos_hint: {'x': 0.4, 'top': 0.7}
+	Label:
 		text:'Password: '
 		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.6}
+		pos_hint: {'x': 0.2, 'top': 0.5}
 	TextInput:
 		id: password
 		multiline: False
 		text:''
 		size_hint:(.5,.1)
-		pos_hint: {'center_x': 0.6, 'top': 0.6}
+		pos_hint: {'center_x': 0.7, 'top': 0.5}
 	Label:
-		id:notes
 		text:'Notes: '
 		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.5}
+		pos_hint: {'x': 0.2, 'top': 0.3}
+	Label:
+		id:notes
+		text:''
+		size_hint:(None,.1)
+		width:self.width
+		pos_hint: {'x': 0.4, 'top': 0.3}
 
 

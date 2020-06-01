@@ -47,23 +47,24 @@ class Login_Popup_export(FloatLayout):
 	def authenticate(self):
 		if(CheckUser()):
 			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
-				label=Label(text='Export Successful.',size_hint=(None,0.1), width=400, text_size=(350, None), pos_hint={'center_x':0.8,'center_y':0.15})
-				self.add_widget(label)
+				self.ids.label.text='Export Successful.'
+				self.ids.label.color=[1,1,1,1]
 				Export()
 			else:
-				label=Label(text='Authentication Failed',size_hint=(None,0.1), width=400, text_size=(350, None),pos_hint={'center_x':0.8,'center_y':0.15},color=[1,0,0,1])
-				self.add_widget(label)
+				self.ids.label.text='Authentication Failed.'
+				self.ids.label.color=[1,0,0,1]
 class Login_Popup_import(FloatLayout):
 	def authenticate(self):
 		if(CheckUser()):
 			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
-				label=Label(text='Import Successful.',size_hint=(None,0.1), width=400, text_size=(350, None),pos_hint={'center_x':0.8,'center_y':0.15},color=[1,0,0,1])
-				self.add_widget(label)
+				self.ids.label.text='Import Successful.'
+				self.ids.label.color=[1,1,1,1]
 				Import()
 			else:
-				label=Label(text='Authentication Failed',size_hint=(None,0.1), width=400, text_size=(350, None),pos_hint={'center_x':0.8,'center_y':0.15})
+				self.ids.label.text='Authentication Failed'
+				self.ids.label.color=[1,0,0,1]
 				self.add_widget(label)
-	
+				
 class SignUp_Pop(FloatLayout):
 	user=ObjectProperty()
 	p1=ObjectProperty()
