@@ -1,4 +1,4 @@
-import win32api, win32con, os, os.path
+import os
 def EOF(file): #This checks if pointer has reached end of file
 	if(file.read() == ''):
 		file.seek(0)
@@ -28,9 +28,6 @@ def ReadSeperator(file, sep): #Reads file and seperates string using sep, return
 def WriteLine(file, info): #Writes line with \n included
 	file.writelines(info + '\n')
 
-def HideFile(fileName): #Hides file
-	win32api.SetFileAttributes(fileName, win32con.FILE_ATTRIBUTE_HIDDEN)
-
 def HomeDir(filename):
 	homedir = os.path.expanduser('~')
 	newdir = homedir + '\\AppData\\Roaming\\Reminiscor\\'+filename
@@ -57,3 +54,9 @@ def Import_Export_Dir(filename):
 		os.makedirs(os.path.join(File_dir, direc))
 		newdir = homedir + '\\Desktop\\Reminiscor Export_Import\\'+ filename
 	return newdir
+
+def deleteContent(pfile):
+    pfile.seek(0)
+    pfile.truncate()
+    pfile.seek(0) 
+    return pfile

@@ -1,6 +1,5 @@
 from FileHandling import *
 from EnigmaModule import *
-import win32con, win32api, os
 import string
 from random import randint
 
@@ -14,6 +13,20 @@ def MapAlphaNum(ch):
 
 
 def WriteEncrypt(fileName, paswrd): #This encrypts paswrd and stores passwrd and encryption key in filename. paswrd and key are seperated by sep.
+	userkeyFile = open(HomeDir('Data2.txt') , "r")
+	listofkeys = ReadFile(userkeyFile)
+	userkeyFile.close()
+	key = One_Setting_Generator()
+	paswrd = EnigmaMachine(paswrd, key)
+	keyNo = randint(0,49)
+	keyofkey = ''.join(listofkeys[keyNo])
+	key = EnigmaMachine(key, keyofkey)
+	Nstr = paswrd + key + MapNumAlpha(keyNo)
+	file = open(fileName , "a")
+	WriteLine(file, Nstr)
+	file.close()
+
+def ReWriteEncrypt(fileName, paswrd): #This encrypts paswrd and stores passwrd and encryption key in filename. paswrd and key are seperated by sep.
 	userkeyFile = open(HomeDir('Data2.txt') , "r")
 	listofkeys = ReadFile(userkeyFile)
 	userkeyFile.close()
@@ -73,7 +86,10 @@ def Export():
 	file = open(Import_Export_Dir('Export File.txt'),'w')
 	for ele in newList:
 		for sublist in ele:
-			file.write(sublist+'&')
+			if not sublist == ele[len(ele)-1]:
+				file.write(sublist+'qwertyuiop***asdfghjklzxcvbnm')
+			else:
+				file.write(sublist)
 		file.write('\n')
 	file.close()
 #Export()
@@ -84,7 +100,7 @@ def Import():
 	List = ReadFile(file)
 	del List[len(List)-1]
 	for ele in List:
-		newList.append(ele.split('&'))
+		newList.append(ele.split('qwertyuiop***asdfghjklzxcvbnm'))
 	file.close()
 	pass_file = open(HomeDir('Data3.txt'), 'r')
 	Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
@@ -103,12 +119,58 @@ def Import():
 		if temp == False:
 			password = ''
 			for subele in ele1:
-				password += subele + 'qwertyuiop***asdfghjklzxcvbnm'
-			#print(password)
+				if not subele == ele1[len(ele1)-1]: 
+					password += subele + 'qwertyuiop***asdfghjklzxcvbnm'
+				else:
+					password += subele
 			WriteEncrypt(HomeDir('Data3.txt'), password)
 	file_new.close()
 
-#Import()
+def DelPassword(entry):
+	newListData3 = []
+	pass_file = open(HomeDir('Data3.txt'), 'r')
+	Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
+	for ele in Data3_List:
+		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
+		newListData3.append(Sublist)
+	pass_file.close()
+	newListData3.remove(entry)
+	temp = open(HomeDir('Data3.txt'), 'w')
+	temp = deleteContent(temp)
+	temp.close()
+	for passList in newListData3:
+		passwrd = ''
+		for ele in passList:
+			if not ele == passList[len(passList)-1]:
+				passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
+			else:
+				passwrd += ele
+		ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
 
+
+def EditPassword(iniEntry, entry): #replaces iniEntry with entry
+	newListData3 = []
+	pass_file = open(HomeDir('Data3.txt'), 'r')
+	Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
+	for ele in Data3_List:
+		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
+		newListData3.append(Sublist)
+	pass_file.close()
+	index = newListData3.index(iniEntry)
+	newListData3.remove(iniEntry)
+	newListData3.insert(index, entry)
+	temp = open(HomeDir('Data3.txt'), 'w')
+	temp = deleteContent(temp)
+	temp.close()
+	for passList in newListData3:
+		passwrd = ''
+		for ele in passList:
+			if not ele == passList[len(passList)-1]:
+				passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
+			else:
+				passwrd += ele
+		ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
+
+#EditPassword(['google', 'manu', 'manu2002', '     '],['google', 'manu', 'manvendra2002', '     '])
 
 

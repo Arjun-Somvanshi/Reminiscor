@@ -84,10 +84,10 @@ class SignUp_Pop(FloatLayout):
 			sep='qwertyuiop***asdfghjklzxcvbnm'
 			file=open(HomeDir('Data1.txt'),'w')
 			file.close()
-			HideFile(HomeDir('Data1.txt'))
+			#HideFile(HomeDir('Data1.txt'))
 			file=open(HomeDir('Data3.txt'),'w')
 			file.close()
-			HideFile(HomeDir('Data3.txt'))
+			#`HideFile(HomeDir('Data3.txt'))
 			WriteEncrypt(HomeDir('Data1.txt'),self.user.text+sep+self.p1.text)
 			label=Label(text='You\'ve successfully signed up!', size_hint=(0.1,0.1), pos_hint={'center_x':0.5,'center_y':0.225})
 			self.add_widget(label)

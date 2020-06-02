@@ -2,7 +2,6 @@
 from random import randint, shuffle
 import string 
 from FileHandling import *
-import win32con, win32api, os
 def One_Setting_Generator(): #Generates one enigma setting with 'qwertyuiop***asdfghjklzxcvbnm' as a seperator
 
 #    PLUGBOARD IS DIFFERENT EACH LETTER IS MUTUALLY MATCHED
@@ -45,7 +44,7 @@ def Default_Unique_User_EnigmaSettings():
 	for i in user_keys:
 		WriteLine(file,i)
 	file.close()
-	HideFile(HomeDir('Data2.txt'))#Default_Unique_User_EnigmaSettings()
+	#HideFile(HomeDir('Data2.txt'))#Default_Unique_User_EnigmaSettings()
 
 def EnigmaMachine(msg_str,enigma_setting_str):
 	enigma=enigma_setting_str.split('qwertyuiop***asdfghjklzxcvbnm') #stores the five rotors as strings in a list
