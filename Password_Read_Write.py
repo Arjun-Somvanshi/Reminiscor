@@ -96,36 +96,38 @@ def Export():
 def Import():
 	newList = []
 	newListData3 = []
-	file = open(Import_Export_Dir('Import File.txt'), 'r')
-	List = ReadFile(file)
-	del List[len(List)-1]
-	for ele in List:
-		newList.append(ele.split('qwertyuiop***asdfghjklzxcvbnm'))
-	file.close()
-	pass_file = open(HomeDir('Data3.txt'), 'r')
-	Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
-	for ele in Data3_List:
-		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
-		newListData3.append(Sublist)
-	pass_file.close()
-	file_new = open(HomeDir('Data3.txt'), 'a')
-	for ele1 in newList:
-		for ele2 in newListData3:
-			if ele1[0].lower() == ele2[0].lower():
-				temp = True
-				break
-			else:
-				temp = False
-		if temp == False:
-			password = ''
-			for subele in ele1:
-				if not subele == ele1[len(ele1)-1]: 
-					password += subele + 'qwertyuiop***asdfghjklzxcvbnm'
+	if os.path.isfile(Import_Export_Dir('Import File.txt')):
+		file = open(Import_Export_Dir('Import File.txt'), 'r')
+		List = ReadFile(file)
+		for ele in List:
+			newList.append(ele.split('qwertyuiop***asdfghjklzxcvbnm'))
+		file.close()
+		pass_file = open(HomeDir('Data3.txt'), 'r')
+		Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
+		for ele in Data3_List:
+			Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
+			newListData3.append(Sublist)
+		pass_file.close()
+		file_new = open(HomeDir('Data3.txt'), 'a')
+		for ele1 in newList:
+			for ele2 in newListData3:
+				if ele1[0].lower() == ele2[0].lower():
+					temp = True
+					break
 				else:
-					password += subele
-			WriteEncrypt(HomeDir('Data3.txt'), password)
-	file_new.close()
-
+					temp = False
+			if temp == False:
+				password = ''
+				for subele in ele1:
+					if not subele == ele1[len(ele1)-1]: 
+						password += subele + 'qwertyuiop***asdfghjklzxcvbnm'
+					else:
+						password += subele
+				WriteEncrypt(HomeDir('Data3.txt'), password)
+		file_new.close()
+		return True
+	else:
+		return False
 def DelPassword(entry):
 	newListData3 = []
 	pass_file = open(HomeDir('Data3.txt'), 'r')
@@ -140,11 +142,14 @@ def DelPassword(entry):
 	temp.close()
 	for passList in newListData3:
 		passwrd = ''
+		a=0
 		for ele in passList:
-			if not ele == passList[len(passList)-1]:
-				passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
+			if a == len(passList)-1:
+				passwrd += ele 
+				a+=1
 			else:
-				passwrd += ele
+				passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
+				a+=1
 		ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
 
 
@@ -164,13 +169,17 @@ def EditPassword(iniEntry, entry): #replaces iniEntry with entry
 	temp.close()
 	for passList in newListData3:
 		passwrd = ''
+		a=0
 		for ele in passList:
-			if not ele == passList[len(passList)-1]:
+			if not a == len(passList)-1:
 				passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
+				a+=1
 			else:
 				passwrd += ele
+				a+=1
 		ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
-
-#EditPassword(['google', 'manu', 'manu2002', '     '],['google', 'manu', 'manvendra2002', '     '])
-
-
+'''
+EditPassword(['google', 'manu', 'manu2002', '     '],['google', 'manu', 'manvendra2002', '     '])
+List = ReadDecrypt(HomeDir('Data3.txt'))
+print(List)
+'''

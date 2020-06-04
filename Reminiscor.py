@@ -57,9 +57,13 @@ class Login_Popup_import(FloatLayout):
 	def authenticate(self):
 		if(CheckUser()):
 			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
-				self.ids.label.text='Import Successful.'
-				self.ids.label.color=[1,1,1,1]
-				Import()
+				a=Import()
+				if a==True:
+					self.ids.label.text='Import Successful.'
+					self.ids.label.color=[1,1,1,1]
+				else:
+					self.ids.label.text='Import File is not present.'
+					self.ids.label.color=[1,0,0,1]
 			else:
 				self.ids.label.text='Authentication Failed'
 				self.ids.label.color=[1,0,0,1]
@@ -235,6 +239,7 @@ class Password_Screen(Screen):
 						entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
 						btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
 						btn.background_normal='Main Window Button.png'
+						btn.background_down='Main Window Button Ondown.png'
 						layout1.add_widget(btn)
 					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 					root.add_widget(layout1)
@@ -256,10 +261,17 @@ class Password_Screen(Screen):
 		
 		mainlayout=BoxLayout(orientation='horizontal',spacing=10)
 		layout0=FloatLayout()
-		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'center_x':0.5,'top':1},halign='center')
-		searchbtn=Button(text='Q', size_hint=(None,None),size =(40,40),pos_hint={'center_x':0.87,'top':1},halign='center',on_release=self.searchresult)
+		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'x':0,'top':1},halign='center',
+			                     foreground_color=(0.7,0.7,0.7,1),color=(0.7,0.7,0.7),cursor_color=(0,171/255,174/255,1),background_color=(45/255,45/255,45/255,1))
+		searchbtn=Button(size_hint=(None,None),size =(40,40),pos_hint={'x':0.63,'top':1},halign='center',on_release=self.searchresult)
 		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
-		Refreshbtn=Button(text='Refresh List', size_hint=(.3,.08), pos_hint={'x':0.5,'y':0},on_release=showlist)
+		Refreshbtn=Button(size_hint=(None,None),size=(100,50), pos_hint={'x':0.74,'top':1},on_release=showlist)
+		Refreshbtn.background_normal='Refresh.png'
+		Refreshbtn.background_down='refreshondown.png'
+		searchbtn.background_normal='Search.png'
+		searchbtn.background_down='SearchOnDown.png'
+		Backbtn.background_normal='button for login.png'
+		Backbtn.background_down='on down login.png'
 		layout0.add_widget(Refreshbtn)
 		layout0.add_widget(searchbtn)
 		layout0.add_widget(Backbtn)
@@ -294,8 +306,38 @@ class Password_Screen(Screen):
 		design.ids.notes.text+=entrydata[3]
 		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400))
 		entry.open()
+class editpopup(FloatLayout):
+	def pre_edit(self):
+		self.entrydata=[]
+		self.entrydata.append(self.ids.title_input.text)
+		self.entrydata.append(self.ids.username_input.text)
+		self.entrydata.append(self.ids.password.text)
+		self.entrydata.append(self.ids.notes_input.text)
+	def edit(self):
+		entry=[]
+		entry.append(self.ids.title_input.text)
+		entry.append(self.ids.username_input.text)
+		entry.append(self.ids.password.text)
+		entry.append(self.ids.notes_input.text)
+		EditPassword(self.entrydata,entry)
 class passwordpopup(FloatLayout):
-	pass
+	def edit_popup(self):
+		design=editpopup()
+		design.ids.title_input.text+=self.ids.title.text
+		design.ids.username_input.text+=self.ids.username.text
+		design.ids.password.text+=self.ids.password.text
+		design.ids.notes_input.text+=self.ids.notes.text
+		design.pre_edit()
+		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400))
+		entry.open()
+	def delete(self):
+		entry=[]
+		entry.append(self.ids.title.text)
+		entry.append(self.ids.username.text)
+		entry.append(self.ids.password.text)
+		entry.append(self.ids.notes.text)
+		DelPassword(entry)
+
 class Screen_Manager(ScreenManager):
 	pass
 kv=Builder.load_file("reminiscorGUI.kv")

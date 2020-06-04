@@ -95,7 +95,8 @@ Screen_Manager:
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
 		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
-		size_hint: (0.35, 0.1)
+		size_hint: (None, 0.1)
+		width: 200
 	TextInput:
 		id: p
 		hint_text: 'Master Password' 
@@ -104,8 +105,9 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-		size_hint: (0.35, 0.1)
+		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+		size_hint: (None, 0.1)
+		width: 200
 	Button:
 		text: 'Authenticate'
 		color: (0.5, 0.5, 0.5, 1)
@@ -424,5 +426,65 @@ Screen_Manager:
 		size_hint:(None,.1)
 		width:self.width
 		pos_hint: {'x': 0.4, 'top': 0.3}
-
-
+	Button:
+		id: delete
+		text:'Delete Entry'
+		size_hint:(0.35,0.1)
+		pos_hint: {'center_x': 0.2, 'center_y':0.1}
+		on_release:
+			root.delete()
+	Button:
+		id: edit
+		text:'Edit Entry'
+		size_hint:(0.35,0.1)
+		pos_hint: {'center_x': 0.6, 'center_y':0.1}
+		on_release:
+			root.edit_popup()
+<editpopup>:
+	Label:
+		text:'Title: '
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.9}
+	TextInput:
+		id: title_input
+		multiline: False
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.9}
+	Label:
+		text:'Username: '
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.7}
+	TextInput:
+		id: username_input
+		multiline: False
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.7}
+	Label:
+		text:'Password: '
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.5}
+	TextInput:
+		id: password
+		multiline: False
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.5}
+	Label:
+		text:'Notes: '
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.3}
+	TextInput:
+		id: notes_input
+		multiline: False
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.3}
+	Button:
+		id:Edit
+		text:'Confirm Edit'
+		size_hint:(0.35,0.1)
+		pos_hint: {'center_x': 0.2, 'center_y':0.1}
+		on_release:
+			root.edit()
