@@ -31,7 +31,7 @@ def DescriptionCheck(description):
 	else:
 		return False
 def PassCheck(n):
-	minimum_size=8
+	minimum_size=1
 	maximum_size=30
 	if n.text=='' or n.text.isalpha() or int(n.text)<minimum_size or int(n.text)>maximum_size:
 		return True

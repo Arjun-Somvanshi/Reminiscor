@@ -4,6 +4,7 @@ Config.set('graphics', 'width',  800)
 Config.set('graphics', 'height', 600)
 Config.set('graphics', 'resizable', False)
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
+Config.set('kivy', 'default_font', '["Montserrat", "Fonts/Montserrat-Regular.ttf", "Fonts/Montserrat-Regular.ttf", "Fonts/Montserrat-Bold.ttf", "Fonts/Montserrat-Bold.ttf"]')
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
@@ -196,7 +197,7 @@ class MainWindow(Screen):
 			self.passw.text=PasswordGen(int(self.n.text))
 	def Add_New_Password(self):
 		sep='qwertyuiop***asdfghjklzxcvbnm'
-		if not DescriptionCheck(self.description) and len(self.passw.text)>=8:
+		if not DescriptionCheck(self.description) and len(self.passw.text)>=1:
 			ColorChange(self.description,False,'Entry Title')
 			ColorChange(self.n,False,'Password\nSize')
 			ColorChange(self.passw,False,'Password')
@@ -238,8 +239,8 @@ class Password_Screen(Screen):
 					for i in password_list:
 						entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
 						btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
-						btn.background_normal='Main Window Button.png'
-						btn.background_down='Main Window Button Ondown.png'
+						btn.background_normal='UI/Main Window Button.png'
+						btn.background_down='UI/Main Window Button Ondown.png'
 						layout1.add_widget(btn)
 					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 					root.add_widget(layout1)
@@ -261,17 +262,17 @@ class Password_Screen(Screen):
 		
 		mainlayout=BoxLayout(orientation='horizontal',spacing=10)
 		layout0=FloatLayout()
-		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(250,40),pos_hint={'x':0,'top':1},halign='center',
+		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(200,40),pos_hint={'x':0,'top':1},halign='center',
 			                     foreground_color=(0.7,0.7,0.7,1),color=(0.7,0.7,0.7),cursor_color=(0,171/255,174/255,1),background_color=(45/255,45/255,45/255,1))
-		searchbtn=Button(size_hint=(None,None),size =(40,40),pos_hint={'x':0.63,'top':1},halign='center',on_release=self.searchresult)
+		searchbtn=Button(size_hint=(None,None),size =(40,40),pos_hint={'x':0.51,'top':1},halign='center',on_release=self.searchresult)
 		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
 		Refreshbtn=Button(size_hint=(None,None),size=(100,50), pos_hint={'x':0.74,'top':1},on_release=showlist)
-		Refreshbtn.background_normal='Refresh.png'
-		Refreshbtn.background_down='refreshondown.png'
-		searchbtn.background_normal='Search.png'
-		searchbtn.background_down='SearchOnDown.png'
-		Backbtn.background_normal='button for login.png'
-		Backbtn.background_down='on down login.png'
+		Refreshbtn.background_normal='UI/Refresh.png'
+		Refreshbtn.background_down='UI/refreshondown.png'
+		searchbtn.background_normal='UI/Search.png'
+		searchbtn.background_down='UI/SearchOnDown.png'
+		Backbtn.background_normal='UI/button for login.png'
+		Backbtn.background_down='UI/on down login.png'
 		layout0.add_widget(Refreshbtn)
 		layout0.add_widget(searchbtn)
 		layout0.add_widget(Backbtn)

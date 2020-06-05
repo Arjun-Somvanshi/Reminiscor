@@ -68,8 +68,8 @@ Screen_Manager:
 		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
 		size_hint: (0.35, 0.1)
-		background_normal: 'button for login.png'
-		background_down: 'on down login.png'
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
 		on_release:
 			root.authenticate()
 <Login_Popup_import>:
@@ -113,8 +113,8 @@ Screen_Manager:
 		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
 		size_hint: (0.35, 0.1)
-		background_normal: 'button for login.png'
-		background_down: 'on down login.png'
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
 		on_release:
 			root.authenticate()
 <search_popup>:
@@ -205,10 +205,15 @@ Screen_Manager:
 	        size: self.size
 	        pos: self.pos
 	FloatLayout:
+		Image:
+			source:'UI/Header.png'
+			size_hint: (None,None)
+			size:(800,140)
+			pos_hint:{'x':0,'top':1}
 		Label:
 			id:errortext 
 			text: ''
-			pos_hint: {'center_x': 0.5,'center_y': 0.9}
+			pos_hint: {'center_x': 0.5,'center_y': 0.7}
 			size_hint: (.1, .1)
 		TextInput:
 			id:username 
@@ -235,16 +240,16 @@ Screen_Manager:
 			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'center_x': 0.5 ,'center_y': 0.35 }
 			size_hint: (0.20, 0.06)
-			background_normal: 'button for login.png'
-			background_down: 'on down login.png'
+			background_normal: 'UI/button for login.png'
+			background_down: 'UI/on down login.png'
 			on_release:
 				app.root.current='Main' if root.Login_Authenticate() else 'Login'
 				root.manager.transition.direction= "left"
 		Button:
 			text: 'Sign-Up'
 			color: (0.5, 0.5, 0.5, 1)
-			background_normal: 'button for login.png'
-			background_down: 'on down login.png'
+			background_normal: 'UI/button for login.png'
+			background_down: 'UI/on down login.png'
 			pos_hint: {'center_x': 0.5 ,'center_y': 0.2 }
 			size_hint: (0.20, 0.06)
 			on_release:
@@ -319,22 +324,22 @@ Screen_Manager:
 			background_color:(45/255,45/255,45/255,1)
 			hint_text: 'Password\nSize'
 			multiline: False
-			pos_hint: {'center_x': 0.87,'center_y': 0.45}
-			size_hint: (0.1, 0.08)
+			pos_hint: {'center_x': 0.86,'center_y': 0.45}
+			size_hint: (0.12, 0.08)
 		Button: 
 			text: 'Generate Password'
 			pos_hint: {'center_x': 0.68 ,'center_y': 0.45 }
 			size_hint: (0.20, 0.06)
-			background_normal: 'button for login.png'
-			background_down: 'on down login.png'
+			background_normal: 'UI/button for login.png'
+			background_down: 'UI/on down login.png'
 			on_release:
 				root.random_password()
 		Button:
 			text: 'Save Password'
 			pos_hint: {'center_x': 0.85 ,'center_y': 0.1 }
 			size_hint: (0.15, 0.06)
-			background_normal: 'button for login.png'
-			background_down: 'on down login.png'
+			background_normal: 'UI/button for login.png'
+			background_down: 'UI/on down login.png'
 			on_release:
 				root.Add_New_Password()
 				
@@ -343,8 +348,8 @@ Screen_Manager:
 			pos_hint: {'x': 0 ,'top': 0.2 }
 			size_hint: (None, None)
 			size: (150,120)
-			background_normal: 'Main Window Button.png'
-			background_down: 'Main Window Button Ondown.png'
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
 			on_release:
 				app.root.current='Login'
 				root.manager.transition.direction= "right"
@@ -353,31 +358,31 @@ Screen_Manager:
 			pos_hint: {'x': 0 ,'top': 0.4 }
 			size_hint: (None, None)
 			size: (150,120)
-			background_normal: 'Main Window Button.png'
-			background_down: 'Main Window Button Ondown.png'
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
 		Button:
 			text: 'Import Passwords'
 			pos_hint: {'x': 0 ,'top': 0.6 }
 			size_hint: (None, None)
 			size: (150,120)
-			background_normal: 'Main Window Button.png'
-			background_down: 'Main Window Button Ondown.png'
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
 			on_release: root.Import_Passwords()
 		Button:
 			text: 'Export Passwords'
 			pos_hint: {'x': 0 ,'top': 0.8 }
 			size_hint: (None, None)
 			size: (150,120)
-			background_normal: 'Main Window Button.png'
-			background_down: 'Main Window Button Ondown.png'
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
 			on_release: root.Export_Passwords()
 		Button: 
 			text: 'View Passwords'
 			pos_hint: {'x': 0 ,'top': 1 }
 			size_hint: (None, None)
 			size: (150,120)
-			background_normal: 'Main Window Button.png'
-			background_down: 'Main Window Button Ondown.png'
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
 			on_release:
 				app.root.current='PassDisp'
 				root.manager.transition.direction= "left"

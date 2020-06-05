@@ -136,21 +136,24 @@ def DelPassword(entry):
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newListData3.append(Sublist)
 	pass_file.close()
-	newListData3.remove(entry)
-	temp = open(HomeDir('Data3.txt'), 'w')
-	temp = deleteContent(temp)
-	temp.close()
-	for passList in newListData3:
-		passwrd = ''
-		a=0
-		for ele in passList:
-			if a == len(passList)-1:
-				passwrd += ele 
-				a+=1
-			else:
-				passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
-				a+=1
-		ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
+	if entry in newListData3:
+		newListData3.remove(entry)
+		temp = open(HomeDir('Data3.txt'), 'w')
+		temp = deleteContent(temp)
+		temp.close()
+		for passList in newListData3:
+			passwrd = ''
+			a=0
+			for ele in passList:
+				if a == len(passList)-1:
+					passwrd += ele 
+					a+=1
+				else:
+					passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
+					a+=1
+			ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
+	else:
+		pass
 
 
 def EditPassword(iniEntry, entry): #replaces iniEntry with entry
