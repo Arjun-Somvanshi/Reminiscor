@@ -153,9 +153,11 @@ Screen_Manager:
 	Label:
 		markup: True
 		text: 'This is the Sign-Up page. A user [color=#e8c209]doesn\'t[/color] exist!\nPlease remember your [color=#e8c209]Master Password[/color] and [color=#e8c209]Username[/color]'
-		font_size: 15
-		size_hint: (.1, .1)
-		pos_hint: {'center_x': 0.5,'top': 1 }	
+		font_size: 14
+		size_hint: (None, .1)
+		width:350
+		text_size: (self.width,None)
+		pos_hint: {'center_x': 0.5,'top': 0.95 }	
 	TextInput: 
 		id: user
 		hint_text: 'Username'

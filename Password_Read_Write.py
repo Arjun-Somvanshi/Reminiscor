@@ -2,6 +2,7 @@ from FileHandling import *
 from EnigmaModule import *
 import string
 from random import randint
+from stat import S_IREAD, S_IRGRP, S_IROTH, S_IWUSR
 
 Alpha = string.ascii_letters
 
@@ -84,6 +85,7 @@ def Export():
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newList.append(Sublist)
 	file = open(Import_Export_Dir('Export File.txt'),'w')
+	os.chmod(Import_Export_Dir('Export File.txt'), S_IWUSR|S_IREAD)
 	for ele in newList:
 		for sublist in ele:
 			if not sublist == ele[len(ele)-1]:
@@ -91,12 +93,14 @@ def Export():
 			else:
 				file.write(sublist)
 		file.write('\n')
+	os.chmod(Import_Export_Dir('Export File.txt'), S_IREAD|S_IRGRP|S_IROTH)
 	file.close()
 #Export()
 def Import():
 	newList = []
 	newListData3 = []
 	if os.path.isfile(Import_Export_Dir('Import File.txt')):
+		os.chmod(Import_Export_Dir('Import File.txt'), S_IREAD|S_IRGRP|S_IROTH)
 		file = open(Import_Export_Dir('Import File.txt'), 'r')
 		List = ReadFile(file)
 		for ele in List:
@@ -181,8 +185,3 @@ def EditPassword(iniEntry, entry): #replaces iniEntry with entry
 				passwrd += ele
 				a+=1
 		ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
-'''
-EditPassword(['google', 'manu', 'manu2002', '     '],['google', 'manu', 'manvendra2002', '     '])
-List = ReadDecrypt(HomeDir('Data3.txt'))
-print(List)
-'''
