@@ -168,20 +168,23 @@ def EditPassword(iniEntry, entry): #replaces iniEntry with entry
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newListData3.append(Sublist)
 	pass_file.close()
-	index = newListData3.index(iniEntry)
-	newListData3.remove(iniEntry)
-	newListData3.insert(index, entry)
-	temp = open(HomeDir('Data3.txt'), 'w')
-	temp = deleteContent(temp)
-	temp.close()
-	for passList in newListData3:
-		passwrd = ''
-		a=0
-		for ele in passList:
-			if not a == len(passList)-1:
-				passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
-				a+=1
-			else:
-				passwrd += ele
-				a+=1
-		ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
+	if iniEntry in newListData3:
+		index = newListData3.index(iniEntry)
+		newListData3.remove(iniEntry)
+		newListData3.insert(index, entry)
+		temp = open(HomeDir('Data3.txt'), 'w')
+		temp = deleteContent(temp)
+		temp.close()
+		for passList in newListData3:
+			passwrd = ''
+			a=0
+			for ele in passList:
+				if not a == len(passList)-1:
+					passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
+					a+=1
+				else:
+					passwrd += ele
+					a+=1
+			ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
+	else:
+		pass
