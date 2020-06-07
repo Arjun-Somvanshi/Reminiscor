@@ -218,10 +218,8 @@ class MainWindow(Screen):
 			ColorChange(self.description,True,'Invalid Add')
 			ColorChange(self.n,True,'Invalid\nAdd')
 			ColorChange(self.passw,True,'Invalid Add')
-	def screen3(self):
-		x=Password_Screen()
 class Password_Screen(Screen):
-	passn=None
+	passn=None		
 	def __init__(self, **kwargs):
 		super(Password_Screen,self).__init__(**kwargs)
 		def showlist(*args):
@@ -278,7 +276,7 @@ class Password_Screen(Screen):
 		layout0.add_widget(Backbtn)
 		layout0.add_widget(self.searchbar)
 		mainlayout.add_widget(layout0)
-		showlist()
+		Clock.schedule_interval(showlist, 1.5)
 		self.add_widget(mainlayout)
 	def searchresult(self,instance):
 		result=SearchFile(self.searchbar.text)
