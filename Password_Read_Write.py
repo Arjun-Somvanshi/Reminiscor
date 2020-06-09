@@ -63,6 +63,7 @@ def ReadDecrypt(filename): #Reads a file and decrypts it using userkey. Returns 
 def SearchFile(Str): #searches for passwords in data3,txt and returns all information of required password. 
 	newList = []
 	List = ReadDecrypt(HomeDir('Data3.txt'))
+	ind=None
 	for ele in List:
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newList.append(Sublist)

@@ -219,16 +219,39 @@ class MainWindow(Screen):
 			ColorChange(self.description,True,'Invalid Add')
 			ColorChange(self.n,True,'Invalid\nAdd')
 			ColorChange(self.passw,True,'Invalid Add')
+	def refresh(self):
+		self.manager.get_screen('PassDisp').showlist()
+		pass
 class Password_Screen(Screen):
 	passn=None		
+
 	def __init__(self, **kwargs):
 		super(Password_Screen,self).__init__(**kwargs)
-		def showlist(*args):
-			if len(mainlayout.children)>1:
+		self.refreshing=False
+		self.mainlayout=BoxLayout(orientation='horizontal',spacing=10)
+		layout0=FloatLayout()
+		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(200,40),pos_hint={'x':0,'top':1},halign='center',
+			                     foreground_color=(0.7,0.7,0.7,1),color=(0.7,0.7,0.7),cursor_color=(0,171/255,174/255,1),background_color=(45/255,45/255,45/255,1))
+		searchbtn=Button(size_hint=(None,None),size =(40,40),pos_hint={'x':0.51,'top':1},halign='center',on_release=self.searchresult)
+		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
+		searchbtn.background_normal='UI/Search.png'
+		searchbtn.background_down='UI/SearchOnDown.png'
+		Backbtn.background_normal='UI/button for login.png'
+		Backbtn.background_down='UI/on down login.png'
+		layout0.add_widget(searchbtn)
+		layout0.add_widget(Backbtn)
+		layout0.add_widget(self.searchbar)
+		self.mainlayout.add_widget(layout0)
+		self.showlist()
+		#Clock.schedule_interval(partial(self.showlist ),0.5)
+		self.add_widget(self.mainlayout)
+	def showlist(self,*largs):
+			print('a')
+			if len(self.mainlayout.children)>1:
 				a=0
-				for i in mainlayout.children:
+				for i in self.mainlayout.children:
 					if a==0:
-						mainlayout.remove_widget(i)
+						self.mainlayout.remove_widget(i)
 			layout1 = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
 			layout1.bind(minimum_height=layout1.setter('height'))
 			if os.path.isfile(HomeDir('Data3.txt')):
@@ -243,42 +266,24 @@ class Password_Screen(Screen):
 						layout1.add_widget(btn)
 					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 					root.add_widget(layout1)
-					mainlayout.add_widget(root)
+					self.mainlayout.add_widget(root)
 				else:
 					btn = Button(text='No passwords yet!',size_hint_y=None, height=60,color=[1,0,0,1])
-					btn.background_normal='Main Window Button.png'
+					btn.background_normal='UI/Main Window Button.png'
+					btn.background_down='UI/Main Window Button.png'
 					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 					layout1.add_widget(btn)
 					root.add_widget(layout1)
-					mainlayout.add_widget(root)
+					self.mainlayout.add_widget(root)
 
 			else:
 				btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
+				btn.background_normal='UI/Main Window Button.png'
+				btn.background_down='UI/Main Window Button.png'
 				root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 				layout1.add_widget(btn)
 				root.add_widget(layout1)
 				mainlayout.add_widget(root)
-		
-		mainlayout=BoxLayout(orientation='horizontal',spacing=10)
-		layout0=FloatLayout()
-		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(200,40),pos_hint={'x':0,'top':1},halign='center',
-			                     foreground_color=(0.7,0.7,0.7,1),color=(0.7,0.7,0.7),cursor_color=(0,171/255,174/255,1),background_color=(45/255,45/255,45/255,1))
-		searchbtn=Button(size_hint=(None,None),size =(40,40),pos_hint={'x':0.51,'top':1},halign='center',on_release=self.searchresult)
-		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
-		Refreshbtn=Button(size_hint=(None,None),size=(100,50), pos_hint={'x':0.74,'top':1},on_release=showlist)
-		Refreshbtn.background_normal='UI/Refresh.png'
-		Refreshbtn.background_down='UI/refreshondown.png'
-		searchbtn.background_normal='UI/Search.png'
-		searchbtn.background_down='UI/SearchOnDown.png'
-		Backbtn.background_normal='UI/button for login.png'
-		Backbtn.background_down='UI/on down login.png'
-		layout0.add_widget(Refreshbtn)
-		layout0.add_widget(searchbtn)
-		layout0.add_widget(Backbtn)
-		layout0.add_widget(self.searchbar)
-		mainlayout.add_widget(layout0)
-		Clock.schedule_interval(showlist, 1.5)
-		self.add_widget(mainlayout)
 	def searchresult(self,instance):
 		result=SearchFile(self.searchbar.text)
 		if result==[]:
@@ -296,6 +301,8 @@ class Password_Screen(Screen):
 			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400))
 			search.open()
 	def screenswitch(self,instance):
+		if self.refreshing:
+			self.refresh_event.cancel()
 		self.manager.current = 'Main'
 		self.manager.transition.direction='right'
 	def poppassword(self,entrydata,*args):
@@ -306,6 +313,9 @@ class Password_Screen(Screen):
 		design.ids.notes.text+=entrydata[3]
 		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400))
 		entry.open()
+		design.ids.delete.bind(on_release=entry.dismiss)
+		self.refresh_event = Clock.schedule_interval(self.showlist, 0.5)
+		self.refreshing=True
 class editpopup(FloatLayout):
 	def pre_edit(self):
 		self.entrydata=[]
@@ -337,7 +347,6 @@ class passwordpopup(FloatLayout):
 		entry.append(self.ids.password.text)
 		entry.append(self.ids.notes.text)
 		DelPassword(entry)
-
 class Screen_Manager(ScreenManager):
 	pass
 kv=Builder.load_file("reminiscorGUI.kv")

@@ -1,4 +1,5 @@
 Screen_Manager:
+	id:sm
 	LoginWindow:
 	MainWindow:
 	Password_Screen:
@@ -388,6 +389,7 @@ Screen_Manager:
 			on_release:
 				app.root.current='PassDisp'
 				root.manager.transition.direction= "left"
+				root.refresh()
 
 <Password_Screen>:
 	name: 'PassDisp'
