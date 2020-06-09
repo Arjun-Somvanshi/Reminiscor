@@ -220,7 +220,7 @@ class MainWindow(Screen):
 			ColorChange(self.n,True,'Invalid\nAdd')
 			ColorChange(self.passw,True,'Invalid Add')
 	def refresh(self):
-		self.manager.get_screen('PassDisp').showlist()
+		self.manager.get_screen('PassDisp').refresh_trig()
 		pass
 class Password_Screen(Screen):
 	passn=None		
@@ -246,7 +246,7 @@ class Password_Screen(Screen):
 		#Clock.schedule_interval(partial(self.showlist ),0.5)
 		self.add_widget(self.mainlayout)
 	def showlist(self,*largs):
-			print('a')
+			#print('a') to understand when show list is called.
 			if len(self.mainlayout.children)>1:
 				a=0
 				for i in self.mainlayout.children:
@@ -314,8 +314,9 @@ class Password_Screen(Screen):
 		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400))
 		entry.open()
 		design.ids.delete.bind(on_release=entry.dismiss)
-		self.refresh_event = Clock.schedule_interval(self.showlist, 0.5)
+	def refresh_trig(self):
 		self.refreshing=True
+		self.refresh_event = Clock.schedule_interval(self.showlist, 0.5)	
 class editpopup(FloatLayout):
 	def pre_edit(self):
 		self.entrydata=[]
