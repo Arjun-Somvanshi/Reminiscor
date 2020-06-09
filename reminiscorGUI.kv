@@ -402,24 +402,26 @@ Screen_Manager:
 		id: title
 		text:''
 		size_hint:(None,.1)
-		width:self.width
-		pos_hint: {'x': 0.4, 'top': 0.9}
+		width:150
+		text_size:self.width,None
+		pos_hint: {'x': 0.45, 'top': 0.9}
 	Label:
 		text:'Username: '
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.7}
-	Label:
+	TextInput:
 		id: username
+		multiline: False
 		text:''
-		size_hint:(None,.1)
-		width:self.width
-		pos_hint: {'x': 0.4, 'top': 0.7}
+		size_hint:(0.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.7}
 	Label:
 		text:'Password: '
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.5}
 	TextInput:
 		id: password
+		halign:'left'
 		multiline: False
 		text:''
 		size_hint:(.5,.1)
@@ -432,8 +434,9 @@ Screen_Manager:
 		id:notes
 		text:''
 		size_hint:(None,.1)
-		width:self.width
-		pos_hint: {'x': 0.4, 'top': 0.3}
+		width:150
+		text_size:self.width,None
+		pos_hint: {'x': 0.45, 'top': 0.3}
 	Button:
 		id: delete
 		text:'Delete Entry'
