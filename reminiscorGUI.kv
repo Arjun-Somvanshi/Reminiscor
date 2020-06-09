@@ -1,3 +1,5 @@
+#: import FadeTransition kivy.uix.screenmanager.FadeTransition
+#: import SlideTransition kivy.uix.screenmanager.SlideTransition
 Screen_Manager:
 	id:sm
 	LoginWindow:
@@ -246,8 +248,9 @@ Screen_Manager:
 			background_normal: 'UI/button for login.png'
 			background_down: 'UI/on down login.png'
 			on_release:
+				app.root.transition=FadeTransition(duration=1.2)
 				app.root.current='Main' if root.Login_Authenticate() else 'Login'
-				root.manager.transition.direction= "left"
+				
 		Button:
 			text: 'Sign-Up'
 			color: (0.5, 0.5, 0.5, 1)
@@ -354,8 +357,8 @@ Screen_Manager:
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release:
+				app.root.transition=FadeTransition(duration=1.2)
 				app.root.current='Login'
-				root.manager.transition.direction= "right"
 		Button: 
 			text: 'Help'
 			pos_hint: {'x': 0 ,'top': 0.4 }
@@ -387,6 +390,7 @@ Screen_Manager:
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release:
+				app.root.transition=SlideTransition()
 				app.root.current='PassDisp'
 				root.manager.transition.direction= "left"
 				root.refresh()
