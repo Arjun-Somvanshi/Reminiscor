@@ -18,16 +18,18 @@ Screen_Manager:
 <signup_error>:
 	Label:
 		markup: True
-		text:'The username and password protect [color=#e8c209]all your passwords in Reminiscor.[/color]\n\nTo keep your data safe on your device we have set the default allowable username size to [color=#e8c209]eight characters[/color] and the password size to [color=#e8c209]ten characters.[/color]'
+		text:'The username and password protect [color=00abae]all your passwords in Reminiscor.[/color]\n\nTo keep your data safe on your device we have set the default allowable username size to [color=00abae]eight characters[/color] and the password size to [color=00abae]ten characters.[/color]'
 		text_size:(self.width,None)
 		size_hint: (None, .1)
 		width:350
-		pos_hint: {'center_x': 0.5, 'center_y': 0.66}
+		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
 	Button:
 		id: close
-		text:'Back to Signup'
+		text:'Back'
 		halign: 'center'
 		text_size: (self.width,None)
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
 		pos_hint: {'center_x':0.8,'center_y':0.1}
 		size_hint:(0.3,0.18)
 <Login_Popup_export>:
@@ -40,7 +42,7 @@ Screen_Manager:
 	Label:
 		id: label
 		text:''
-		pos_hint:{'center_x':0.8,'center_y':0.15}
+		pos_hint:{'center_x':0.75,'center_y':0.15}
 		size_hint:(None,0.1)
 		width:400
 		text_size:(350, None)
@@ -139,6 +141,10 @@ Screen_Manager:
 	TextInput:
 		id: password
 		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.6, 'top': 0.6}
@@ -155,7 +161,7 @@ Screen_Manager:
 	signup:signup
 	Label:
 		markup: True
-		text: 'This is the Sign-Up page. A user [color=#e8c209]doesn\'t[/color] exist!\nPlease remember your [color=#e8c209]Master Password[/color] and [color=#e8c209]Username[/color]'
+		text: 'This is the Sign-Up page. A user [color=00abae]doesn\'t[/color] exist!\nPlease remember your [color=00abae]Master Password[/color] and [color=00abae]Username[/color]'
 		font_size: 14
 		size_hint: (None, .1)
 		width:350
@@ -164,33 +170,50 @@ Screen_Manager:
 	TextInput: 
 		id: user
 		hint_text: 'Username'
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.3, 'top': 0.8}
+		pos_hint: {'center_x': 0.3, 'top': 0.75}
 		size_hint: (0.50, 0.09)
 	TextInput:
 		id: p1
 		hint_text: 'Master Password' 
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.3, 'top': 0.6}
+		pos_hint: {'center_x': 0.3, 'top': 0.55}
 		size_hint: (0.50, 0.09)
 	TextInput:
 		id: p2
 		hint_text: 'Confirm Master Password' 
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.3, 'top': 0.4}
+		pos_hint: {'center_x': 0.3, 'top': 0.35}
 		size_hint: (0.50, 0.09)
 	Button:
 		id:signup
 		text:'Sign-Up!'
 		pos_hint: {'center_x': 0.8, 'center_y': 0.1}
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
 		size_hint: (0.3, 0.1)
 		on_release:
 			root.check()
 	Button:
 		id:close
-		text:'Back to Login Screen'
+		text:'Back'
+		halign:'center'
 		font_size: 14
 		text_size: (self.width, None)
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
 		halign: 'center'
 		pos_hint: {'center_x': 0.2, 'center_y': 0.1}
 		size_hint: (0.3, 0.1)
@@ -416,6 +439,10 @@ Screen_Manager:
 	TextInput:
 		id: username
 		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		text:''
 		size_hint:(0.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.7}
@@ -427,6 +454,10 @@ Screen_Manager:
 		id: password
 		halign:'left'
 		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
@@ -444,6 +475,8 @@ Screen_Manager:
 	Button:
 		id: delete
 		text:'Delete Entry'
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
 		size_hint:(0.35,0.1)
 		pos_hint: {'center_x': 0.2, 'center_y':0.1}
 		on_release:
@@ -451,6 +484,8 @@ Screen_Manager:
 	Button:
 		id: edit
 		text:'Edit Entry'
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
 		size_hint:(0.35,0.1)
 		pos_hint: {'center_x': 0.6, 'center_y':0.1}
 		on_release:
@@ -463,6 +498,10 @@ Screen_Manager:
 	TextInput:
 		id: title_input
 		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.9}
@@ -472,6 +511,10 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.7}
 	TextInput:
 		id: username_input
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		multiline: False
 		text:''
 		size_hint:(.5,.1)
@@ -483,6 +526,10 @@ Screen_Manager:
 	TextInput:
 		id: password
 		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
@@ -493,6 +540,10 @@ Screen_Manager:
 	TextInput:
 		id: notes_input
 		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.3}
@@ -500,6 +551,8 @@ Screen_Manager:
 		id:Edit
 		text:'Confirm Edit'
 		size_hint:(0.35,0.1)
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
 		pos_hint: {'center_x': 0.2, 'center_y':0.1}
 		on_release:
 			root.edit()

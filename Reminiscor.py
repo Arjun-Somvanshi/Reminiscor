@@ -69,7 +69,6 @@ class Login_Popup_import(FloatLayout):
 			else:
 				self.ids.label.text='Authentication Failed'
 				self.ids.label.color=[1,0,0,1]
-				self.add_widget(label)
 				
 class SignUp_Pop(FloatLayout):
 	user=ObjectProperty()
@@ -104,7 +103,7 @@ class SignUp_Pop(FloatLayout):
 			return True
 		else:
 			errorpop=signup_error()
-			error_win=Popup(title='Sign-Up Failed', content=errorpop,size_hint=(None,None),size=(400,250))
+			error_win=Popup(title='Sign-Up Failed', content=errorpop,size_hint=(None,None),size=(400,250),separator_color=[0,171/255,174/255,1],background='UI/popup400x250.png')
 			error_win.open()
 			errorpop.ids.close.bind(on_release=error_win.dismiss)
 			ColorChange(self.user,True,'Invalid')
@@ -121,11 +120,11 @@ class LoginWindow(Screen):
 		self.win.dismiss()
 	def user_error_popup(self):
 		design=UserError()
-		UserExists=Popup(title='User Error Encountered!',title_align='center',content=design,size_hint=(None,None),size=(400,200))
+		UserExists=Popup(title='User Error Encountered!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 		UserExists.open()
 	def signup_pop(self):
 		design=SignUp_Pop()
-		self.win=Popup(title='Sign-Up Screen',title_align='center',content=design,size_hint=(None,None),size=(400,450))
+		self.win=Popup(title='Sign-Up Screen',title_align='center',content=design,size_hint=(None,None),size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
 		self.win.open()
 	def signup_check(self):
 		if not CheckUser():
@@ -163,19 +162,19 @@ class MainWindow(Screen):
 	notes=ObjectProperty()
 	def Import_Passwords(self):
 		design=Login_Popup_import()
-		explain=Label(text='This is an import process of passwords, they will be added to your list if any.', text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
+		explain=Label(markup=True,text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.',text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
 		design.add_widget(explain)
-		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450))
+		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
 		win.open()
 	def Export_Passwords(self):
 		design=Login_Popup_export()
-		explain=Label(text='This process will decrypt and export your passwords.', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.9})
+		explain=Label(markup=True,text='This process will [color=00abae]decrypt and export your passwords.[/color]', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
 		design.add_widget(explain)
-		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450))
+		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
 		win.open()
 	def p_size_popup(self):
 		design=Password_Size_Popup()
-		win=Popup(title='Error',content=design,size_hint=(None,None),size=(400,400))
+		win=Popup(title='Error',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 		win.open()
 	def random_password(self):
 		pass_check=PassCheck(self.n)
@@ -204,7 +203,7 @@ class MainWindow(Screen):
 			ColorChange(self.passw,False,'Password')
 			WriteEncrypt(HomeDir('Data3.txt'),self.description.text + sep + self.username.text + sep + self.passw.text + sep + self.notes.text)
 			design=Password_Added()
-			Added_pop=Popup(title='Password Added!',title_align='center',content=design,size_hint=(None,None),size=(400,200))
+			Added_pop=Popup(title='Password Added!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			Added_pop.open()
 			self.description.text=''
 			self.n.text=''
@@ -286,7 +285,7 @@ class Password_Screen(Screen):
 		if result==[]:
 			design=search_popup()
 			design.ids.title.text='No such entry exists'
-			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400))
+			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 			search.open()
 		else:
 			design=search_popup()
@@ -295,7 +294,7 @@ class Password_Screen(Screen):
 			design.ids.passtext.text='Password: '
 			design.ids.password.text=result[2]
 			design.ids.notes.text='Notes: '+result[3]
-			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400))
+			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 			search.open()
 	def screenswitch(self,instance):
 		if self.refreshing:
@@ -309,13 +308,13 @@ class Password_Screen(Screen):
 		design.ids.username.text+=entrydata[1]
 		design.ids.password.text+=entrydata[2]
 		design.ids.notes.text+=entrydata[3]
-		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400))
+		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 		entry.open()
 		design.ids.delete.bind(on_release=entry.dismiss)
 		design.ids.edit.bind(on_release=entry.dismiss)
 	def refresh_trig(self):
 		self.refreshing=True
-		self.refresh_event = Clock.schedule_interval(self.showlist, 0.8)	
+		self.refresh_event = Clock.schedule_interval(self.showlist, 1)	
 class editpopup(FloatLayout):
 	def pre_edit(self):
 		self.entrydata=[]
@@ -338,7 +337,7 @@ class passwordpopup(FloatLayout):
 		design.ids.password.text+=self.ids.password.text
 		design.ids.notes_input.text+=self.ids.notes.text
 		design.pre_edit()
-		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400))
+		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 		entry.open()
 	def delete(self):
 		entry=[]
