@@ -114,6 +114,7 @@ def Import():
 			newListData3.append(Sublist)
 		pass_file.close()
 		file_new = open(HomeDir('Data3.txt'), 'a')
+		temp = False
 		for ele1 in newList:
 			for ele2 in newListData3:
 				if ele1[0].lower() == ele2[0].lower():
