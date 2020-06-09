@@ -279,7 +279,7 @@ class Password_Screen(Screen):
 				root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 				layout1.add_widget(btn)
 				root.add_widget(layout1)
-				mainlayout.add_widget(root)
+				self.mainlayout.add_widget(root)
 	def searchresult(self,instance):
 		result=SearchFile(self.searchbar.text)
 		if result==[]:
