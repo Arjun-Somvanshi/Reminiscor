@@ -11,7 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty,BooleanProperty
 from kivy.uix.popup import Popup
 from PassGen import *
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
@@ -22,6 +22,7 @@ from Password_Read_Write import *
 from EnigmaModule import *
 from FileHandling import *
 import os
+import pyperclip
 from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -216,11 +217,9 @@ class MainWindow(Screen):
 			ColorChange(self.passw,True,'Invalid Add')
 	def refresh(self):
 		self.manager.get_screen('PassDisp').showlist()
-		self.manager.get_screen('PassDisp').refresh_trig()
-		pass
 class Password_Screen(Screen):
 	passn=None		
-
+	
 	def __init__(self, **kwargs):
 		super(Password_Screen,self).__init__(**kwargs)
 		self.refreshing=False
@@ -242,7 +241,7 @@ class Password_Screen(Screen):
 		#Clock.schedule_interval(partial(self.showlist ),0.5)
 		self.add_widget(self.mainlayout)
 	def showlist(self,*largs):
-			#print('a') to understand when show list is called 
+			print('a\nb') #to understand when show list is called 
 			if len(self.mainlayout.children)>1:
 				a=0
 				for i in self.mainlayout.children:
@@ -285,7 +284,7 @@ class Password_Screen(Screen):
 		if result==[]:
 			design=search_popup()
 			design.ids.title.text='No such entry exists'
-			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
+			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png',auto_dismiss=False)
 			search.open()
 		else:
 			design=search_popup()
@@ -297,55 +296,61 @@ class Password_Screen(Screen):
 			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 			search.open()
 	def screenswitch(self,instance):
-		if self.refreshing:
-			self.refresh_event.cancel()
 		self.manager.transition=SlideTransition()
 		self.manager.current = 'Main'
 		self.manager.transition.direction='right'
 	def poppassword(self,entrydata,*args):
 		design=passwordpopup()
+
 		design.ids.title.text+=entrydata[0]
 		design.ids.username.text+=entrydata[1]
 		design.ids.password.text+=entrydata[2]
 		design.ids.notes.text+=entrydata[3]
-		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
+		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png',auto_dismiss=False)
 		entry.open()
-		design.ids.delete.bind(on_release=entry.dismiss)
-		design.ids.edit.bind(on_release=entry.dismiss)
+		design.ids.close.bind(on_release=partial(self.DismissAndTriggerCancel,design,entry))
+		design.ids.delete.bind(on_release=partial(self.DeleteAndRefresh,design,entry))
+		design.ids.edit.bind(on_release=partial(self.editflow,design,entrydata))
+	def editflow(self,design,entrydata,instance):
+		design.edit(entrydata)
+		self.showlist()
+	def DismissAndTriggerCancel(self,design,entry,instance):
+		entry.dismiss()
+	def DeleteAndRefresh(self,design,entry,instance):
+		design.delete()
+		entry.dismiss()
+		self.showlist()
 	def refresh_trig(self):
 		self.refreshing=True
-		self.refresh_event = Clock.schedule_interval(self.showlist, 1)	
-class editpopup(FloatLayout):
-	def pre_edit(self):
-		self.entrydata=[]
-		self.entrydata.append(self.ids.title_input.text)
-		self.entrydata.append(self.ids.username_input.text)
-		self.entrydata.append(self.ids.password.text)
-		self.entrydata.append(self.ids.notes_input.text)
-	def edit(self):
-		entry=[]
-		entry.append(self.ids.title_input.text)
-		entry.append(self.ids.username_input.text)
-		entry.append(self.ids.password.text)
-		entry.append(self.ids.notes_input.text)
-		EditPassword(self.entrydata,entry)
+		self.refresh_event = Clock.schedule_interval(self.showlist, 0.5)	
+	def refresh_trig_cancel(self):
+		self.refreshing=False
+		print('\nclosed')
+		self.refresh_event.cancel()
 class passwordpopup(FloatLayout):
-	def edit_popup(self):
-		design=editpopup()
-		design.ids.title_input.text+=self.ids.title.text
-		design.ids.username_input.text+=self.ids.username.text
-		design.ids.password.text+=self.ids.password.text
-		design.ids.notes_input.text+=self.ids.notes.text
-		design.pre_edit()
-		entry=Popup(title='Entry Information',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
-		entry.open()
-	def delete(self):
+	viewing = BooleanProperty(True)
+	def delete(self, *args):
+		print('deleted')
 		entry=[]
 		entry.append(self.ids.title.text)
 		entry.append(self.ids.username.text)
 		entry.append(self.ids.password.text)
 		entry.append(self.ids.notes.text)
 		DelPassword(entry)
+	def copytoclip1(self):
+		pyperclip.copy(self.ids.username.text)
+	def copytoclip2(self):
+		pyperclip.copy(self.ids.password.text)
+	def edit(self,entrydata):
+		print('flow')
+		self.ids.edittoggle.state='normal'
+		editedentry=[]
+		editedentry.append(self.ids.title.text)
+		editedentry.append(self.ids.username.text)
+		editedentry.append(self.ids.password.text)
+		editedentry.append(self.ids.notes.text)
+		EditPassword(entrydata,editedentry)
+
 class Screen_Manager(ScreenManager):
 	pass
 kv=Builder.load_file("reminiscorGUI.kv")

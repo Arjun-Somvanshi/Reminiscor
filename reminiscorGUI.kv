@@ -304,6 +304,11 @@ Screen_Manager:
 	        size: self.size
 	        pos: self.pos
 	FloatLayout:
+		Image:
+			source:'UI/Logo.png'
+			size_hint: (None,None)
+			size:(100,97)
+			pos_hint:{'right':1,'top':1}
 		TextInput:
 			id: description
 			foreground_color:(0.7,0.7,0.7,1)
@@ -424,14 +429,20 @@ Screen_Manager:
 	Label:
 		text:'Title: '
 		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.9}
-	Label:
+		pos_hint: {'x': 0.18, 'top': 0.9}
+	TextInput:
 		id: title
+		halign:'left'
+		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
 		text:''
-		size_hint:(None,.1)
-		width:150
-		text_size:self.width,None
-		pos_hint: {'x': 0.45, 'top': 0.9}
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.9}
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled: root.viewing
 	Label:
 		text:'Username: '
 		size_hint:(.1,.1)
@@ -446,6 +457,8 @@ Screen_Manager:
 		text:''
 		size_hint:(0.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.7}
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled: root.viewing
 	Label:
 		text:'Password: '
 		size_hint:(.1,.1)
@@ -461,84 +474,15 @@ Screen_Manager:
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled: root.viewing
 	Label:
 		text:'Notes: '
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.3}
-	Label:
+	TextInput:
 		id:notes
-		text:''
-		size_hint:(None,.1)
-		width:150
-		text_size:self.width,None
-		pos_hint: {'x': 0.45, 'top': 0.3}
-	Button:
-		id: delete
-		text:'Delete Entry'
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
-		size_hint:(0.35,0.1)
-		pos_hint: {'center_x': 0.2, 'center_y':0.1}
-		on_release:
-			root.delete()
-	Button:
-		id: edit
-		text:'Edit Entry'
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
-		size_hint:(0.35,0.1)
-		pos_hint: {'center_x': 0.6, 'center_y':0.1}
-		on_release:
-			root.edit_popup()
-<editpopup>:
-	Label:
-		text:'Title: '
-		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.9}
-	TextInput:
-		id: title_input
-		multiline: False
-		foreground_color:(0.7,0.7,0.7,1)
-		color:(0.7,0.7,0.7)
-		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
-		text:''
-		size_hint:(.5,.1)
-		pos_hint: {'center_x': 0.7, 'top': 0.9}
-	Label:
-		text:'Username: '
-		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.7}
-	TextInput:
-		id: username_input
-		foreground_color:(0.7,0.7,0.7,1)
-		color:(0.7,0.7,0.7)
-		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
-		multiline: False
-		text:''
-		size_hint:(.5,.1)
-		pos_hint: {'center_x': 0.7, 'top': 0.7}
-	Label:
-		text:'Password: '
-		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.5}
-	TextInput:
-		id: password
-		multiline: False
-		foreground_color:(0.7,0.7,0.7,1)
-		color:(0.7,0.7,0.7)
-		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
-		text:''
-		size_hint:(.5,.1)
-		pos_hint: {'center_x': 0.7, 'top': 0.5}
-	Label:
-		text:'Notes: '
-		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.3}
-	TextInput:
-		id: notes_input
+		halign:'left'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -547,12 +491,54 @@ Screen_Manager:
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.3}
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled: root.viewing
+	ToggleButton:
+		id:edittoggle 
+        text: "Edit/Copy"
+        font_size: 11
+        state: 'normal' if root.viewing else 'down'
+        on_state: root.viewing = not root.viewing
+        background_normal: 'UI/button for login.png'
+		background_down: 'UI/editondown.png'
+        size_hint:(0.2,0.065)
+        pos_hint:{'x':0,'top':0.98}
+    Button:
+    	id: copyuser
+    	size_hint:(None,None)
+    	size:(30,30)
+    	background_normal: 'UI/clipboard.png'
+    	background_down: 'UI/clipboarddown.png'
+    	pos_hint:{'x':0,'top':0.685}
+    	on_release:root.copytoclip1()
+    Button:
+    	id: copypass
+    	size_hint:(None,None)
+    	size:(30,30)
+    	background_normal: 'UI/clipboard.png'
+    	background_down: 'UI/clipboarddown.png'
+    	pos_hint:{'x':0,'top':0.485}
+    	on_release:root.copytoclip2()
 	Button:
-		id:Edit
-		text:'Confirm Edit'
-		size_hint:(0.35,0.1)
+		id: delete
+		text:'Delete Entry'
 		background_normal: 'UI/button for login.png'
 		background_down: 'UI/on down login.png'
-		pos_hint: {'center_x': 0.2, 'center_y':0.1}
-		on_release:
-			root.edit()
+		size_hint:(0.3,0.08)
+		pos_hint: {'x': 0, 'y':0}
+	Button:
+		id: close
+		text:'Back'
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
+		size_hint:(0.3,0.08)
+		pos_hint: {'right':1 , 'y':0}
+	Button:
+		id: edit
+		text:'Confirm Edit'
+		background_normal: 'UI/button for login.png'
+		background_down: 'UI/on down login.png'
+		background_disabled_normal:'UI/DisabledButton.png'
+		size_hint:(0.3,0.08)
+		pos_hint: {'center_x': 0.5, 'y':0}
+		disabled:root.viewing
