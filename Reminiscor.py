@@ -81,7 +81,7 @@ class SignUp_Pop(FloatLayout):
 		if CheckMainPassword(self.user.text,self.p1.text,self.p2.text):
 			parent_dir = os.path.expanduser('~') + '/AppData/Roaming'
 			directory = "Reminiscor"
-			os.mkdir(os.path.join(parent_dir, directory))
+			os.makedirs(os.path.join(parent_dir, directory))
 			File_dir = os.path.expanduser('~') + '/Desktop'
 			direc = "Reminiscor Export_Import"
 			os.makedirs(os.path.join(File_dir, direc))
