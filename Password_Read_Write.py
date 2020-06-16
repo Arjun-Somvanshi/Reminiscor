@@ -199,5 +199,4 @@ def CheckFunction(List, LOL):
 	for element in LOL:
 		if List[0] == element[0]:
 			return True
-		else:
-			return False
+	return False

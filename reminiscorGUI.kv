@@ -308,7 +308,7 @@ Screen_Manager:
 			source:'UI/Logo.png'
 			size_hint: (None,None)
 			size:(100,97)
-			pos_hint:{'right':1,'top':1}
+			pos_hint:{'right':0.8,'top':0.9}
 		TextInput:
 			id: description
 			foreground_color:(0.7,0.7,0.7,1)
@@ -524,14 +524,14 @@ Screen_Manager:
 		text:'Delete Entry'
 		background_normal: 'UI/button for login.png'
 		background_down: 'UI/on down login.png'
-		size_hint:(0.3,0.08)
+		size_hint:(0.3,0.1)
 		pos_hint: {'x': 0, 'y':0}
 	Button:
 		id: close
 		text:'Back'
 		background_normal: 'UI/button for login.png'
 		background_down: 'UI/on down login.png'
-		size_hint:(0.3,0.08)
+		size_hint:(0.3,0.1)
 		pos_hint: {'right':1 , 'y':0}
 	Button:
 		id: edit
@@ -539,6 +539,6 @@ Screen_Manager:
 		background_normal: 'UI/button for login.png'
 		background_down: 'UI/on down login.png'
 		background_disabled_normal:'UI/DisabledButton.png'
-		size_hint:(0.3,0.08)
+		size_hint:(0.3,0.1)
 		pos_hint: {'center_x': 0.5, 'y':0}
 		disabled:root.viewing

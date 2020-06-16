@@ -30,7 +30,7 @@ def WriteLine(file, info): #Writes line with \n included
 
 def HomeDir(filename):
 	homedir = os.path.expanduser('~')
-	newdir = homedir + '\\AppData\\Roaming\\Reminiscor\\'+filename
+	newdir = homedir + '/AppData/Roaming/Reminiscor/'+filename
 	return newdir
 
 def ModifiedFileTime(filepath):
@@ -46,13 +46,13 @@ def CheckModified(a , b):
 
 def Import_Export_Dir(filename):
 	homedir = os.path.expanduser('~')
-	if os.path.isdir(homedir + '\\Desktop\\Reminiscor Export_Import\\'):	
-		newdir = homedir + '\\Desktop\\Reminiscor Export_Import\\'+ filename
+	if os.path.isdir(homedir + '/Desktop/Reminiscor Export_Import/'):	
+		newdir = homedir + '/Desktop/Reminiscor Export_Import/'+ filename
 	else:
-		File_dir = os.path.expanduser('~') + '\\Desktop'
+		File_dir = os.path.expanduser('~') + '/Desktop'
 		direc = "Reminiscor Export_Import"
 		os.makedirs(os.path.join(File_dir, direc))
-		newdir = homedir + '\\Desktop\\Reminiscor Export_Import\\'+ filename
+		newdir = homedir + '/Desktop/Reminiscor Export_Import/'+ filename
 	return newdir
 
 def deleteContent(pfile):

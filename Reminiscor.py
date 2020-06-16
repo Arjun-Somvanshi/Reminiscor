@@ -1,6 +1,6 @@
 
 from kivy.config import Config
-Config.set('kivy','window_icon','UI\\winicon.png')
+Config.set('kivy','window_icon','UI/winicon.png')
 Config.set('graphics', 'width',  800)
 Config.set('graphics', 'height', 600)
 Config.set('graphics', 'resizable', False)
@@ -11,7 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
-from kivy.properties import ObjectProperty,BooleanProperty
+from kivy.properties import ObjectProperty,BooleanProperty,NumericProperty
 from kivy.uix.popup import Popup
 from PassGen import *
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
@@ -79,10 +79,10 @@ class SignUp_Pop(FloatLayout):
 	cred_error=ObjectProperty()
 	def check(self):
 		if CheckMainPassword(self.user.text,self.p1.text,self.p2.text):
-			parent_dir = os.path.expanduser('~') + '\\AppData\\Roaming'
+			parent_dir = os.path.expanduser('~') + '/AppData/Roaming'
 			directory = "Reminiscor"
 			os.mkdir(os.path.join(parent_dir, directory))
-			File_dir = os.path.expanduser('~') + '\\Desktop'
+			File_dir = os.path.expanduser('~') + '/Desktop'
 			direc = "Reminiscor Export_Import"
 			os.makedirs(os.path.join(File_dir, direc))
 			Default_Unique_User_EnigmaSettings()
@@ -222,7 +222,6 @@ class Password_Screen(Screen):
 	
 	def __init__(self, **kwargs):
 		super(Password_Screen,self).__init__(**kwargs)
-		self.refreshing=False
 		self.mainlayout=BoxLayout(orientation='horizontal',spacing=10)
 		layout0=FloatLayout()
 		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(200,40),pos_hint={'x':0,'top':1},halign='center',
@@ -241,7 +240,7 @@ class Password_Screen(Screen):
 		#Clock.schedule_interval(partial(self.showlist ),0.5)
 		self.add_widget(self.mainlayout)
 	def showlist(self,*largs):
-			print('a\nb') #to understand when show list is called 
+			print('a') #to understand when show list is called 
 			if len(self.mainlayout.children)>1:
 				a=0
 				for i in self.mainlayout.children:
@@ -259,7 +258,7 @@ class Password_Screen(Screen):
 						btn.background_normal='UI/Main Window Button.png'
 						btn.background_down='UI/Main Window Button Ondown.png'
 						layout1.add_widget(btn)
-					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
+					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height),bar_margin=2,scroll_type=['bars', 'content'],bar_width=8,bar_color=[0,171/255,174/255,1])
 					root.add_widget(layout1)
 					self.mainlayout.add_widget(root)
 				else:
@@ -270,7 +269,6 @@ class Password_Screen(Screen):
 					layout1.add_widget(btn)
 					root.add_widget(layout1)
 					self.mainlayout.add_widget(root)
-
 			else:
 				btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
 				btn.background_normal='UI/Main Window Button.png'
@@ -301,7 +299,6 @@ class Password_Screen(Screen):
 		self.manager.transition.direction='right'
 	def poppassword(self,entrydata,*args):
 		design=passwordpopup()
-
 		design.ids.title.text+=entrydata[0]
 		design.ids.username.text+=entrydata[1]
 		design.ids.password.text+=entrydata[2]
@@ -312,7 +309,9 @@ class Password_Screen(Screen):
 		design.ids.delete.bind(on_release=partial(self.DeleteAndRefresh,design,entry))
 		design.ids.edit.bind(on_release=partial(self.editflow,design,entrydata))
 	def editflow(self,design,entrydata,instance):
-		design.edit(entrydata)
+		check=design.edit(entrydata)
+		if check:
+			design.ids.title.text=entrydata[0]
 		self.showlist()
 	def DismissAndTriggerCancel(self,design,entry,instance):
 		entry.dismiss()
@@ -320,13 +319,6 @@ class Password_Screen(Screen):
 		design.delete()
 		entry.dismiss()
 		self.showlist()
-	def refresh_trig(self):
-		self.refreshing=True
-		self.refresh_event = Clock.schedule_interval(self.showlist, 0.5)	
-	def refresh_trig_cancel(self):
-		self.refreshing=False
-		print('\nclosed')
-		self.refresh_event.cancel()
 class passwordpopup(FloatLayout):
 	viewing = BooleanProperty(True)
 	def delete(self, *args):
@@ -349,7 +341,8 @@ class passwordpopup(FloatLayout):
 		editedentry.append(self.ids.username.text)
 		editedentry.append(self.ids.password.text)
 		editedentry.append(self.ids.notes.text)
-		EditPassword(entrydata,editedentry)
+		check=EditPassword(entrydata,editedentry)
+		return check
 
 class Screen_Manager(ScreenManager):
 	pass
