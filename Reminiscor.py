@@ -36,41 +36,65 @@ if os.path.isfile(HomeDir('Data2.txt')):
 	MonitorData2=ModifiedFileTime(HomeDir('Data2.txt'))
 else:
 	MonitorData2=None
-class search_popup(FloatLayout):
-	pass
+#----------------------------------------------------------------------LOGIN WINDOW------------------------------------------------------------------------------------------------------
+class LoginWindow(Screen):
+	username=ObjectProperty()
+	p=ObjectProperty()
+	errortext=ObjectProperty()
+	user_check=ObjectProperty()
+	def on_enter(self):
+		Clock.schedule_once(self.welcome_screen)
+	def welcome_screen(self,dt):
+		if not CheckUser():
+			design=Welcome()
+			welcome_pop=Popup(title='',content=design,size_hint=(None,None),size=(400,500),separator_height=0,background='UI/Welcome.png')
+			welcome_pop.open()
+			design.ids.close.bind(on_release=welcome_pop.dismiss)
+	def close(self):
+		self.win.dismiss()
+	def user_error_popup(self):
+		design=UserError()
+		UserExists=Popup(title='User Error Encountered!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
+		UserExists.open()
+		design.ids.close.bind(on_release=UserExists.dismiss)
+	def signup_pop(self):
+		design=SignUp_Pop()
+		self.win=Popup(title='Sign-Up Screen',title_align='center',content=design,size_hint=(None,None),size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
+		self.win.open()
+	def signup_check(self):
+		if not CheckUser():
+			self.signup_pop()
+		else:
+			self.user_error_popup()
+	def Login_Authenticate(self):
+		if CheckUser():
+			if CheckCredentials(self.username.text,self.p.text):    #To check if main credential file exists
+				self.user_check.text=''
+				self.errortext.text=''
+				self.errortext.color=[1,1,1,1]
+				self.username.text=''
+				self.p.text=''
+				ColorChange(self.username,False,'Username')	
+				ColorChange(self.p,False,'Master Password')
+				return True 
+			else:
+				self.errortext.text='[u]Wrong credentials were entered. Try again![/u]'
+				self.errortext.color=[204/255,0,0,1]
+				ColorChange(self.username,True,'Invalid Field')	
+				ColorChange(self.p,True,'Invalid Field')	
+				return False
+		else:
+			self.username.text=''
+			self.p.text=''
+			self.signup_pop()  #redirect to signup page
+			return False
+	def help1(self):
+		design=Help1()
+		help1win=Popup(title='Help',content=design,size_hint=(None,None),size=(400,300),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png',auto_dismiss=False)
+		help1win.open()
+		design.ids.close.bind(on_release=help1win.dismiss)
 class signup_error(FloatLayout):
 	pass
-class Password_Added(FloatLayout):
-	pass
-class UserError(FloatLayout):
-	pass
-class Password_Size_Popup(FloatLayout):
-	pass
-class Login_Popup_export(FloatLayout):
-	def authenticate(self):
-		if(CheckUser()):
-			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
-				self.ids.label.text='Export Successful.'
-				self.ids.label.color=[1,1,1,1]
-				Export()
-			else:
-				self.ids.label.text='Authentication Failed.'
-				self.ids.label.color=[1,0,0,1]
-class Login_Popup_import(FloatLayout):
-	def authenticate(self):
-		if(CheckUser()):
-			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
-				a=Import()
-				if a==True:
-					self.ids.label.text='Import Successful.'
-					self.ids.label.color=[1,1,1,1]
-				else:
-					self.ids.label.text='Import File is not present.'
-					self.ids.label.color=[1,0,0,1]
-			else:
-				self.ids.label.text='Authentication Failed'
-				self.ids.label.color=[1,0,0,1]
-				
 class SignUp_Pop(FloatLayout):
 	user=ObjectProperty()
 	p1=ObjectProperty()
@@ -112,48 +136,11 @@ class SignUp_Pop(FloatLayout):
 			ColorChange(self.p2,True,'Invalid')
 			return False
 
-class LoginWindow(Screen):
-	username=ObjectProperty()
-	p=ObjectProperty()
-	errortext=ObjectProperty()
-	user_check=ObjectProperty()
-	def close(self):
-		self.win.dismiss()
-	def user_error_popup(self):
-		design=UserError()
-		UserExists=Popup(title='User Error Encountered!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
-		UserExists.open()
-	def signup_pop(self):
-		design=SignUp_Pop()
-		self.win=Popup(title='Sign-Up Screen',title_align='center',content=design,size_hint=(None,None),size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
-		self.win.open()
-	def signup_check(self):
-		if not CheckUser():
-			self.signup_pop()
-		else:
-			self.user_error_popup()
-	def Login_Authenticate(self):
-		if CheckUser():
-			if CheckCredentials(self.username.text,self.p.text):    #To check if main credential file exists
-				self.user_check.text=''
-				self.errortext.text=''
-				self.errortext.color=[1,1,1,1]
-				self.username.text=''
-				self.p.text=''
-				ColorChange(self.username,False,'Username')	
-				ColorChange(self.p,False,'Master Password')
-				return True 
-			else:
-				self.errortext.text='Wrong credentials were entered. Try again.'
-				self.errortext.color=[1,0,0,1]
-				ColorChange(self.username,True,'Invalid Field')	
-				ColorChange(self.p,True,'Invalid Field')	
-				return False
-		else:
-			self.username.text=''
-			self.p.text=''
-			self.signup_pop()  #redirect to signup page
-			return False
+class Help1(FloatLayout):
+	pass
+class Welcome(FloatLayout):
+	pass
+#----------------------------------------------------------------------Main WINDOW------------------------------------------------------------------------------------------------------
 
 class MainWindow(Screen):
 	passw=ObjectProperty()
@@ -166,17 +153,20 @@ class MainWindow(Screen):
 		explain=Label(markup=True,text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.',text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
 		design.add_widget(explain)
 		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
+		design.ids.close.bind(on_release=win.dismiss)
 		win.open()
 	def Export_Passwords(self):
 		design=Login_Popup_export()
 		explain=Label(markup=True,text='This process will [color=00abae]decrypt and export your passwords.[/color]', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
 		design.add_widget(explain)
 		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
+		design.ids.close.bind(on_release=win.dismiss)
 		win.open()
 	def p_size_popup(self):
 		design=Password_Size_Popup()
-		win=Popup(title='Error',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
+		win=Popup(title='Entry Error!',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png',auto_dismiss=False)
 		win.open()
+		design.ids.close.bind(on_release=win.dismiss)
 	def random_password(self):
 		pass_check=PassCheck(self.n)
 		d_check=DescriptionCheck(self.description)
@@ -212,11 +202,50 @@ class MainWindow(Screen):
 			self.username.text=''
 			self.notes.text=''
 		else:
+			self.p_size_popup()
 			ColorChange(self.description,True,'Invalid Add')
-			ColorChange(self.n,True,'Invalid\nAdd')
 			ColorChange(self.passw,True,'Invalid Add')
 	def refresh(self):
+		ColorChange(self.description,False,'Invalid Add')
+		ColorChange(self.n,False,'Invalid\nAdd')
+		ColorChange(self.passw,False,'Invalid Add')
 		self.manager.get_screen('PassDisp').showlist()
+
+class Password_Added(FloatLayout):
+	pass
+class UserError(FloatLayout):
+	pass
+class Login_Popup_export(FloatLayout):
+	def authenticate(self):
+		if(CheckUser()):
+			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
+				self.ids.label.text='Export Successful.'
+				self.ids.label.color=[1,1,1,1]
+				Export()
+			else:
+				self.ids.label.text='Authentication Failed.'
+				self.ids.label.color=[204/255,0,0,1]
+
+class Login_Popup_import(FloatLayout):
+	def authenticate(self):
+		if(CheckUser()):
+			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
+				a=Import()
+				if a==True:
+					self.ids.label.text='Import Successful.'
+					self.ids.label.color=[1,1,1,1]
+				else:
+					self.ids.label.text='Import File is not present.'
+					self.ids.label.color=[204/255,0,0,1]
+			else:
+				self.ids.label.text='Authentication Failed'
+				self.ids.label.color=[204/255,0,0,1]
+
+class Password_Size_Popup(FloatLayout):
+	pass
+
+#----------------------------------------------------------------------Password WINDOW------------------------------------------------------------------------------------------------------
+
 class Password_Screen(Screen):
 	passn=None		
 	
@@ -230,17 +259,18 @@ class Password_Screen(Screen):
 		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
 		searchbtn.background_normal='UI/Search.png'
 		searchbtn.background_down='UI/SearchOnDown.png'
-		Backbtn.background_normal='UI/button for login.png'
-		Backbtn.background_down='UI/on down login.png'
+		Backbtn.background_normal='UI/login2normal.png'
+		Backbtn.background_down='UI/login2down.png'
+		#self.searchbar.keyboard_on_key_up(Window,13)
 		layout0.add_widget(searchbtn)
 		layout0.add_widget(Backbtn)
 		layout0.add_widget(self.searchbar)
 		self.mainlayout.add_widget(layout0)
 		self.showlist()
-		#Clock.schedule_interval(partial(self.showlist ),0.5)
 		self.add_widget(self.mainlayout)
+
 	def showlist(self,*largs):
-			print('a') #to understand when show list is called 
+			#print('a') #to understand when show list is called 
 			if len(self.mainlayout.children)>1:
 				a=0
 				for i in self.mainlayout.children:
@@ -255,14 +285,14 @@ class Password_Screen(Screen):
 					for i in password_list:
 						entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
 						btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
-						btn.background_normal='UI/Main Window Button.png'
-						btn.background_down='UI/Main Window Button Ondown.png'
+						btn.background_normal='UI/passwordlist.png'
+						btn.background_down='UI/passwordlistdown.png'
 						layout1.add_widget(btn)
 					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height),bar_margin=2,scroll_type=['bars', 'content'],bar_width=8,bar_color=[0,171/255,174/255,1])
 					root.add_widget(layout1)
 					self.mainlayout.add_widget(root)
 				else:
-					btn = Button(text='No passwords yet!',size_hint_y=None, height=60,color=[1,0,0,1])
+					btn = Button(text='No passwords yet!',size_hint_y=None, height=60,color=[204/255,0,0,1])
 					btn.background_normal='UI/Main Window Button.png'
 					btn.background_down='UI/Main Window Button.png'
 					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
@@ -277,22 +307,30 @@ class Password_Screen(Screen):
 				layout1.add_widget(btn)
 				root.add_widget(layout1)
 				self.mainlayout.add_widget(root)
+
 	def searchresult(self,instance):
 		result=SearchFile(self.searchbar.text)
 		if result==[]:
 			design=search_popup()
 			design.ids.title.text='No such entry exists'
+			design.ids.username.text='No such entry exists'
+			design.ids.password.text='No such entry exists'
+			design.ids.notes.text='No such entry exists'
 			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png',auto_dismiss=False)
 			search.open()
+			design.ids.close.bind(on_release=partial(self.DismissAndTriggerCancel,design,search))
 		else:
 			design=search_popup()
-			design.ids.title.text='Title: '+result[0]
-			design.ids.username.text='Title: '+result[1]
-			design.ids.passtext.text='Password: '
+			design.ids.title.text=result[0]
+			design.ids.username.text=result[1]
+			design.ids.password.text='Password: '
 			design.ids.password.text=result[2]
-			design.ids.notes.text='Notes: '+result[3]
+			design.ids.notes.text=result[3]
 			search=Popup(title='Search result',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 			search.open()
+			design.ids.close.bind(on_release=partial(self.DismissAndTriggerCancel,design,search))
+			design.ids.delete.bind(on_release=partial(self.DeleteAndRefresh,design,search))
+			design.ids.edit.bind(on_release=partial(self.editflow,design,result))
 	def screenswitch(self,instance):
 		self.manager.transition=SlideTransition()
 		self.manager.current = 'Main'
@@ -320,6 +358,31 @@ class Password_Screen(Screen):
 		entry.dismiss()
 		self.showlist()
 class passwordpopup(FloatLayout):
+	viewing = BooleanProperty(True)
+	def delete(self, *args):
+		print('deleted')
+		entry=[]
+		entry.append(self.ids.title.text)
+		entry.append(self.ids.username.text)
+		entry.append(self.ids.password.text)
+		entry.append(self.ids.notes.text)
+		DelPassword(entry)
+	def copytoclip1(self):
+		pyperclip.copy(self.ids.username.text)
+	def copytoclip2(self):
+		pyperclip.copy(self.ids.password.text)
+	def edit(self,entrydata):
+		print('flow')
+		self.ids.edittoggle.state='normal'
+		editedentry=[]
+		editedentry.append(self.ids.title.text)
+		editedentry.append(self.ids.username.text)
+		editedentry.append(self.ids.password.text)
+		editedentry.append(self.ids.notes.text)
+		check=EditPassword(entrydata,editedentry)
+		return check
+
+class search_popup(FloatLayout):
 	viewing = BooleanProperty(True)
 	def delete(self, *args):
 		print('deleted')

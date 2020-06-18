@@ -5,16 +5,90 @@ Screen_Manager:
 	LoginWindow:
 	MainWindow:
 	Password_Screen:
-<Password_Size_Popup>: #    Main Window Password Error
-	Label:
-		text: 'Ok Boomer'
-		size_hint: (.1,.1 )
-		pos_hint: {'center_x': 0.5,'center_y': 0.5 }
-<UserError>:
-	Label:
-		text: 'This PC already has a user!'
-		size_hint: (.1, .1)
-		pos_hint: {'center_x': 0.5, 'center_y':0.5}
+#----------------------------------------------------------------------Login WINDOW------------------------------------------------------------------------------------------------------
+<LoginWindow>:
+	username:username
+	p:p
+	errortext:errortext
+	user_check:user_check
+	name: 'Login'
+	canvas:
+	    Color:
+	        rgba:30/255,30/255, 30/255, 1
+	    Rectangle: 
+	        size: self.size
+	        pos: self.pos
+	FloatLayout:
+		Image:
+			source:'UI/Login Background.png'
+			size_hint: (None,None)
+			size:(800,600)
+			pos_hint:{'x':0,'y':0}
+		Label:
+			id:errortext 
+			font_size: 13.5
+			markup:True
+			text: ''
+			text_size:(self.width,None)
+			pos_hint: {'center_x': 0.51,'center_y': 0.59}
+			width:300
+			size_hint: (None, .1)
+		TextInput:
+			id:username 
+			hint_text: 'Username'
+			foreground_color:(0.7,0.7,0.7,1)
+			halign:'center'
+			color:(0.7,0.7,0.7)
+			cursor_color:(0,171/255,174/255,1)
+			background_color:(45/255,45/255,45/255,1)
+			multiline: False
+			pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+			size_hint: (0.20, 0.06)
+		TextInput:
+			id: p
+			hint_text: 'Master Password' 
+			halign:'center'
+			foreground_color:(0.7,0.7,0.7,1)
+			password: True
+			cursor_color:(0,171/255,174/255,1)
+			background_color:(45/255,45/255,45/255,1)
+			multiline: False
+			pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+			size_hint: (0.20, 0.06)
+		Button:
+			text: 'Log in'
+			color: (0.5, 0.5, 0.5, 1)
+			pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
+			size_hint: (0.20, 0.06)
+			background_normal: 'UI/button for login.png'
+			background_down: 'UI/on down login.png'
+			on_release:
+				app.root.transition=FadeTransition(duration=1.2)
+				app.root.current='Main' if root.Login_Authenticate() else 'Login'
+		Button:
+			color: (0.5, 0.5, 0.5, 1)
+			pos_hint: {'right': 0.98 ,'y': 0.015 }
+			size_hint: (32/800, 32/600)
+			background_normal: 'UI/help.png'
+			background_down: 'UI/helpdown.png'
+			on_release:
+				root.help1()
+		Button:
+			text: 'Sign-Up'
+			color: (0.5, 0.5, 0.5, 1)
+			background_normal: 'UI/button for login.png'
+			background_down: 'UI/on down login.png'
+			pos_hint: {'center_x': 0.5 ,'center_y': 0.2 }
+			size_hint: (0.20, 0.06)
+			on_release:
+				root.signup_check()
+		Label:
+			id:user_check
+			text: ''
+			pos_hint: {'center_x': 0.5,'center_y': 0.8}
+			size_hint: (.1, .1)
+			color:[1,0,0,1]
+
 <signup_error>:
 	Label:
 		markup: True
@@ -28,132 +102,10 @@ Screen_Manager:
 		text:'Back'
 		halign: 'center'
 		text_size: (self.width,None)
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 		pos_hint: {'center_x':0.8,'center_y':0.1}
 		size_hint:(0.3,0.18)
-<Login_Popup_export>:
-	Label:
-		text:'Enter Credentials to authenticate the process: '
-		text_size:(self.width,None)
-		size_hint: (None, .1)
-		width:350
-		pos_hint: {'center_x': 0.5, 'top': 0.8}
-	Label:
-		id: label
-		text:''
-		pos_hint:{'center_x':0.75,'center_y':0.15}
-		size_hint:(None,0.1)
-		width:400
-		text_size:(350, None)
-	TextInput:
-		id:username 
-		hint_text: 'Username'
-		foreground_color:(0.7,0.7,0.7,1)
-		color:(0.7,0.7,0.7)
-		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
-		multiline: False
-		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
-		size_hint: (None, 0.1)
-		width: 200
-	TextInput:
-		id: p
-		hint_text: 'Master Password' 
-		foreground_color:(0.7,0.7,0.7,1)
-		password: True
-		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
-		multiline: False
-		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
-		size_hint: (None, 0.1)
-		width: 200
-	Button:
-		text: 'Authenticate'
-		color: (0.5, 0.5, 0.5, 1)
-		pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
-		size_hint: (0.35, 0.1)
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
-		on_release:
-			root.authenticate()
-<Login_Popup_import>:
-	Label:
-		text:'Enter Credentials to authenticate the process: '
-		text_size:(self.width,None)
-		size_hint: (None, .1)
-		width:350
-		pos_hint: {'center_x': 0.5, 'top': 0.8}
-	Label:
-		id: label
-		text:''
-		pos_hint:{'center_x':0.8,'center_y':0.15}
-		size_hint:(None,0.1)
-		width:400
-		text_size:(350, None)
-	TextInput:
-		id:username 
-		hint_text: 'Username'
-		foreground_color:(0.7,0.7,0.7,1)
-		color:(0.7,0.7,0.7)
-		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
-		multiline: False
-		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
-		size_hint: (None, 0.1)
-		width: 200
-	TextInput:
-		id: p
-		hint_text: 'Master Password' 
-		foreground_color:(0.7,0.7,0.7,1)
-		password: True
-		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
-		multiline: False
-		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
-		size_hint: (None, 0.1)
-		width: 200
-	Button:
-		text: 'Authenticate'
-		color: (0.5, 0.5, 0.5, 1)
-		pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
-		size_hint: (0.35, 0.1)
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
-		on_release:
-			root.authenticate()
-<search_popup>:
-	Label:
-		id: title
-		text:''
-		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.8}
-	Label:
-		id: username
-		text:''
-		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.7}
-	Label:
-		id: passtext
-		text:''
-		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.6}
-	TextInput:
-		id: password
-		multiline: False
-		foreground_color:(0.7,0.7,0.7,1)
-		color:(0.7,0.7,0.7)
-		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
-		text:''
-		size_hint:(.5,.1)
-		pos_hint: {'center_x': 0.6, 'top': 0.6}
-	Label:
-		id:notes
-		text:''
-		size_hint:(.1,.1)
-		pos_hint: {'x': 0.2, 'top': 0.5}
-
 <SignUp_Pop>:
 	user:user
 	p1:p1
@@ -175,8 +127,8 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.3, 'top': 0.75}
-		size_hint: (0.50, 0.09)
+		pos_hint: {'center_x': 0.35, 'top': 0.75}
+		size_hint: (0.6, 0.09)
 	TextInput:
 		id: p1
 		hint_text: 'Master Password' 
@@ -185,8 +137,8 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.3, 'top': 0.55}
-		size_hint: (0.50, 0.09)
+		pos_hint: {'center_x': 0.35, 'top': 0.55}
+		size_hint: (0.6, 0.09)
 	TextInput:
 		id: p2
 		hint_text: 'Confirm Master Password' 
@@ -195,14 +147,14 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.3, 'top': 0.35}
-		size_hint: (0.50, 0.09)
+		pos_hint: {'center_x': 0.35, 'top': 0.35}
+		size_hint: (0.6, 0.09)
 	Button:
 		id:signup
 		text:'Sign-Up!'
 		pos_hint: {'center_x': 0.8, 'center_y': 0.1}
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 		size_hint: (0.3, 0.1)
 		on_release:
 			root.check()
@@ -212,84 +164,43 @@ Screen_Manager:
 		halign:'center'
 		font_size: 14
 		text_size: (self.width, None)
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 		halign: 'center'
 		pos_hint: {'center_x': 0.2, 'center_y': 0.1}
 		size_hint: (0.3, 0.1)
 		on_release:
 			on_release: app.root.get_screen('Login').close()
+<Help1>:
+	Label:
+		markup: True
+		text: 'This is the log in screen of Reminiscor.\n\nIf you are using Reminiscor after a fresh install, you would have encountered a [color=00abae]sign-up popup.[/color]\n\nIf you didn\'t sign-up yet, you can click on the [color=00abae]sign-up button.[/color]'
+		font_size: 15
+		size_hint: (None, .1)
+		width:350
+		text_size: (self.width,None)
+		pos_hint: {'center_x': 0.5,'top': 0.68 }
+	Button:
+		id: close
+		text:'Back'
+		halign: 'center'
+		text_size: (self.width,None)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		pos_hint: {'center_x':0.8,'center_y':0.1}
+		size_hint:(0.3,0.18)
+<Welcome>:
+	Button:
+		id: close
+		text:'Close'
+		halign: 'center'
+		text_size: (self.width,None)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		pos_hint: {'center_x':0.83,'center_y':0.1}
+		size_hint:(0.3,0.06)
 
-<LoginWindow>:
-	username:username
-	p:p
-	errortext:errortext
-	user_check:user_check
-	name: 'Login'
-	canvas:
-	    Color:
-	        rgba:30/255,30/255, 30/255, 1
-	    Rectangle: 
-	        size: self.size
-	        pos: self.pos
-	FloatLayout:
-		Image:
-			source:'UI/Header.png'
-			size_hint: (None,None)
-			size:(800,140)
-			pos_hint:{'x':0,'top':1}
-		Label:
-			id:errortext 
-			text: ''
-			pos_hint: {'center_x': 0.5,'center_y': 0.7}
-			size_hint: (.1, .1)
-		TextInput:
-			id:username 
-			hint_text: 'Username'
-			foreground_color:(0.7,0.7,0.7,1)
-			color:(0.7,0.7,0.7)
-			cursor_color:(0,171/255,174/255,1)
-			background_color:(45/255,45/255,45/255,1)
-			multiline: False
-			pos_hint: {'center_x': 0.5, 'center_y': 0.6}
-			size_hint: (0.20, 0.06)
-		TextInput:
-			id: p
-			hint_text: 'Master Password' 
-			foreground_color:(0.7,0.7,0.7,1)
-			password: True
-			cursor_color:(0,171/255,174/255,1)
-			background_color:(45/255,45/255,45/255,1)
-			multiline: False
-			pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-			size_hint: (0.20, 0.06)
-		Button:
-			text: 'Submit'
-			color: (0.5, 0.5, 0.5, 1)
-			pos_hint: {'center_x': 0.5 ,'center_y': 0.35 }
-			size_hint: (0.20, 0.06)
-			background_normal: 'UI/button for login.png'
-			background_down: 'UI/on down login.png'
-			on_release:
-				app.root.transition=FadeTransition(duration=1.2)
-				app.root.current='Main' if root.Login_Authenticate() else 'Login'
-				
-		Button:
-			text: 'Sign-Up'
-			color: (0.5, 0.5, 0.5, 1)
-			background_normal: 'UI/button for login.png'
-			background_down: 'UI/on down login.png'
-			pos_hint: {'center_x': 0.5 ,'center_y': 0.2 }
-			size_hint: (0.20, 0.06)
-			on_release:
-				root.signup_check()
-		Label:
-			id:user_check
-			text: ''
-			pos_hint: {'center_x': 0.5,'center_y': 0.8}
-			size_hint: (.1, .1)
-			color:[1,0,0,1]
-
+#----------------------------------------------------------------------Main WINDOW------------------------------------------------------------------------------------------------------
 <MainWindow>:
 	name: 'Main'
 	passw:passw
@@ -304,11 +215,6 @@ Screen_Manager:
 	        size: self.size
 	        pos: self.pos
 	FloatLayout:
-		Image:
-			source:'UI/Logo.png'
-			size_hint: (None,None)
-			size:(100,97)
-			pos_hint:{'right':0.8,'top':0.9}
 		TextInput:
 			id: description
 			foreground_color:(0.7,0.7,0.7,1)
@@ -364,16 +270,16 @@ Screen_Manager:
 			text: 'Generate Password'
 			pos_hint: {'center_x': 0.68 ,'center_y': 0.45 }
 			size_hint: (0.20, 0.06)
-			background_normal: 'UI/button for login.png'
-			background_down: 'UI/on down login.png'
+			background_normal: 'UI/login2normal.png'
+			background_down: 'UI/login2down.png'
 			on_release:
 				root.random_password()
 		Button:
 			text: 'Save Password'
 			pos_hint: {'center_x': 0.85 ,'center_y': 0.1 }
 			size_hint: (0.15, 0.06)
-			background_normal: 'UI/button for login.png'
-			background_down: 'UI/on down login.png'
+			background_normal: 'UI/login2normal.png'
+			background_down: 'UI/login2down.png'
 			on_release:
 				root.Add_New_Password()
 				
@@ -423,6 +329,149 @@ Screen_Manager:
 				root.manager.transition.direction= "left"
 				root.refresh()
 
+<Password_Size_Popup>: #    Main Window Password Error
+	Label:
+		markup: True
+		text: 'The password generator/Entry addition process has encountered an error.\n\nTry doing the following: \n\nRename the title with [color=00abae]atleast 3 characters.[/color]\n\nEnter a [color=00abae]password size[/color] before hitting the generate password button[color=00abae](i.e if you are using the generator).[/color]\n\nNote: To add an [color=00abae]Entry[/color] you need to enter a [color=00abae]title and password[/color] atleast.'
+		size_hint: (None,.1 )
+		text_size:(self.width,None)
+		width:350
+		pos_hint: {'x': 0,'top': 0.65 }
+	Button:
+		id: close
+		text:'Back'
+		halign: 'center'
+		text_size: (self.width,None)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		pos_hint: {'center_x':0.8,'center_y':0.1}
+		size_hint:(0.3,0.1)
+<UserError>:
+	Label:
+		text: 'This PC already has a user!\nReminiscor supports only [color=00abae]one user[/color] at a time.'
+		markup: True
+		font_size: 14
+		size_hint: (None,.1 )
+		text_size:(self.width,None)
+		width:350
+		pos_hint: {'x': 0, 'top':0.8}
+	Button:
+		id: close
+		text:'Back'
+		halign: 'center'
+		text_size: (self.width,None)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		pos_hint: {'center_x':0.8,'center_y':0.1}
+		size_hint:(0.3,0.2)
+<Login_Popup_export>:
+	Label:
+		text:'Enter Credentials to authenticate the process: '
+		text_size:(self.width,None)
+		size_hint: (None, .1)
+		width:350
+		pos_hint: {'center_x': 0.5, 'top': 0.8}
+	Label:
+		id: label
+		text:''
+		pos_hint:{'center_x':0.75,'center_y':0.15}
+		size_hint:(None,0.1)
+		width:400
+		text_size:(350, None)
+	TextInput:
+		id:username 
+		hint_text: 'Username'
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		multiline: False
+		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+		size_hint: (None, 0.1)
+		width: 200
+	TextInput:
+		id: p
+		hint_text: 'Master Password' 
+		foreground_color:(0.7,0.7,0.7,1)
+		password: True
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		multiline: False
+		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+		size_hint: (None, 0.1)
+		width: 200
+	Button:
+		text: 'Authenticate'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
+		size_hint: (0.35, 0.1)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		on_release:
+			root.authenticate()
+	Button:
+		id: close
+		text: 'Close'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.5 ,'center_y': 0.125 }
+		size_hint: (0.35, 0.1)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+<Login_Popup_import>:
+	Label:
+		text:'Enter Credentials to authenticate the process: '
+		text_size:(self.width,None)
+		size_hint: (None, .1)
+		width:350
+		pos_hint: {'center_x': 0.5, 'top': 0.8}
+	Label:
+		id: label
+		text:''
+		pos_hint:{'center_x':0.8,'center_y':0.15}
+		size_hint:(None,0.1)
+		width:400
+		text_size:(350, None)
+	TextInput:
+		id:username 
+		hint_text: 'Username'
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		multiline: False
+		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+		size_hint: (None, 0.1)
+		width: 200
+	TextInput:
+		id: p
+		hint_text: 'Master Password' 
+		foreground_color:(0.7,0.7,0.7,1)
+		password: True
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		multiline: False
+		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+		size_hint: (None, 0.1)
+		width: 200
+	Button:
+		text: 'Authenticate'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.5 ,'center_y': 0.3 }
+		size_hint: (0.35, 0.1)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		on_release:
+			root.authenticate()
+	Button:
+		id: close
+		text: 'Close'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.5 ,'center_y': 0.125 }
+		size_hint: (0.35, 0.1)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+
+#----------------------------------------------------------------------Password WINDOW------------------------------------------------------------------------------------------------------
 <Password_Screen>:
 	name: 'PassDisp'
 <passwordpopup>:
@@ -499,7 +548,7 @@ Screen_Manager:
         font_size: 11
         state: 'normal' if root.viewing else 'down'
         on_state: root.viewing = not root.viewing
-        background_normal: 'UI/button for login.png'
+        background_normal: 'UI/login2normal.png'
 		background_down: 'UI/editondown.png'
         size_hint:(0.2,0.065)
         pos_hint:{'x':0,'top':0.98}
@@ -522,23 +571,141 @@ Screen_Manager:
 	Button:
 		id: delete
 		text:'Delete Entry'
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 		size_hint:(0.3,0.1)
 		pos_hint: {'x': 0, 'y':0}
 	Button:
 		id: close
 		text:'Back'
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 		size_hint:(0.3,0.1)
 		pos_hint: {'right':1 , 'y':0}
 	Button:
 		id: edit
 		text:'Confirm Edit'
-		background_normal: 'UI/button for login.png'
-		background_down: 'UI/on down login.png'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 		background_disabled_normal:'UI/DisabledButton.png'
 		size_hint:(0.3,0.1)
 		pos_hint: {'center_x': 0.5, 'y':0}
 		disabled:root.viewing
+<search_popup>:
+	Label:
+		text:'Title: '
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.18, 'top': 0.9}
+	TextInput:
+		id: title
+		halign:'left'
+		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.9}
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled: root.viewing
+	Label:
+		text:'Username: '
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.7}
+	TextInput:
+		id: username
+		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		text:''
+		size_hint:(0.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.7}
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled: root.viewing
+	Label:
+		text:'Password: '
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.5}
+	TextInput:
+		id: password
+		halign:'left'
+		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.5}
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled: root.viewing
+	Label:
+		text:'Notes: '
+		size_hint:(.1,.1)
+		pos_hint: {'x': 0.2, 'top': 0.3}
+	TextInput:
+		id:notes
+		halign:'left'
+		multiline: False
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		text:''
+		size_hint:(.5,.1)
+		pos_hint: {'center_x': 0.7, 'top': 0.3}
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled: root.viewing
+	ToggleButton:
+		id:edittoggle 
+        text: "Edit/Copy"
+        font_size: 11
+        state: 'normal' if root.viewing else 'down'
+        on_state: root.viewing = not root.viewing
+        background_normal: 'UI/login2normal.png'
+		background_down: 'UI/editondown.png'
+        size_hint:(0.2,0.065)
+        pos_hint:{'x':0,'top':0.98}
+    Button:
+    	id: copyuser
+    	size_hint:(None,None)
+    	size:(30,30)
+    	background_normal: 'UI/clipboard.png'
+    	background_down: 'UI/clipboarddown.png'
+    	pos_hint:{'x':0,'top':0.685}
+    	on_release:root.copytoclip1()
+    Button:
+    	id: copypass
+    	size_hint:(None,None)
+    	size:(30,30)
+    	background_normal: 'UI/clipboard.png'
+    	background_down: 'UI/clipboarddown.png'
+    	pos_hint:{'x':0,'top':0.485}
+    	on_release:root.copytoclip2()
+	Button:
+		id: delete
+		text:'Delete Entry'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.3,0.1)
+		pos_hint: {'x': 0, 'y':0}
+	Button:
+		id: close
+		text:'Back'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.3,0.1)
+		pos_hint: {'right':1 , 'y':0}
+	Button:
+		id: edit
+		text:'Confirm Edit'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		background_disabled_normal:'UI/DisabledButton.png'
+		size_hint:(0.3,0.1)
+		pos_hint: {'center_x': 0.5, 'y':0}
+		disabled:root.viewing
+

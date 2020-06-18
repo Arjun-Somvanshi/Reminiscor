@@ -5,7 +5,7 @@ from Password_Read_Write import *
 from FileHandling import *
 def ColorChange(n,error,error_text='',color=(45/255,45/255,45/255,1)):
 	if error:
-		n.background_color=(235/255, 31/255, 20/255,1)				
+		n.background_color=(204/255, 0, 0,1)				
 		n.hint_text_color=(0.2,0.2,0.2,1)
 		n.cursor_color=(0,0,0,1)
 		n.hint_text=error_text 
