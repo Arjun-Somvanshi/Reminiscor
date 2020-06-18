@@ -50,6 +50,7 @@ class LoginWindow(Screen):
 			welcome_pop=Popup(title='',content=design,size_hint=(None,None),size=(400,500),separator_height=0,background='UI/Welcome.png')
 			welcome_pop.open()
 			design.ids.close.bind(on_release=welcome_pop.dismiss)
+			welcome_pop.bind(on_dismiss=Clock.schedule_once(self.signup_pop,2))
 	def welcome_screen1(self,*_):
 		design=Welcome()
 		welcome_pop=Popup(title='',content=design,size_hint=(None,None),size=(400,500),separator_height=0,background='UI/Welcome.png')
@@ -62,7 +63,7 @@ class LoginWindow(Screen):
 		UserExists=Popup(title='User Error Encountered!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
 		UserExists.open()
 		design.ids.close.bind(on_release=UserExists.dismiss)
-	def signup_pop(self):
+	def signup_pop(self,*_):
 		design=SignUp_Pop()
 		self.win=Popup(title='Sign-Up Screen',title_align='center',content=design,size_hint=(None,None),size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
 		self.win.open()
