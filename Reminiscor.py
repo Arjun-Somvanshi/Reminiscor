@@ -44,12 +44,17 @@ class LoginWindow(Screen):
 	user_check=ObjectProperty()
 	def on_enter(self):
 		Clock.schedule_once(self.welcome_screen)
-	def welcome_screen(self,dt):
+	def welcome_screen(self,*_):
 		if not CheckUser():
 			design=Welcome()
 			welcome_pop=Popup(title='',content=design,size_hint=(None,None),size=(400,500),separator_height=0,background='UI/Welcome.png')
 			welcome_pop.open()
 			design.ids.close.bind(on_release=welcome_pop.dismiss)
+	def welcome_screen1(self,*_):
+		design=Welcome()
+		welcome_pop=Popup(title='',content=design,size_hint=(None,None),size=(400,500),separator_height=0,background='UI/Welcome.png')
+		welcome_pop.open()
+		design.ids.close.bind(on_release=welcome_pop.dismiss)
 	def close(self):
 		self.win.dismiss()
 	def user_error_popup(self):
@@ -90,7 +95,7 @@ class LoginWindow(Screen):
 			return False
 	def help1(self):
 		design=Help1()
-		help1win=Popup(title='Help',content=design,size_hint=(None,None),size=(400,300),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png',auto_dismiss=False)
+		help1win=Popup(title='Help', content=design,size_hint=(None,None),size=(400,250),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png',auto_dismiss=False)
 		help1win.open()
 		design.ids.close.bind(on_release=help1win.dismiss)
 class signup_error(FloatLayout):

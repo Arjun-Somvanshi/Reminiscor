@@ -66,6 +66,7 @@ Screen_Manager:
 				app.root.transition=FadeTransition(duration=1.2)
 				app.root.current='Main' if root.Login_Authenticate() else 'Login'
 		Button:
+			id: help1
 			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'right': 0.98 ,'y': 0.015 }
 			size_hint: (32/800, 32/600)
@@ -73,6 +74,15 @@ Screen_Manager:
 			background_down: 'UI/helpdown.png'
 			on_release:
 				root.help1()
+		Button:
+			id: info 
+			color: (0.5, 0.5, 0.5, 1)
+			pos_hint: {'right': 0.93 ,'y': 0.015 }
+			size_hint: (32/800, 32/600)
+			background_normal: 'UI/info.png'
+			background_down: 'UI/infodown.png'
+			on_release:
+				root.welcome_screen1()
 		Button:
 			text: 'Sign-Up'
 			color: (0.5, 0.5, 0.5, 1)
@@ -175,11 +185,11 @@ Screen_Manager:
 	Label:
 		markup: True
 		text: 'This is the log in screen of Reminiscor.\n\nIf you are using Reminiscor after a fresh install, you would have encountered a [color=00abae]sign-up popup.[/color]\n\nIf you didn\'t sign-up yet, you can click on the [color=00abae]sign-up button.[/color]'
-		font_size: 15
+		font_size: 14
 		size_hint: (None, .1)
 		width:350
 		text_size: (self.width,None)
-		pos_hint: {'center_x': 0.5,'top': 0.68 }
+		pos_hint: {'center_x': 0.5,'top': 0.65}
 	Button:
 		id: close
 		text:'Back'
