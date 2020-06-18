@@ -50,7 +50,7 @@ class LoginWindow(Screen):
 			welcome_pop=Popup(title='',content=design,size_hint=(None,None),size=(400,500),separator_height=0,background='UI/Welcome.png')
 			welcome_pop.open()
 			design.ids.close.bind(on_release=welcome_pop.dismiss)
-			welcome_pop.bind(on_dismiss=Clock.schedule_once(self.signup_pop,2))
+			welcome_pop.bind(on_dismiss=self.signup_pop)
 	def welcome_screen1(self,*_):
 		design=Welcome()
 		welcome_pop=Popup(title='',content=design,size_hint=(None,None),size=(400,500),separator_height=0,background='UI/Welcome.png')
