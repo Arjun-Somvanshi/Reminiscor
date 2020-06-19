@@ -142,6 +142,7 @@ Screen_Manager:
 	TextInput:
 		id: p1
 		hint_text: 'Master Password' 
+		password: True
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -152,6 +153,7 @@ Screen_Manager:
 	TextInput:
 		id: p2
 		hint_text: 'Confirm Master Password' 
+		password: True
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -437,7 +439,7 @@ Screen_Manager:
 	Label:
 		id: label
 		text:''
-		pos_hint:{'center_x':0.8,'center_y':0.15}
+		pos_hint:{'center_x':0.76,'center_y':0.04}
 		size_hint:(None,0.1)
 		width:400
 		text_size:(350, None)
@@ -718,4 +720,47 @@ Screen_Manager:
 		size_hint:(0.3,0.1)
 		pos_hint: {'center_x': 0.5, 'y':0}
 		disabled:root.viewing
-
+<Delete_Confirmation>:
+	Label:
+		text:'This will [color=00abae]delete[/color] your entry [color=00abae]permanently[/color], are you sure you want to proceed?'
+		size_hint:(None,0.1)
+		text_size:(self.width, None)
+		width:350
+		markup:True
+		pos_hint:{'x':0,'top':0.88}
+	Button:
+		id: close
+		text:'No'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.25,0.2)
+		pos_hint: {'x':0.1 , 'y':0.1}
+	Button:
+		id: yes
+		text:'Yes'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.25,0.2)
+		pos_hint: {'center_x':0.8 , 'y':0.1}
+<Edit_Confirmation>:
+	Label:
+		text:'This will [color=00abae]make changes[/color] to your entry [color=00abae]permanently[/color], are you sure you want to proceed?'
+		size_hint:(None,0.1)
+		text_size:(self.width, None)
+		width:350
+		markup:True
+		pos_hint:{'x':0,'top':0.82}
+	Button:
+		id: close
+		text:'No'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.25,0.2)
+		pos_hint: {'x':0.1 , 'y':0.1}
+	Button:
+		id: yes
+		text:'Yes'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.25,0.2)
+		pos_hint: {'center_x':0.8 , 'y':0.1}

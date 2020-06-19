@@ -98,7 +98,7 @@ def Export():
 def Import():
 	newList = []
 	newListData3 = []
-	if os.path.isfile(Import_Export_Dir('Password File.txt')):
+	if os.path.isfile(Import_Export_Dir('Password File.txt')) and os.stat(Import_Export_Dir('Password File.txt')).st_size is not 0:
 		file = open(Import_Export_Dir('Password File.txt'), 'r')
 		List = ReadFile(file)
 		for ele in List:

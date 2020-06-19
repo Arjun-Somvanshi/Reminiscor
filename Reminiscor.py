@@ -241,7 +241,7 @@ class Login_Popup_import(FloatLayout):
 					self.ids.label.text='Import Successful.'
 					self.ids.label.color=[1,1,1,1]
 				else:
-					self.ids.label.text='Import File is not present.'
+					self.ids.label.text='Import File is not present or empty.'
 					self.ids.label.color=[204/255,0,0,1]
 			else:
 				self.ids.label.text='Authentication Failed'
@@ -353,20 +353,34 @@ class Password_Screen(Screen):
 		design.ids.delete.bind(on_release=partial(self.DeleteAndRefresh,design,entry))
 		design.ids.edit.bind(on_release=partial(self.editflow,design,entrydata))
 	def editflow(self,design,entrydata,instance):
+		editconfirm=Edit_Confirmation()
+		editwin=Popup(title='Edit Confirmation', content=editconfirm,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)		
+		editwin.open()
+		editconfirm.ids.close.bind(on_release=editwin.dismiss)
+		editconfirm.ids.yes.bind(on_release=partial(self.confirm2,design,entrydata,editwin))
+	def confirm2(self,design,entrydata,editwin,*_):
 		check=design.edit(entrydata)
 		if check:
 			design.ids.title.text=entrydata[0]
+		editwin.dismiss()
 		self.showlist()
 	def DismissAndTriggerCancel(self,design,entry,instance):
 		entry.dismiss()
 	def DeleteAndRefresh(self,design,entry,instance):
+		self.check=False
+		deletepop=Delete_Confirmation()
+		deletewin=Popup(title='Delete Confirmation', content=deletepop,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
+		deletewin.open()
+		deletepop.ids.close.bind(on_release=deletewin.dismiss)
+		deletepop.ids.yes.bind(on_release=partial(self.confirm1,design,entry,deletewin))
+	def confirm1(self,design,entry,deletewin,*args):
 		design.delete()
+		deletewin.dismiss()
 		entry.dismiss()
 		self.showlist()
 class passwordpopup(FloatLayout):
 	viewing = BooleanProperty(True)
 	def delete(self, *args):
-		print('deleted')
 		entry=[]
 		entry.append(self.ids.title.text)
 		entry.append(self.ids.username.text)
@@ -378,7 +392,6 @@ class passwordpopup(FloatLayout):
 	def copytoclip2(self):
 		pyperclip.copy(self.ids.password.text)
 	def edit(self,entrydata):
-		print('flow')
 		self.ids.edittoggle.state='normal'
 		editedentry=[]
 		editedentry.append(self.ids.title.text)
@@ -412,6 +425,10 @@ class search_popup(FloatLayout):
 		editedentry.append(self.ids.notes.text)
 		check=EditPassword(entrydata,editedentry)
 		return check
+class Delete_Confirmation(FloatLayout):
+	pass
+class Edit_Confirmation(FloatLayout):
+	pass
 
 class Screen_Manager(ScreenManager):
 	pass
