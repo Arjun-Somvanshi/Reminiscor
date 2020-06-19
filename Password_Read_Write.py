@@ -85,24 +85,28 @@ def Export():
 	for ele in List:
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newList.append(Sublist)
-	file = open(Import_Export_Dir('Export File.txt'),'w')
-	os.chmod(Import_Export_Dir('Export File.txt'), S_IWUSR|S_IREAD)
+	os.chmod(Import_Export_Dir('Password File.txt'), S_IWUSR|S_IREAD)
+	temp = open(Import_Export_Dir('Password File.txt'), 'w')
+	temp = deleteContent(temp)
+	temp.close()
+	file = open(Import_Export_Dir('Password File.txt'),'w')
 	for ele in newList:
 		for sublist in ele:
 			if not sublist == ele[len(ele)-1]:
 				file.write(sublist+'qwertyuiop***asdfghjklzxcvbnm')
 			else:
 				file.write(sublist)
-		file.write('\n')
-	os.chmod(Import_Export_Dir('Export File.txt'), S_IREAD|S_IRGRP|S_IROTH)
+		if not sublist == newList[len(newList) -1]:
+			file.write('\n')
+	os.chmod(Import_Export_Dir('Password File.txt'), S_IREAD|S_IRGRP|S_IROTH)
 	file.close()
 #Export()
 def Import():
 	newList = []
 	newListData3 = []
-	if os.path.isfile(Import_Export_Dir('Import File.txt')):
-		os.chmod(Import_Export_Dir('Import File.txt'), S_IREAD|S_IRGRP|S_IROTH)
-		file = open(Import_Export_Dir('Import File.txt'), 'r')
+	if os.path.isfile(Import_Export_Dir('Password File.txt')):
+		os.chmod(Import_Export_Dir('Password File.txt'), S_IREAD|S_IRGRP|S_IROTH)
+		file = open(Import_Export_Dir('Password File.txt'), 'r')
 		List = ReadFile(file)
 		for ele in List:
 			newList.append(ele.split('qwertyuiop***asdfghjklzxcvbnm'))
