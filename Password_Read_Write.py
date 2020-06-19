@@ -80,24 +80,18 @@ def SearchFile(Str): #searches for passwords in data3,txt and returns all inform
 
 
 def Export():
-	newList = []
 	List = ReadDecrypt(HomeDir('Data3.txt'))
-	for ele in List:
-		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
-		newList.append(Sublist)
-	os.chmod(Import_Export_Dir('Password File.txt'), S_IWUSR|S_IREAD)
+	if os.path.isfile(Import_Export_Dir('Password File.txt')):
+		os.chmod(Import_Export_Dir('Password File.txt'), S_IWUSR|S_IREAD)
 	temp = open(Import_Export_Dir('Password File.txt'), 'w')
 	temp = deleteContent(temp)
 	temp.close()
 	file = open(Import_Export_Dir('Password File.txt'),'w')
-	for ele in newList:
-		for sublist in ele:
-			if not sublist == ele[len(ele)-1]:
-				file.write(sublist+'qwertyuiop***asdfghjklzxcvbnm')
-			else:
-				file.write(sublist)
-		if not sublist == newList[len(newList) -1]:
-			file.write('\n')
+	for ele in List:
+		if List.index(ele) == len(List) - 1:
+			file.write(ele)
+		else:
+			file.write(ele + '\n')
 	os.chmod(Import_Export_Dir('Password File.txt'), S_IREAD|S_IRGRP|S_IROTH)
 	file.close()
 #Export()
@@ -105,7 +99,6 @@ def Import():
 	newList = []
 	newListData3 = []
 	if os.path.isfile(Import_Export_Dir('Password File.txt')):
-		os.chmod(Import_Export_Dir('Password File.txt'), S_IREAD|S_IRGRP|S_IROTH)
 		file = open(Import_Export_Dir('Password File.txt'), 'r')
 		List = ReadFile(file)
 		for ele in List:
@@ -129,15 +122,22 @@ def Import():
 			if temp == False:
 				password = ''
 				for subele in ele1:
-					if not subele == ele1[len(ele1)-1]: 
+					if not ele1.index(subele) == len(ele1)-1: 
 						password += subele + 'qwertyuiop***asdfghjklzxcvbnm'
 					else:
 						password += subele
 				WriteEncrypt(HomeDir('Data3.txt'), password)
+		os.chmod(Import_Export_Dir('Password File.txt'), S_IWUSR|S_IREAD)
+		temp1=open(Import_Export_Dir("Password File.txt"),'w')
+		temp1=deleteContent(temp1)
+		temp1.close()
 		file_new.close()
+		
 		return True
 	else:
 		return False
+#Import()
+
 def DelPassword(entry):
 	newListData3 = []
 	pass_file = open(HomeDir('Data3.txt'), 'r')
@@ -204,3 +204,4 @@ def CheckFunction(List, LOL):
 		if List[0] == element[0]:
 			return True
 	return False
+#print(ReadDecrypt(HomeDir('Data3.txt')))
