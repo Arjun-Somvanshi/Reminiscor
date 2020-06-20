@@ -312,8 +312,8 @@ class Password_Screen(Screen):
 					for i in password_list:
 						entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
 						btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
-						btn.background_normal='UI/passwordlist.png'
-						btn.background_down='UI/passwordlistdown.png'
+						btn.background_normal='UI/firstlistbutton.png'
+						btn.background_down='UI/firstlistbuttondown.png'
 						layout1.add_widget(btn)
 					root = ScrollView(size_hint=(1, 0.9), size=(Window.width, Window.height),bar_margin=2,scroll_type=['bars', 'content'],bar_width=8,bar_color=[0,171/255,174/255,1])
 					root.add_widget(layout1)
@@ -321,8 +321,8 @@ class Password_Screen(Screen):
 					self.mainlayout.add_widget(parent)
 				else:
 					btn = Button(text='No passwords yet!',size_hint_y=None, height=60,color=[204/255,0,0,1])
-					btn.background_normal='UI/Main Window Button.png'
-					btn.background_down='UI/Main Window Button.png'
+					btn.background_normal='UI/firstbutton.png'
+					btn.background_down='UI/firstbuttondown.png'
 					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 					layout1.add_widget(btn)
 					root.add_widget(layout1)
@@ -330,8 +330,8 @@ class Password_Screen(Screen):
 					self.mainlayout.add_widget(parent)
 			else:
 				btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
-				btn.background_normal='UI/Main Window Button.png'
-				btn.background_down='UI/Main Window Button.png'
+				btn.background_normal='UI/firstbutton.png'
+				btn.background_down='UI/firstbuttondown.png'
 				root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 				layout1.add_widget(btn)
 				root.add_widget(layout1)

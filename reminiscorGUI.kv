@@ -260,6 +260,11 @@ Screen_Manager:
 			size_hint: (None,None)
 			size:(800,600)
 			pos_hint:{'x':0,'y':0}
+		Image:
+			source:'UI/MainWinLogo.png'
+			size_hint: (None,None)
+			size:(150,120)
+			pos_hint:{'x':0,'y':0.8}
 		TextInput:
 			id: description
 			foreground_color:(0.7,0.7,0.7,1)
@@ -306,8 +311,8 @@ Screen_Manager:
 			pos_hint: {'center_x': 0.51 ,'center_y': 0.25 }
 			size_hint: (0.15, 0.06)
 			font_size:14
-			background_normal: 'UI/login2normal.png'
-			background_down: 'UI/login2down.png'
+			background_normal: 'UI/Mainbutton.png'
+	    	background_down: 'UI/Mainbuttondown.png'
 			on_release:
 				root.Add_New_Password()
 		                                                                 #PASSWORD GENERATOR FROM HERE
@@ -321,14 +326,14 @@ Screen_Manager:
 			hint_text: 'Generated Password'
 			multiline: False
 			pos_hint: {'center_x': 0.8 ,'center_y': 0.55 }
-			size_hint: (0.3, 0.08)
+			size_hint: (0.29, 0.08)
 		Button: 
 			text: 'Generate\nPassword'
 			font_size:13
-			pos_hint: {'center_x': 0.87 ,'center_y': 0.65 }
+			pos_hint: {'center_x': 0.86 ,'center_y': 0.65 }
 			size_hint: (0.15, 0.07)
-			background_normal: 'UI/login2normal.png'
-			background_down: 'UI/login2down.png'
+			background_normal: 'UI/Mainbutton.png'
+	    	background_down: 'UI/Mainbuttondown.png'
 			on_release:
 				root.random_password()
 		Button:
@@ -347,8 +352,8 @@ Screen_Manager:
 	    	halign:'center'
 	    	size_hint:(None,None)
 	    	size:(180,30)
-	    	background_normal: 'UI/login2normal.png'
-	    	background_down: 'UI/login2down.png'
+	    	background_normal: 'UI/Mainbutton.png'
+	    	background_down: 'UI/Mainbuttondown.png'
 	    	pos_hint:{'center_x':0.830,'center_y':0.47}
 	    	on_release:root.sendgenpass()
 		TextInput:
@@ -359,7 +364,7 @@ Screen_Manager:
 			background_color:(45/255,45/255,45/255,1)
 			hint_text: 'Password\nSize'
 			multiline: False
-			pos_hint: {'center_x': 0.71,'center_y': 0.65}
+			pos_hint: {'center_x': 0.715,'center_y': 0.65}
 			size_hint: (0.12, 0.08)
                                                                     	#Side Bar
 		Button: 
@@ -406,8 +411,8 @@ Screen_Manager:
 			pos_hint: {'x': 0 ,'y': 0.64 }
 			size_hint: (None, None)
 			size: (150,96)
-			background_normal: 'UI/Main Window Button.png'
-			background_down: 'UI/Main Window Button Ondown.png'
+			background_normal: 'UI/firstbutton.png'
+			background_down: 'UI/firstbuttondown.png'
 			on_release:
 				app.root.transition=SlideTransition()
 				app.root.current='PassDisp'
@@ -586,13 +591,13 @@ Screen_Manager:
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release: root.Export_Passwords()
 		Button: 
-			text: 'View Passwords'
+			text: 'Backup Passwords'
 			font_size:14
 			pos_hint: {'x': 0 ,'y': 0.64 }
 			size_hint: (None, None)
 			size: (150,96)
-			background_normal: 'UI/Main Window Button.png'
-			background_down: 'UI/Main Window Button Ondown.png'
+			background_normal: 'UI/firstbutton.png'
+			background_down: 'UI/firstbuttondown.png'
 			on_release:
 				
 		
