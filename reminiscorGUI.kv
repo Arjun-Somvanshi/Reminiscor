@@ -255,6 +255,11 @@ Screen_Manager:
 	        size: self.size
 	        pos: self.pos
 	FloatLayout:
+		Image:
+			source:'UI/MainscreenBackground.png'
+			size_hint: (None,None)
+			size:(800,600)
+			pos_hint:{'x':0,'y':0}
 		TextInput:
 			id: description
 			foreground_color:(0.7,0.7,0.7,1)
@@ -263,7 +268,7 @@ Screen_Manager:
 			background_color:(45/255,45/255,45/255,1)
 			hint_text: 'Entry Title'
 			multiline: False
-			pos_hint: {'center_x': 0.75 ,'center_y': 0.65 }
+			pos_hint: {'center_x': 0.42 ,'center_y': 0.65 }
 			size_hint: (0.35, 0.08)
 		TextInput:
 			id: username
@@ -273,7 +278,7 @@ Screen_Manager:
 			background_color:(45/255,45/255,45/255,1)
 			hint_text: 'Username'
 			multiline: False
-			pos_hint: {'center_x': 0.75 ,'center_y': 0.55 }
+			pos_hint: {'center_x': 0.42 ,'center_y': 0.55 }
 			size_hint: (0.35, 0.08)
 		TextInput:
 			id: passw
@@ -283,7 +288,7 @@ Screen_Manager:
 			background_color:(45/255,45/255,45/255,1)
 			hint_text: 'Password'
 			multiline: False
-			pos_hint: {'center_x': 0.75 ,'center_y': 0.35 }
+			pos_hint: {'center_x': 0.42 ,'center_y': 0.45 }
 			size_hint: (0.35, 0.08)
 		TextInput:
 			id: notes
@@ -294,8 +299,58 @@ Screen_Manager:
 			halign: 'center' 
 			hint_text: 'Notes'
 			multiline: False
-			pos_hint: {'center_x': 0.75 ,'center_y': 0.22 }
+			pos_hint: {'center_x': 0.42 ,'center_y': 0.35 }
 			size_hint: (0.35, 0.08)
+		Button:
+			text: 'Save Password'
+			pos_hint: {'center_x': 0.51 ,'center_y': 0.25 }
+			size_hint: (0.15, 0.06)
+			font_size:14
+			background_normal: 'UI/login2normal.png'
+			background_down: 'UI/login2down.png'
+			on_release:
+				root.Add_New_Password()
+		                                                                 #PASSWORD GENERATOR FROM HERE
+		TextInput:
+			id: passwgen
+			foreground_color:(0.7,0.7,0.7,1)
+			color:(0.7,0.7,0.7)
+			cursor_color:(0,171/255,174/255,1)
+			readonly: True
+			background_color:(45/255,45/255,45/255,1)
+			hint_text: 'Generated Password'
+			multiline: False
+			pos_hint: {'center_x': 0.8 ,'center_y': 0.55 }
+			size_hint: (0.3, 0.08)
+		Button: 
+			text: 'Generate\nPassword'
+			font_size:13
+			pos_hint: {'center_x': 0.87 ,'center_y': 0.65 }
+			size_hint: (0.15, 0.07)
+			background_normal: 'UI/login2normal.png'
+			background_down: 'UI/login2down.png'
+			on_release:
+				root.random_password()
+		Button:
+	    	id: copypass
+	    	size_hint:(None,None)
+	    	size:(30,30)
+	    	background_normal: 'UI/clipboard.png'
+	    	background_down: 'UI/clipboarddown.png'
+	    	pos_hint:{'center_x':0.675,'center_y':0.47}
+	    	on_release:root.copytoclip()
+	    Button:
+	    	id: passwsend
+	    	text:"Copy to Password textbox"
+	    	text_size:(180,None)
+	    	font_size:12
+	    	halign:'center'
+	    	size_hint:(None,None)
+	    	size:(180,30)
+	    	background_normal: 'UI/login2normal.png'
+	    	background_down: 'UI/login2down.png'
+	    	pos_hint:{'center_x':0.830,'center_y':0.47}
+	    	on_release:root.sendgenpass()
 		TextInput:
 			id: n
 			foreground_color:(0.7,0.7,0.7,1)
@@ -304,26 +359,9 @@ Screen_Manager:
 			background_color:(45/255,45/255,45/255,1)
 			hint_text: 'Password\nSize'
 			multiline: False
-			pos_hint: {'center_x': 0.86,'center_y': 0.45}
+			pos_hint: {'center_x': 0.71,'center_y': 0.65}
 			size_hint: (0.12, 0.08)
-		Button: 
-			text: 'Generate Password'
-			pos_hint: {'center_x': 0.68 ,'center_y': 0.45 }
-			size_hint: (0.20, 0.06)
-			background_normal: 'UI/login2normal.png'
-			background_down: 'UI/login2down.png'
-			on_release:
-				root.random_password()
-		Button:
-			text: 'Save Password'
-			pos_hint: {'center_x': 0.85 ,'center_y': 0.1 }
-			size_hint: (0.15, 0.06)
-			font_size:14
-			background_normal: 'UI/login2normal.png'
-			background_down: 'UI/login2down.png'
-			on_release:
-				root.Add_New_Password()
-				
+                                                                    	#Side Bar
 		Button: 
 			text: 'Log Out'
 			font_size:14
@@ -335,6 +373,7 @@ Screen_Manager:
 			on_release:
 				app.root.transition=FadeTransition(duration=1.2)
 				app.root.current='Login'
+				root.clear()
 		Button: 
 			text: 'Help'
 			font_size:14
@@ -512,7 +551,6 @@ Screen_Manager:
 	Button:
 		id: close
 		text: 'Close'
-		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'center_x': 0.85,'center_y': 0.1 }
 		size_hint: (0.25, 0.2)
 		background_normal: 'UI/login2normal.png'
@@ -520,6 +558,44 @@ Screen_Manager:
 #----------------------------------------------------------------------Password WINDOW------------------------------------------------------------------------------------------------------
 <Password_Screen>:
 	name: 'PassDisp'
+	FloatLayout:
+		Button: 
+			text: 'Help'
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0.16 }
+			size_hint: (None, None)
+			size: (150,96)
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
+		Button:
+			text: 'Import Passwords'
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0.32 }
+			size_hint: (None, None)
+			size: (150,96)
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
+			on_release: root.Import_Passwords()
+		Button:
+			text: 'Export Passwords'
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0.48 }
+			size_hint: (None, None)
+			size: (150,96)
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
+			on_release: root.Export_Passwords()
+		Button: 
+			text: 'View Passwords'
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0.64 }
+			size_hint: (None, None)
+			size: (150,96)
+			background_normal: 'UI/Main Window Button.png'
+			background_down: 'UI/Main Window Button Ondown.png'
+			on_release:
+				
+		
 <passwordpopup>:
 	Label:
 		text:'Title: '

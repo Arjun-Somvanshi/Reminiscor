@@ -154,6 +154,17 @@ class MainWindow(Screen):
 	description=ObjectProperty()
 	username=ObjectProperty()
 	notes=ObjectProperty()
+	def clear(self):
+		self.ids.passwgen.text=''
+		self.ids.passw.text=''
+		self.ids.username.text=''
+		self.ids.n.text=''
+		self.ids.notes.text=''
+		self.ids.description.text=''
+	def sendgenpass(self):
+		self.ids.passw.text=self.ids.passwgen.text
+	def copytoclip(self):
+		pyperclip.copy(self.ids.passwgen.text)
 	def Import_Passwords(self):
 		design=Login_Popup_import()
 		explain=Label(markup=True,text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.',text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95},font_size=14)
@@ -176,22 +187,12 @@ class MainWindow(Screen):
 	def random_password(self):
 		pass_check=PassCheck(self.n)
 		d_check=DescriptionCheck(self.description)
-		if pass_check and d_check:
+		if pass_check:
 			self.p_size_popup()
 			ColorChange(self.n,True,'Invalid\nSize')
-			ColorChange(self.description,True,'Invalid Size')
-		elif pass_check is True and d_check is False:
-			self.p_size_popup()
-			ColorChange(self.description,False)
-			ColorChange(self.n,True,'Invalid\nSize')
-		elif d_check is True and pass_check is False:
-			self.p_size_popup()
-			ColorChange(self.n,False)
-			ColorChange(self.description,True,'Invalid Size/Title')
 		else:
 			ColorChange(self.n,False,'Password\nSize')
-			ColorChange(self.description,False,'Entry Title')
-			self.passw.text=PasswordGen(int(self.n.text))
+			self.ids.passwgen.text=PasswordGen(int(self.n.text))
 	def Add_New_Password(self):
 		sep='qwertyuiop***asdfghjklzxcvbnm'
 		if not DescriptionCheck(self.description) and len(self.passw.text)>=1:
@@ -213,9 +214,9 @@ class MainWindow(Screen):
 			ColorChange(self.description,True,'Invalid Add')
 			ColorChange(self.passw,True,'Invalid Add')
 	def refresh(self):
-		ColorChange(self.description,False,'Invalid Add')
-		ColorChange(self.n,False,'Invalid\nAdd')
-		ColorChange(self.passw,False,'Invalid Add')
+		ColorChange(self.description,False,'Entry Title')
+		ColorChange(self.n,False,'Password\nSize')
+		ColorChange(self.passw,False,'Password')
 		self.manager.get_screen('PassDisp').showlist()
 
 class Password_Added(FloatLayout):
@@ -240,6 +241,7 @@ class Login_Popup_import(FloatLayout):
 				a=Import()
 				if a==True:
 					self.ids.label.text='Import Successful!'
+					self.ids.label.color=[0,171/255,174/255,1]
 					self.ids.label.color=[1,1,1,1]
 				else:
 					self.ids.label.text='Import File is not present or empty.'
@@ -257,7 +259,20 @@ class Password_Size_Popup(FloatLayout):
 
 class Password_Screen(Screen):
 	passn=None		
-	
+	def Import_Passwords(self):
+		design=Login_Popup_import()
+		explain=Label(markup=True,text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.',text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95},font_size=14)
+		design.add_widget(explain)
+		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
+		design.ids.close.bind(on_release=win.dismiss)
+		win.open()
+	def Export_Passwords(self):
+		design=Login_Popup_export()
+		explain=Label(markup=True,text='This process will [color=00abae]decrypt and export your passwords.[/color]', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
+		design.add_widget(explain)
+		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
+		design.ids.close.bind(on_release=win.dismiss)
+		win.open()
 	def __init__(self, **kwargs):
 		super(Password_Screen,self).__init__(**kwargs)
 		self.mainlayout=BoxLayout(orientation='horizontal',spacing=10)
@@ -265,11 +280,11 @@ class Password_Screen(Screen):
 		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(200,40),pos_hint={'x':0,'top':1},halign='center',
 			                     foreground_color=(0.7,0.7,0.7,1),color=(0.7,0.7,0.7),cursor_color=(0,171/255,174/255,1),background_color=(45/255,45/255,45/255,1))
 		searchbtn=Button(size_hint=(None,None),size =(40,40),pos_hint={'x':0.51,'top':1},halign='center',on_release=self.searchresult)
-		Backbtn=Button(text='Go Back', size_hint=(.3,.08), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
+		Backbtn=Button(text='Go Back', size_hint=(None,None),size=(150,96), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
 		searchbtn.background_normal='UI/Search.png'
 		searchbtn.background_down='UI/SearchOnDown.png'
-		Backbtn.background_normal='UI/login2normal.png'
-		Backbtn.background_down='UI/login2down.png'
+		Backbtn.background_normal='UI/Main Window Button.png'
+		Backbtn.background_down='UI/Main Window Button Ondown.png'
 		#self.searchbar.keyboard_on_key_up(Window,13)
 		layout0.add_widget(searchbtn)
 		layout0.add_widget(Backbtn)
@@ -311,7 +326,8 @@ class Password_Screen(Screen):
 					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 					layout1.add_widget(btn)
 					root.add_widget(layout1)
-					self.mainlayout.add_widget(root)
+					parent.add_widget(root)
+					self.mainlayout.add_widget(parent)
 			else:
 				btn = Button(text='No passwords yet!',size_hint_y=None, height=60)
 				btn.background_normal='UI/Main Window Button.png'
@@ -319,7 +335,8 @@ class Password_Screen(Screen):
 				root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
 				layout1.add_widget(btn)
 				root.add_widget(layout1)
-				self.mainlayout.add_widget(root)
+				parent.add_widget(root)
+				self.mainlayout.add_widget(parent)
 
 	def searchresult(self,instance):
 		result=SearchFile(self.searchbar.text)
@@ -344,6 +361,7 @@ class Password_Screen(Screen):
 			design.ids.close.bind(on_release=partial(self.DismissAndTriggerCancel,design,search))
 			design.ids.delete.bind(on_release=partial(self.DeleteAndRefresh,design,search))
 			design.ids.edit.bind(on_release=partial(self.editflow,design,result))
+		self.searchbar.text=''
 	def screenswitch(self,instance):
 		self.manager.transition=SlideTransition()
 		self.manager.current = 'Main'

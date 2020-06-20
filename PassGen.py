@@ -33,10 +33,13 @@ def DescriptionCheck(description):
 def PassCheck(n):
 	minimum_size=8
 	maximum_size=30
-	if n.text=='' or n.text.isalpha() or int(n.text)<minimum_size or int(n.text)>maximum_size:
-		return True
+	if n.text.isnumeric():
+		if n.text=='' or n.text.isalpha() or int(n.text)<minimum_size or int(n.text)>maximum_size:
+			return True
+		else:
+			return False
 	else:
-		return False
+		return True
 
 
 def PasswordGen(n):
