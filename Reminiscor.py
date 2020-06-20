@@ -156,7 +156,7 @@ class MainWindow(Screen):
 	notes=ObjectProperty()
 	def Import_Passwords(self):
 		design=Login_Popup_import()
-		explain=Label(markup=True,text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.',text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
+		explain=Label(markup=True,text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.',text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95},font_size=14)
 		design.add_widget(explain)
 		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
 		design.ids.close.bind(on_release=win.dismiss)
@@ -200,8 +200,9 @@ class MainWindow(Screen):
 			ColorChange(self.passw,False,'Password')
 			WriteEncrypt(HomeDir('Data3.txt'),self.description.text + sep + self.username.text + sep + self.passw.text + sep + self.notes.text)
 			design=Password_Added()
-			Added_pop=Popup(title='Password Added!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			Added_pop=Popup(title='New Entry Added!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			Added_pop.open()
+			design.ids.close.bind(on_release=Added_pop.dismiss)
 			self.description.text=''
 			self.n.text=''
 			self.passw.text=''
@@ -225,11 +226,11 @@ class Login_Popup_export(FloatLayout):
 	def authenticate(self):
 		if(CheckUser()):
 			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
-				self.ids.label.text='Export Successful.'
-				self.ids.label.color=[1,1,1,1]
+				self.ids.label.text='Export Successful!'
+				self.ids.label.color=[0,171/255,174/255,1]
 				Export()
 			else:
-				self.ids.label.text='Authentication Failed.'
+				self.ids.label.text='Authentication Failed!'
 				self.ids.label.color=[204/255,0,0,1]
 
 class Login_Popup_import(FloatLayout):
@@ -238,13 +239,15 @@ class Login_Popup_import(FloatLayout):
 			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
 				a=Import()
 				if a==True:
-					self.ids.label.text='Import Successful.'
+					self.ids.label.text='Import Successful!'
 					self.ids.label.color=[1,1,1,1]
 				else:
 					self.ids.label.text='Import File is not present or empty.'
+					self.ids.label.pos_hint={'center_x':0.6,'center_y':0.72}
 					self.ids.label.color=[204/255,0,0,1]
 			else:
-				self.ids.label.text='Authentication Failed'
+				self.ids.label.text='Authentication Failed!'
+				self.ids.label.pos_hint={'center_x':0.75,'center_y':0.72}
 				self.ids.label.color=[204/255,0,0,1]
 
 class Password_Size_Popup(FloatLayout):
@@ -282,8 +285,11 @@ class Password_Screen(Screen):
 				for i in self.mainlayout.children:
 					if a==0:
 						self.mainlayout.remove_widget(i)
+			parent=BoxLayout(orientation='vertical', spacing=10)
 			layout1 = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
 			layout1.bind(minimum_height=layout1.setter('height'))
+			title_label=Label(text='[u][b]Entry List:[/b][/u]',markup=True, size_hint_y=None,height=60,font_size=20,color=[0,171/255,174/255,1])
+			parent.add_widget(title_label)
 			if os.path.isfile(HomeDir('Data3.txt')):
 				password_list=ReadDecrypt(HomeDir('Data3.txt'))
 				pass_len=len(password_list)
@@ -294,9 +300,10 @@ class Password_Screen(Screen):
 						btn.background_normal='UI/passwordlist.png'
 						btn.background_down='UI/passwordlistdown.png'
 						layout1.add_widget(btn)
-					root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height),bar_margin=2,scroll_type=['bars', 'content'],bar_width=8,bar_color=[0,171/255,174/255,1])
+					root = ScrollView(size_hint=(1, 0.9), size=(Window.width, Window.height),bar_margin=2,scroll_type=['bars', 'content'],bar_width=8,bar_color=[0,171/255,174/255,1])
 					root.add_widget(layout1)
-					self.mainlayout.add_widget(root)
+					parent.add_widget(root)
+					self.mainlayout.add_widget(parent)
 				else:
 					btn = Button(text='No passwords yet!',size_hint_y=None, height=60,color=[204/255,0,0,1])
 					btn.background_normal='UI/Main Window Button.png'

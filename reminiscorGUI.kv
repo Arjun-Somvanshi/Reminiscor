@@ -66,6 +66,16 @@ Screen_Manager:
 				app.root.transition=FadeTransition(duration=1.2)
 				app.root.current='Main' if root.Login_Authenticate() else 'Login'
 		Button:
+			text: 'Log in Test'
+			color: (0.5, 0.5, 0.5, 1)
+			pos_hint: {'center_x': 0.8 ,'center_y': 0.3 }
+			size_hint: (0.15, 0.06)
+			background_normal: 'UI/button for login.png'
+			background_down: 'UI/on down login.png'
+			on_release:
+				app.root.transition=FadeTransition(duration=0)
+				app.root.current='Main' 
+		Button:
 			id: help1
 			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'right': 0.98 ,'y': 0.015 }
@@ -116,6 +126,24 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 		pos_hint: {'center_x':0.8,'center_y':0.1}
 		size_hint:(0.3,0.18)
+<UserError>:
+	Label:
+		text: 'This PC already has a user!\nReminiscor supports only [color=00abae]one user[/color] at a time.'
+		markup: True
+		font_size: 14
+		size_hint: (None,.1 )
+		text_size:(self.width,None)
+		width:350
+		pos_hint: {'x': 0, 'top':0.8}
+	Button:
+		id: close
+		text:'Back'
+		halign: 'center'
+		text_size: (self.width,None)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		pos_hint: {'center_x':0.8,'center_y':0.1}
+		size_hint:(0.3,0.2)
 <SignUp_Pop>:
 	user:user
 	p1:p1
@@ -290,6 +318,7 @@ Screen_Manager:
 			text: 'Save Password'
 			pos_hint: {'center_x': 0.85 ,'center_y': 0.1 }
 			size_hint: (0.15, 0.06)
+			font_size:14
 			background_normal: 'UI/login2normal.png'
 			background_down: 'UI/login2down.png'
 			on_release:
@@ -297,9 +326,10 @@ Screen_Manager:
 				
 		Button: 
 			text: 'Log Out'
-			pos_hint: {'x': 0 ,'top': 0.2 }
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0 }
 			size_hint: (None, None)
-			size: (150,120)
+			size: (150,96)
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release:
@@ -307,32 +337,36 @@ Screen_Manager:
 				app.root.current='Login'
 		Button: 
 			text: 'Help'
-			pos_hint: {'x': 0 ,'top': 0.4 }
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0.16 }
 			size_hint: (None, None)
-			size: (150,120)
+			size: (150,96)
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 		Button:
 			text: 'Import Passwords'
-			pos_hint: {'x': 0 ,'top': 0.6 }
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0.32 }
 			size_hint: (None, None)
-			size: (150,120)
+			size: (150,96)
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release: root.Import_Passwords()
 		Button:
 			text: 'Export Passwords'
-			pos_hint: {'x': 0 ,'top': 0.8 }
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0.48 }
 			size_hint: (None, None)
-			size: (150,120)
+			size: (150,96)
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release: root.Export_Passwords()
 		Button: 
 			text: 'View Passwords'
-			pos_hint: {'x': 0 ,'top': 1 }
+			font_size:14
+			pos_hint: {'x': 0 ,'y': 0.64 }
 			size_hint: (None, None)
-			size: (150,120)
+			size: (150,96)
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release:
@@ -344,11 +378,11 @@ Screen_Manager:
 <Password_Size_Popup>: #    Main Window Password Error
 	Label:
 		markup: True
-		text: 'The password generator/Entry addition process has encountered an error.\n\nTry doing the following: \n\nRename the title with [color=00abae]atleast 3 characters.[/color]\n\nEnter a [color=00abae]password size[/color] before hitting the generate password button[color=00abae](i.e if you are using the generator).[/color]\n\nNote: To add an [color=00abae]Entry[/color] you need to enter a [color=00abae]title and password[/color] atleast.'
+		text: 'The password generator/Entry addition process has encountered an error.\n\n[u]Try doing the following:[/u] \n\nRename the title with [color=00abae]atleast 3 characters.[/color]\nEntry Title should be [color=00abae]unique[/color] in [color=00abae]Entry List[/color]\n\nEnter a [color=00abae]password size(minimum 8)[/color] before hitting the generate password button[color=00abae](i.e if you are using the generator).[/color]\n\nNote: To add an [color=00abae]Entry[/color] you need to enter a [color=00abae]title and password[/color] atleast.'
 		size_hint: (None,.1 )
 		text_size:(self.width,None)
 		width:350
-		pos_hint: {'x': 0,'top': 0.65 }
+		pos_hint: {'x': 0,'top': 0.63 }
 	Button:
 		id: close
 		text:'Back'
@@ -356,37 +390,20 @@ Screen_Manager:
 		text_size: (self.width,None)
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
-		pos_hint: {'center_x':0.8,'center_y':0.1}
+		pos_hint: {'center_x':0.82,'center_y':0.08}
 		size_hint:(0.3,0.1)
-<UserError>:
-	Label:
-		text: 'This PC already has a user!\nReminiscor supports only [color=00abae]one user[/color] at a time.'
-		markup: True
-		font_size: 14
-		size_hint: (None,.1 )
-		text_size:(self.width,None)
-		width:350
-		pos_hint: {'x': 0, 'top':0.8}
-	Button:
-		id: close
-		text:'Back'
-		halign: 'center'
-		text_size: (self.width,None)
-		background_normal: 'UI/login2normal.png'
-		background_down: 'UI/login2down.png'
-		pos_hint: {'center_x':0.8,'center_y':0.1}
-		size_hint:(0.3,0.2)
 <Login_Popup_export>:
 	Label:
 		text:'Enter Credentials to authenticate the process: '
+		font_size: 14
 		text_size:(self.width,None)
 		size_hint: (None, .1)
 		width:350
-		pos_hint: {'center_x': 0.5, 'top': 0.8}
+		pos_hint: {'center_x': 0.5, 'top': 0.85}
 	Label:
 		id: label
 		text:''
-		pos_hint:{'center_x':0.75,'center_y':0.15}
+		pos_hint:{'center_x':0.75,'center_y':0.72}
 		size_hint:(None,0.1)
 		width:400
 		text_size:(350, None)
@@ -434,12 +451,13 @@ Screen_Manager:
 		text:'Enter Credentials to authenticate the process: '
 		text_size:(self.width,None)
 		size_hint: (None, .1)
+		font_size: 14
 		width:350
-		pos_hint: {'center_x': 0.5, 'top': 0.8}
+		pos_hint: {'center_x': 0.5, 'top': 0.85}
 	Label:
 		id: label
 		text:''
-		pos_hint:{'center_x':0.76,'center_y':0.04}
+		pos_hint:{'center_x':0.75,'center_y':0.72}
 		size_hint:(None,0.1)
 		width:400
 		text_size:(350, None)
@@ -482,7 +500,23 @@ Screen_Manager:
 		size_hint: (0.35, 0.1)
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
-
+<Password_Added>:
+	Label:
+		pos_hint:{'x':0,'top':0.69}
+		size_hint:(None,0.1)
+		width:350
+		font_size: 14
+		text_size:(self.width,None)
+		text:'New Entry was added to your Entry List!\nYou can view it by pressing the [color=00abae]View Password[/color] button. All your entries are present on that window.\nYou can [color=00abae]edit, delete [/color]and [color=00abae]search[/color] for entries there.'
+		markup: True
+	Button:
+		id: close
+		text: 'Close'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.85,'center_y': 0.1 }
+		size_hint: (0.25, 0.2)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 #----------------------------------------------------------------------Password WINDOW------------------------------------------------------------------------------------------------------
 <Password_Screen>:
 	name: 'PassDisp'
