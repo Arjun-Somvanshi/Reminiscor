@@ -37,6 +37,7 @@ Screen_Manager:
 			id:username 
 			hint_text: 'Username'
 			foreground_color:(0.7,0.7,0.7,1)
+			allow_copy:False
 			halign:'center'
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -47,6 +48,7 @@ Screen_Manager:
 		TextInput:
 			id: p
 			hint_text: 'Master Password' 
+			allow_copy:False
 			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			password: True
@@ -159,8 +161,10 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.5,'top': 0.95 }	
 	TextInput: 
 		id: user
+		allow_copy:False
 		hint_text: 'Username'
 		foreground_color:(0.7,0.7,0.7,1)
+		halign:'center'
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
@@ -169,7 +173,9 @@ Screen_Manager:
 		size_hint: (0.6, 0.09)
 	TextInput:
 		id: p1
+		allow_copy:False
 		hint_text: 'Master Password' 
+		halign:'center'
 		password: True
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -180,8 +186,10 @@ Screen_Manager:
 		size_hint: (0.6, 0.09)
 	TextInput:
 		id: p2
+		allow_copy:False
 		hint_text: 'Confirm Master Password' 
 		password: True
+		halign:'center'
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -267,6 +275,7 @@ Screen_Manager:
 			pos_hint:{'x':0,'y':0.8}
 		TextInput:
 			id: description
+			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -277,6 +286,7 @@ Screen_Manager:
 			size_hint: (0.35, 0.08)
 		TextInput:
 			id: username
+			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -287,6 +297,7 @@ Screen_Manager:
 			size_hint: (0.35, 0.08)
 		TextInput:
 			id: passw
+			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -297,6 +308,7 @@ Screen_Manager:
 			size_hint: (0.35, 0.08)
 		TextInput:
 			id: notes
+			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -318,6 +330,7 @@ Screen_Manager:
 		                                                                 #PASSWORD GENERATOR FROM HERE
 		TextInput:
 			id: passwgen
+			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -358,6 +371,7 @@ Screen_Manager:
 	    	on_release:root.sendgenpass()
 		TextInput:
 			id: n
+			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -414,9 +428,8 @@ Screen_Manager:
 			background_normal: 'UI/firstbutton.png'
 			background_down: 'UI/firstbuttondown.png'
 			on_release:
-				app.root.transition=SlideTransition()
+				app.root.transition=FadeTransition(duration=0)
 				app.root.current='PassDisp'
-				root.manager.transition.direction= "left"
 				root.refresh()
 
 <Password_Size_Popup>: #    Main Window Password Error
@@ -454,6 +467,8 @@ Screen_Manager:
 	TextInput:
 		id:username 
 		hint_text: 'Username'
+		halign:'center'
+		allow_copy:False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -465,8 +480,10 @@ Screen_Manager:
 	TextInput:
 		id: p
 		hint_text: 'Master Password' 
+		allow_copy:False
 		foreground_color:(0.7,0.7,0.7,1)
 		password: True
+		halign:'center'
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
@@ -508,6 +525,8 @@ Screen_Manager:
 	TextInput:
 		id:username 
 		hint_text: 'Username'
+		halign:'center'
+		allow_copy:False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -524,6 +543,8 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
+		allow_copy:False
+		halign:'center'
 		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
 		size_hint: (None, 0.1)
 		width: 200
@@ -610,6 +631,7 @@ Screen_Manager:
 		id: title
 		halign:'left'
 		multiline: False
+		halign:'center'
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -625,6 +647,7 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.7}
 	TextInput:
 		id: username
+		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -641,6 +664,7 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.5}
 	TextInput:
 		id: password
+		halign:'center'
 		halign:'left'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
@@ -659,6 +683,7 @@ Screen_Manager:
 	TextInput:
 		id:notes
 		halign:'left'
+		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -726,6 +751,7 @@ Screen_Manager:
 	TextInput:
 		id: title
 		halign:'left'
+		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -748,6 +774,7 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		text:''
+		halign:'center'
 		size_hint:(0.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.7}
 		disabled_foreground_color:[0.4,0.4,0.4,1]
@@ -759,6 +786,7 @@ Screen_Manager:
 	TextInput:
 		id: password
 		halign:'left'
+		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -776,6 +804,7 @@ Screen_Manager:
 	TextInput:
 		id:notes
 		halign:'left'
+		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)

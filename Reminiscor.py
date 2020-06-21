@@ -14,7 +14,7 @@ from kivy.uix.textinput import TextInput
 from kivy.properties import ObjectProperty,BooleanProperty,NumericProperty
 from kivy.uix.popup import Popup
 from PassGen import *
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeTransition
 from kivy.lang import Builder
 from LoginScreenResponse import *
 from SignUpResponse import *
@@ -363,9 +363,8 @@ class Password_Screen(Screen):
 			design.ids.edit.bind(on_release=partial(self.editflow,design,result))
 		self.searchbar.text=''
 	def screenswitch(self,instance):
-		self.manager.transition=SlideTransition()
+		self.manager.transition=FadeTransition(duration=0)
 		self.manager.current = 'Main'
-		self.manager.transition.direction='right'
 	def poppassword(self,entrydata,*args):
 		design=passwordpopup()
 		design.ids.title.text+=entrydata[0]
