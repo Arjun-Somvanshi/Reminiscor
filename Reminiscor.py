@@ -280,7 +280,7 @@ class Password_Screen(Screen):
 		self.searchbar=TextInput(multiline=False,hint_text='Search for a Password', size_hint=(None,None),size =(200,40),pos_hint={'x':0,'top':1},halign='center',
 			                     foreground_color=(0.7,0.7,0.7,1),color=(0.7,0.7,0.7),cursor_color=(0,171/255,174/255,1),background_color=(45/255,45/255,45/255,1))
 		searchbtn=Button(size_hint=(None,None),size =(40,40),pos_hint={'x':0.51,'top':1},halign='center',on_release=self.searchresult)
-		Backbtn=Button(text='Go Back', size_hint=(None,None),size=(150,96), pos_hint={'x':0,'y':0},on_release=self.screenswitch)
+		Backbtn=Button(text='Go Back', size_hint=(None,None),size=(150,96), pos_hint={'x':0,'y':0},on_release=self.screenswitch,color=(0.5,0.5,0.5,1))
 		searchbtn.background_normal='UI/Search.png'
 		searchbtn.background_down='UI/SearchOnDown.png'
 		Backbtn.background_normal='UI/Main Window Button.png'
@@ -311,7 +311,7 @@ class Password_Screen(Screen):
 				if pass_len>0:
 					for i in password_list:
 						entrydata=i.split('qwertyuiop***asdfghjklzxcvbnm')
-						btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata))
+						btn = Button(text=entrydata[0],size_hint_y=None, height=60,on_release=partial(self.poppassword,entrydata),color=(0.8,0.8,0.8,1))
 						btn.background_normal='UI/firstlistbutton.png'
 						btn.background_down='UI/firstlistbuttondown.png'
 						layout1.add_widget(btn)

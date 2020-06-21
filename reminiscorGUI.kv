@@ -113,6 +113,7 @@ Screen_Manager:
 	Label:
 		markup: True
 		text:'The username and password protect [color=00abae]all your passwords in Reminiscor.[/color]\n\nTo keep your data safe on your device we have set the default allowable username size to [color=00abae]eight characters[/color] and the password size to [color=00abae]ten characters.[/color]'
+		color: (0.5, 0.5, 0.5, 1)
 		text_size:(self.width,None)
 		size_hint: (None, .1)
 		width:350
@@ -120,6 +121,7 @@ Screen_Manager:
 	Button:
 		id: close
 		text:'Back'
+		color: (0.5, 0.5, 0.5, 1)
 		halign: 'center'
 		text_size: (self.width,None)
 		background_normal: 'UI/login2normal.png'
@@ -130,6 +132,7 @@ Screen_Manager:
 	Label:
 		text: 'This PC already has a user!\nReminiscor supports only [color=00abae]one user[/color] at a time.'
 		markup: True
+		color: (0.5, 0.5, 0.5, 1)
 		font_size: 14
 		size_hint: (None,.1 )
 		text_size:(self.width,None)
@@ -138,6 +141,7 @@ Screen_Manager:
 	Button:
 		id: close
 		text:'Back'
+		color: (0.5, 0.5, 0.5, 1)
 		halign: 'center'
 		text_size: (self.width,None)
 		background_normal: 'UI/login2normal.png'
@@ -153,6 +157,7 @@ Screen_Manager:
 		markup: True
 		text: 'This is the Sign-Up page. A user [color=00abae]doesn\'t[/color] exist!\nPlease remember your [color=00abae]Master Password[/color] and [color=00abae]Username[/color]'
 		font_size: 14
+		color: (0.5, 0.5, 0.5, 1)
 		size_hint: (None, .1)
 		width:350
 		text_size: (self.width,None)
@@ -192,6 +197,7 @@ Screen_Manager:
 	Button:
 		id:signup
 		text:'Sign-Up!'
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'center_x': 0.8, 'center_y': 0.1}
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
@@ -202,6 +208,7 @@ Screen_Manager:
 		id:close
 		text:'Back'
 		halign:'center'
+		color: (0.5, 0.5, 0.5, 1)
 		font_size: 14
 		text_size: (self.width, None)
 		background_normal: 'UI/login2normal.png'
@@ -216,6 +223,7 @@ Screen_Manager:
 		markup: True
 		text: 'This is the log in screen of Reminiscor.\n\nIf you are using Reminiscor after a fresh install, you would have encountered a [color=00abae]sign-up popup.[/color]\n\nIf you didn\'t sign-up yet, you can click on the [color=00abae]sign-up button.[/color]'
 		font_size: 14
+		color: (0.5, 0.5, 0.5, 1)
 		size_hint: (None, .1)
 		width:350
 		text_size: (self.width,None)
@@ -223,6 +231,7 @@ Screen_Manager:
 	Button:
 		id: close
 		text:'Back'
+		color: (0.5, 0.5, 0.5, 1)
 		halign: 'center'
 		text_size: (self.width,None)
 		background_normal: 'UI/login2normal.png'
@@ -233,6 +242,7 @@ Screen_Manager:
 	Button:
 		id: close
 		text:'Close'
+		color: (0.5, 0.5, 0.5, 1)
 		halign: 'center'
 		text_size: (self.width,None)
 		background_normal: 'UI/login2normal.png'
@@ -308,6 +318,7 @@ Screen_Manager:
 			size_hint: (0.35, 0.08)
 		Button:
 			text: 'Save Password'
+			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'center_x': 0.51 ,'center_y': 0.25 }
 			size_hint: (0.15, 0.06)
 			font_size:14
@@ -329,6 +340,7 @@ Screen_Manager:
 			size_hint: (0.29, 0.08)
 		Button: 
 			text: 'Generate\nPassword'
+			color: (0.5, 0.5, 0.5, 1)
 			font_size:13
 			pos_hint: {'center_x': 0.86 ,'center_y': 0.65 }
 			size_hint: (0.15, 0.07)
@@ -347,6 +359,7 @@ Screen_Manager:
 	    Button:
 	    	id: passwsend
 	    	text:"Copy to Password textbox"
+	    	color: (0.5, 0.5, 0.5, 1)
 	    	text_size:(180,None)
 	    	font_size:12
 	    	halign:'center'
@@ -370,6 +383,7 @@ Screen_Manager:
 		Button: 
 			text: 'Log Out'
 			font_size:14
+			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'x': 0 ,'y': 0 }
 			size_hint: (None, None)
 			size: (150,96)
@@ -382,6 +396,7 @@ Screen_Manager:
 		Button: 
 			text: 'Help'
 			font_size:14
+			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'x': 0 ,'y': 0.16 }
 			size_hint: (None, None)
 			size: (150,96)
@@ -390,6 +405,7 @@ Screen_Manager:
 		Button:
 			text: 'Import Passwords'
 			font_size:14
+			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'x': 0 ,'y': 0.32 }
 			size_hint: (None, None)
 			size: (150,96)
@@ -399,6 +415,7 @@ Screen_Manager:
 		Button:
 			text: 'Export Passwords'
 			font_size:14
+			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'x': 0 ,'y': 0.48 }
 			size_hint: (None, None)
 			size: (150,96)
@@ -408,6 +425,7 @@ Screen_Manager:
 		Button: 
 			text: 'View Passwords'
 			font_size:14
+			color: (0.5, 0.5, 0.5, 1)
 			pos_hint: {'x': 0 ,'y': 0.64 }
 			size_hint: (None, None)
 			size: (150,96)
@@ -424,6 +442,7 @@ Screen_Manager:
 		markup: True
 		text: 'The password generator/Entry addition process has encountered an error.\n\n[u]Try doing the following:[/u] \n\nRename the title with [color=00abae]atleast 3 characters.[/color]\nEntry Title should be [color=00abae]unique[/color] in [color=00abae]Entry List[/color]\n\nEnter a [color=00abae]password size(minimum 8)[/color] before hitting the generate password button[color=00abae](i.e if you are using the generator).[/color]\n\nNote: To add an [color=00abae]Entry[/color] you need to enter a [color=00abae]title and password[/color] atleast.'
 		size_hint: (None,.1 )
+		color: (0.5, 0.5, 0.5, 1)
 		text_size:(self.width,None)
 		width:350
 		pos_hint: {'x': 0,'top': 0.63 }
@@ -431,6 +450,7 @@ Screen_Manager:
 		id: close
 		text:'Back'
 		halign: 'center'
+		color: (0.5, 0.5, 0.5, 1)
 		text_size: (self.width,None)
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
@@ -549,6 +569,7 @@ Screen_Manager:
 		pos_hint:{'x':0,'top':0.69}
 		size_hint:(None,0.1)
 		width:350
+		color: (0.5, 0.5, 0.5, 1)
 		font_size: 14
 		text_size:(self.width,None)
 		text:'New Entry was added to your Entry List!\nYou can view it by pressing the [color=00abae]View Password[/color] button. All your entries are present on that window.\nYou can [color=00abae]edit, delete [/color]and [color=00abae]search[/color] for entries there.'
@@ -557,6 +578,7 @@ Screen_Manager:
 		id: close
 		text: 'Close'
 		pos_hint: {'center_x': 0.85,'center_y': 0.1 }
+		color: (0.5, 0.5, 0.5, 1)
 		size_hint: (0.25, 0.2)
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
@@ -566,6 +588,7 @@ Screen_Manager:
 	FloatLayout:
 		Button: 
 			text: 'Help'
+			color: (0.5, 0.5, 0.5, 1)
 			font_size:14
 			pos_hint: {'x': 0 ,'y': 0.16 }
 			size_hint: (None, None)
@@ -576,6 +599,7 @@ Screen_Manager:
 			text: 'Import Passwords'
 			font_size:14
 			pos_hint: {'x': 0 ,'y': 0.32 }
+			color: (0.5, 0.5, 0.5, 1)
 			size_hint: (None, None)
 			size: (150,96)
 			background_normal: 'UI/Main Window Button.png'
@@ -588,6 +612,7 @@ Screen_Manager:
 			size_hint: (None, None)
 			size: (150,96)
 			background_normal: 'UI/Main Window Button.png'
+			color: (0.5, 0.5, 0.5, 1)
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release: root.Export_Passwords()
 		Button: 
@@ -596,6 +621,7 @@ Screen_Manager:
 			pos_hint: {'x': 0 ,'y': 0.64 }
 			size_hint: (None, None)
 			size: (150,96)
+			color: (0.5, 0.5, 0.5, 1)
 			background_normal: 'UI/firstbutton.png'
 			background_down: 'UI/firstbuttondown.png'
 			on_release:
@@ -604,6 +630,7 @@ Screen_Manager:
 <passwordpopup>:
 	Label:
 		text:'Title: '
+		color: (0.5, 0.5, 0.5, 1)
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.18, 'top': 0.9}
 	TextInput:
@@ -622,6 +649,7 @@ Screen_Manager:
 	Label:
 		text:'Username: '
 		size_hint:(.1,.1)
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'x': 0.2, 'top': 0.7}
 	TextInput:
 		id: username
@@ -637,6 +665,7 @@ Screen_Manager:
 		disabled: root.viewing
 	Label:
 		text:'Password: '
+		color: (0.5, 0.5, 0.5, 1)
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.5}
 	TextInput:
@@ -654,6 +683,7 @@ Screen_Manager:
 		disabled: root.viewing
 	Label:
 		text:'Notes: '
+		color: (0.5, 0.5, 0.5, 1)
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.3}
 	TextInput:
@@ -672,6 +702,7 @@ Screen_Manager:
 	ToggleButton:
 		id:edittoggle 
         text: "Edit/Copy"
+        color: (0.5, 0.5, 0.5, 1)
         font_size: 11
         state: 'normal' if root.viewing else 'down'
         on_state: root.viewing = not root.viewing
@@ -700,6 +731,7 @@ Screen_Manager:
 		text:'Delete Entry'
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
+		color: (0.5, 0.5, 0.5, 1)
 		size_hint:(0.3,0.1)
 		pos_hint: {'x': 0, 'y':0}
 	Button:
@@ -709,11 +741,13 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 		size_hint:(0.3,0.1)
 		pos_hint: {'right':1 , 'y':0}
+		color: (0.5, 0.5, 0.5, 1)
 	Button:
 		id: edit
 		text:'Confirm Edit'
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
+		color: (0.5, 0.5, 0.5, 1)
 		background_disabled_normal:'UI/DisabledButton.png'
 		size_hint:(0.3,0.1)
 		pos_hint: {'center_x': 0.5, 'y':0}
@@ -722,6 +756,7 @@ Screen_Manager:
 	Label:
 		text:'Title: '
 		size_hint:(.1,.1)
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'x': 0.18, 'top': 0.9}
 	TextInput:
 		id: title
@@ -740,6 +775,7 @@ Screen_Manager:
 		text:'Username: '
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.7}
+		color: (0.5, 0.5, 0.5, 1)
 	TextInput:
 		id: username
 		multiline: False
@@ -756,6 +792,7 @@ Screen_Manager:
 		text:'Password: '
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.5}
+		color: (0.5, 0.5, 0.5, 1)
 	TextInput:
 		id: password
 		halign:'left'
@@ -773,6 +810,7 @@ Screen_Manager:
 		text:'Notes: '
 		size_hint:(.1,.1)
 		pos_hint: {'x': 0.2, 'top': 0.3}
+		color: (0.5, 0.5, 0.5, 1)
 	TextInput:
 		id:notes
 		halign:'left'
@@ -795,6 +833,7 @@ Screen_Manager:
         background_normal: 'UI/login2normal.png'
 		background_down: 'UI/editondown.png'
         size_hint:(0.2,0.065)
+        color: (0.5, 0.5, 0.5, 1)
         pos_hint:{'x':0,'top':0.98}
     Button:
     	id: copyuser
@@ -818,6 +857,7 @@ Screen_Manager:
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
 		size_hint:(0.3,0.1)
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'x': 0, 'y':0}
 	Button:
 		id: close
@@ -825,6 +865,7 @@ Screen_Manager:
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
 		size_hint:(0.3,0.1)
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'right':1 , 'y':0}
 	Button:
 		id: edit
@@ -833,6 +874,7 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 		background_disabled_normal:'UI/DisabledButton.png'
 		size_hint:(0.3,0.1)
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'center_x': 0.5, 'y':0}
 		disabled:root.viewing
 <Delete_Confirmation>:
@@ -841,12 +883,14 @@ Screen_Manager:
 		size_hint:(None,0.1)
 		text_size:(self.width, None)
 		width:350
+		color: (0.5, 0.5, 0.5, 1)
 		markup:True
 		pos_hint:{'x':0,'top':0.88}
 	Button:
 		id: close
 		text:'No'
 		background_normal: 'UI/login2normal.png'
+		color: (0.5, 0.5, 0.5, 1)
 		background_down: 'UI/login2down.png'
 		size_hint:(0.25,0.2)
 		pos_hint: {'x':0.1 , 'y':0.1}
@@ -856,6 +900,7 @@ Screen_Manager:
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
 		size_hint:(0.25,0.2)
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'center_x':0.8 , 'y':0.1}
 <Edit_Confirmation>:
 	Label:
@@ -864,6 +909,7 @@ Screen_Manager:
 		text_size:(self.width, None)
 		width:350
 		markup:True
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint:{'x':0,'top':0.82}
 	Button:
 		id: close
@@ -871,11 +917,13 @@ Screen_Manager:
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
 		size_hint:(0.25,0.2)
+		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'x':0.1 , 'y':0.1}
 	Button:
 		id: yes
 		text:'Yes'
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
+		color: (0.5, 0.5, 0.5, 1)
 		size_hint:(0.25,0.2)
 		pos_hint: {'center_x':0.8 , 'y':0.1}
