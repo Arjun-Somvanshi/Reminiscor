@@ -1,6 +1,8 @@
 # Module to handle Enigma Level Encryption 
 from random import randint, shuffle
 import string 
+import pbkdf2
+import pyaes
 from FileHandling import *
 def One_Setting_Generator(): #Generates one enigma setting with 'qwertyuiop***asdfghjklzxcvbnm' as a seperator
 
@@ -35,14 +37,56 @@ def One_Setting_Generator(): #Generates one enigma setting with 'qwertyuiop***as
 	setting=plugboard[0]+sep+plugboard[1]+sep+rotor1+sep+rotor2+sep+rotor3+sep+reflector[0]+sep+reflector[1]
 	return ''.join(setting)
 
-	
-def Default_Unique_User_EnigmaSettings():
+def KeyDerivationFunction(master_password,skey):
+	key=skey.split('qwertyuiop***asdfghjklzxcvbnm')
+	pl1=''
+	pl2=''
+	rf1=''
+	rf2=''
+	for i in master_password:
+		if i in key[0]:
+			key[0].replace(i,'')
+			key[5].replace(i,'')
+			pl1+=i
+			rf1+=i
+		elif i in key[1]:
+			key[1].replace(i,'')
+			key[6].replace(i,'')
+			pl2+=i
+			rf2+=i
+	key[0]+=pl1
+	key[1]+=pl2
+	key[5]+=rf1
+	key[6]+=rf2
+	for i in master_password:
+		key[2].replace(i,'')
+		key[3].replace(i,'')
+		key[4].replace(i,'')
+	key[2]+=master_password
+	key[3]+=master_password
+	key[4]+=master_password
+	sep='******'
+	derivedkey=''
+	derivedkey+=key[0]+sep+key[1]+sep+key[2]+sep+key[3]+sep+key[4]+sep+key[5]+sep+key[6]
+	#print(derivedkey)
+#KeyDerivationFunction('Arjun2000',One_Setting_Generator())
+def Default_Unique_User_EnigmaSettings(master_password):
 	user_keys=[]
 	for i in range(0,50):
 		user_keys.append(One_Setting_Generator())
 	file=open(HomeDir('Data2.txt'),'w')
 	for i in user_keys:
-		WriteLine(file,i)
+		key = pbkdf2.crypt(master_password)
+		key_32 = key[:32]
+		key_32_bytes=str.encode(key_32)
+
+		iv = "InitializationVe"
+		aes = pyaes.AESModeOfOperationCTR(key_32_bytes)
+		ciphertext = aes.encrypt(i)
+		if not user_keys.index(i) == len(user_keys)-1:
+			file.write(str(ciphertext) + '\n')
+		else:
+			file.write(str(ciphertext)) 
 	file.close()
 	#HideFile(HomeDir('Data2.txt'))#Default_Unique_User_EnigmaSettings()
 

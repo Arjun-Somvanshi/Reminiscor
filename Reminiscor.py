@@ -31,6 +31,7 @@ from kivy.core.window import Window
 Window.clearcolor = (30/255, 30/255, 30/255, 1)
 from functools import partial
 
+Master_Password=''
 MonitorData2=None
 if os.path.isfile(HomeDir('Data2.txt')):
 	MonitorData2=ModifiedFileTime(HomeDir('Data2.txt'))
@@ -75,6 +76,8 @@ class LoginWindow(Screen):
 	def Login_Authenticate(self):
 		if CheckUser():
 			if CheckCredentials(self.username.text,self.p.text):    #To check if main credential file exists
+				global Master_Password
+				Master_Password=self.p.text
 				self.user_check.text=''
 				self.errortext.text=''
 				self.errortext.color=[1,1,1,1]
@@ -115,7 +118,7 @@ class SignUp_Pop(FloatLayout):
 			File_dir = os.path.expanduser('~') + '/Desktop'
 			direc = "Reminiscor Export_Import"
 			os.makedirs(os.path.join(File_dir, direc))
-			Default_Unique_User_EnigmaSettings()
+			Default_Unique_User_EnigmaSettings(self.p1.text)
 			global MonitorData2 
 			MonitorData2=ModifiedFileTime(HomeDir('Data2.txt'))
 			sep='qwertyuiop***asdfghjklzxcvbnm'
@@ -125,7 +128,7 @@ class SignUp_Pop(FloatLayout):
 			file=open(HomeDir('Data3.txt'),'w')
 			file.close()
 			#`HideFile(HomeDir('Data3.txt'))
-			WriteEncrypt(HomeDir('Data1.txt'),self.user.text+sep+self.p1.text)
+			WriteEncrypt(HomeDir('Data1.txt'), self.user.text+sep+self.p1.text, self.p1.text)
 			label=Label(text='You\'ve successfully signed up!', size_hint=(0.1,0.1), pos_hint={'center_x':0.5,'center_y':0.225})
 			self.add_widget(label)
 			ColorChange(self.user,False,'Username')
@@ -199,7 +202,8 @@ class MainWindow(Screen):
 			ColorChange(self.description,False,'Entry Title')
 			ColorChange(self.n,False,'Password\nSize')
 			ColorChange(self.passw,False,'Password')
-			WriteEncrypt(HomeDir('Data3.txt'),self.description.text + sep + self.username.text + sep + self.passw.text + sep + self.notes.text)
+			global Master_Password
+			WriteEncrypt(HomeDir('Data3.txt'), self.description.text + sep + self.username.text + sep + self.passw.text + sep + self.notes.text, Master_Password)
 			design=Password_Added()
 			Added_pop=Popup(title='New Entry Added!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			Added_pop.open()
@@ -227,13 +231,37 @@ class Login_Popup_export(FloatLayout):
 	def authenticate(self):
 		if(CheckUser()):
 			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
-				self.ids.label.text='Export Successful!'
 				self.ids.label.color=[0,171/255,174/255,1]
-				Export()
+				self.ids.username.text=''
+				self.ids.p.text=''
+				export_design=Choose_Export()
+				export_extension=Popup(title='Choose Entries to Share',title_align='center',content=export_design,size_hint=(None,None),size=(400,500),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+				export_extension.open()
 			else:
 				self.ids.label.text='Authentication Failed!'
 				self.ids.label.color=[204/255,0,0,1]
-
+class Choose_Export(FloatLayout):
+	selected=BooleanProperty(True)
+	def export_selected(self):
+		if not (self.ids.target_username.text=='' and self.ids.ChosenEntries.text==''):
+			usernames=self.ids.target_username.text.split(',')
+			Entries=self.ids.ChosenEntries.text.split(',')
+			#Share(Entries,usernames)
+			result=resultpop()
+			rwin=Popup(title='Share File Successfully Created!',title_align='center',content=result,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			rwin.open()
+		else:
+			result=resultpop()
+			rwin=Popup(title='Export Failed',title_align='center',content=result,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			rwin.open()
+	def export_all(self):
+		if not (self.ids.target_username.text==''):
+			usernames=self.ids.target_usernames.text.split(',')
+			#ShareAll(usernames)
+		else:
+			pass
+class resultpop(FloatLayout):
+	pass
 class Login_Popup_import(FloatLayout):
 	def authenticate(self):
 		if(CheckUser()):
@@ -306,7 +334,8 @@ class Password_Screen(Screen):
 			title_label=Label(text='[u][b]Entry List:[/b][/u]',markup=True, size_hint_y=None,height=60,font_size=20,color=[0,171/255,174/255,1])
 			parent.add_widget(title_label)
 			if os.path.isfile(HomeDir('Data3.txt')):
-				password_list=ReadDecrypt(HomeDir('Data3.txt'))
+				global Master_Password
+				password_list=ReadDecrypt(HomeDir('Data3.txt'),Master_Password)
 				pass_len=len(password_list)
 				if pass_len>0:
 					for i in password_list:
@@ -339,7 +368,8 @@ class Password_Screen(Screen):
 				self.mainlayout.add_widget(parent)
 
 	def searchresult(self,instance):
-		result=SearchFile(self.searchbar.text)
+		global Master_Password
+		result=SearchFile(self.searchbar.text,Master_Password)
 		if result==[]:
 			design=search_popup()
 			design.ids.title.text='No such entry exists'
@@ -410,7 +440,8 @@ class passwordpopup(FloatLayout):
 		entry.append(self.ids.username.text)
 		entry.append(self.ids.password.text)
 		entry.append(self.ids.notes.text)
-		DelPassword(entry)
+		global Master_Password
+		DelPassword(entry,Master_Password)
 	def copytoclip1(self):
 		pyperclip.copy(self.ids.username.text)
 	def copytoclip2(self):
@@ -422,7 +453,8 @@ class passwordpopup(FloatLayout):
 		editedentry.append(self.ids.username.text)
 		editedentry.append(self.ids.password.text)
 		editedentry.append(self.ids.notes.text)
-		check=EditPassword(entrydata,editedentry)
+		global Master_Password
+		check=EditPassword(entrydata,editedentry,Master_Password)
 		return check
 
 class search_popup(FloatLayout):
@@ -434,7 +466,8 @@ class search_popup(FloatLayout):
 		entry.append(self.ids.username.text)
 		entry.append(self.ids.password.text)
 		entry.append(self.ids.notes.text)
-		DelPassword(entry)
+		global Master_Password
+		DelPassword(entry,Master_Password)
 	def copytoclip1(self):
 		pyperclip.copy(self.ids.username.text)
 	def copytoclip2(self):
@@ -447,7 +480,8 @@ class search_popup(FloatLayout):
 		editedentry.append(self.ids.username.text)
 		editedentry.append(self.ids.password.text)
 		editedentry.append(self.ids.notes.text)
-		check=EditPassword(entrydata,editedentry)
+		global Master_Password
+		check=EditPassword(entrydata,editedentry,Master_Password)
 		return check
 class Delete_Confirmation(FloatLayout):
 	pass

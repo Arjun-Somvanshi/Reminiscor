@@ -37,7 +37,7 @@ Screen_Manager:
 			id:username 
 			hint_text: 'Username'
 			foreground_color:(0.7,0.7,0.7,1)
-			allow_copy:False
+
 			halign:'center'
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -48,7 +48,7 @@ Screen_Manager:
 		TextInput:
 			id: p
 			hint_text: 'Master Password' 
-			allow_copy:False
+
 			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			password: True
@@ -114,7 +114,7 @@ Screen_Manager:
 <signup_error>:
 	Label:
 		markup: True
-		text:'The username and password protect [color=00abae]all your passwords in Reminiscor.[/color]\n\nTo keep your data safe on your device we have set the default allowable username size to [color=00abae]eight characters[/color] and the password size to [color=00abae]ten characters.[/color]'
+		text:'The username and password protect [color=00abae]all your passwords in Reminiscor.[/color]\n\nTo keep your data safe on your device we have set the default allowable username size to [color=00abae]eight characters[/color] and the password size to [color=00abae]ten characters.[/color]\nThe username cannot include a comma, remaining special characters are allowed.'
 		text_size:(self.width,None)
 		size_hint: (None, .1)
 		width:350
@@ -161,7 +161,6 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.5,'top': 0.95 }	
 	TextInput: 
 		id: user
-		allow_copy:False
 		hint_text: 'Username'
 		foreground_color:(0.7,0.7,0.7,1)
 		halign:'center'
@@ -173,7 +172,6 @@ Screen_Manager:
 		size_hint: (0.6, 0.09)
 	TextInput:
 		id: p1
-		allow_copy:False
 		hint_text: 'Master Password' 
 		halign:'center'
 		password: True
@@ -186,7 +184,6 @@ Screen_Manager:
 		size_hint: (0.6, 0.09)
 	TextInput:
 		id: p2
-		allow_copy:False
 		hint_text: 'Confirm Master Password' 
 		password: True
 		halign:'center'
@@ -322,6 +319,7 @@ Screen_Manager:
 			text: 'Save Password'
 			pos_hint: {'center_x': 0.51 ,'center_y': 0.25 }
 			size_hint: (0.15, 0.06)
+			color:(0.7,0.7,0.7,1)
 			font_size:14
 			background_normal: 'UI/Mainbutton.png'
 	    	background_down: 'UI/Mainbuttondown.png'
@@ -342,6 +340,7 @@ Screen_Manager:
 			size_hint: (0.29, 0.08)
 		Button: 
 			text: 'Generate\nPassword'
+			color:(0.7,0.7,0.7,1)
 			font_size:13
 			pos_hint: {'center_x': 0.86 ,'center_y': 0.65 }
 			size_hint: (0.15, 0.07)
@@ -361,6 +360,7 @@ Screen_Manager:
 	    	id: passwsend
 	    	text:"Copy to Password textbox"
 	    	text_size:(180,None)
+	    	color:(0.7,0.7,0.7,1)
 	    	font_size:12
 	    	halign:'center'
 	    	size_hint:(None,None)
@@ -402,8 +402,9 @@ Screen_Manager:
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 		Button:
-			text: 'Import Passwords'
+			text: 'Import\nShared Passwords'
 			font_size:14
+			halign:'center'
 			pos_hint: {'x': 0 ,'y': 0.32 }
 			size_hint: (None, None)
 			size: (150,96)
@@ -411,7 +412,7 @@ Screen_Manager:
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release: root.Import_Passwords()
 		Button:
-			text: 'Export Passwords'
+			text: 'Share Passwords'
 			font_size:14
 			pos_hint: {'x': 0 ,'y': 0.48 }
 			size_hint: (None, None)
@@ -468,7 +469,6 @@ Screen_Manager:
 		id:username 
 		hint_text: 'Username'
 		halign:'center'
-		allow_copy:False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -480,7 +480,6 @@ Screen_Manager:
 	TextInput:
 		id: p
 		hint_text: 'Master Password' 
-		allow_copy:False
 		foreground_color:(0.7,0.7,0.7,1)
 		password: True
 		halign:'center'
@@ -507,6 +506,85 @@ Screen_Manager:
 		size_hint: (0.35, 0.1)
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
+
+<Choose_Export>:
+	ToggleButton:
+		id:exporttoggle 
+        text: "Share All Toggle Switch"
+        font_size: 11
+        state: 'normal' if root.selected else 'down'
+        on_state: 
+        	root.selected = not root.selected
+        	root.ids.ChosenEntries.text=''
+        background_normal: 'UI/login2normal.png'
+		background_down: 'UI/editondown.png'
+        size_hint:(0.4,0.065)
+        pos_hint:{'x':0,'top':0.98}
+    Label:
+		text:"Enter the [color=00abae]Titles[/color] of those entries you want to share and seperate them with [color=00abae]commas.[/color]\nFor example: [color=00abae]entry_title1,entry_title4,....[/color]" if root.selected else "[color=515151]Enter the [/color][color=006b6d]Titles[/color][color=515151] of those entries you want to share and seperate them with [/color][color=006b6d]commas.[/color]\n[color=515151]For example:[/color] [color=006b6d]entry_title1,entry_title4,....[/color]"
+		text_size:(self.width,None)
+		size_hint:(None,0.1)
+		width:380
+		font_size:14
+		markup:True
+		pos_hint:{'x':0,'top':0.87}
+	TextInput:
+		id: ChosenEntries
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		hint_text: 'Entry List'
+		markup:True
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		pos_hint: {'center_x': 0.5,'center_y': 0.625}
+		size_hint: (0.7, 0.2)
+		disabled: not root.selected
+	Label:
+		text:"Enter the friend's/family member's username(s) you want to share with.Enter a [color=00abae]list of usernames[/color] seperated with [color=00abae]commas[/color] if you are sharing with multiple people. For example: user1,user2..."
+		text_size:(self.width,None)
+		size_hint:(None,0.1)
+		width:380
+		font_size:14
+		markup:True
+		pos_hint:{'x':0,'top':0.46}
+	TextInput:
+		id: target_username
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		hint_text: '(Username of friend/family)'
+		font_size:14
+		multiline: True
+		markup:True
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		pos_hint: {'center_x': 0.5,'center_y': 0.25}
+		size_hint: (0.7, 0.1)
+	Button:
+		id: ExportSelected
+		text:'Share Selected\nEntries'
+		font_size:12.5
+		halign:'center'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		background_disabled_normal:'UI/DisabledButton.png'
+		size_hint:(0.3,0.1)
+		pos_hint: {'center_x': 0.2, 'y':0}
+		disabled: not root.selected
+		on_release:
+			root.export_selected()
+	Button:
+		id: ExportAll
+		text:'Share All'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		background_disabled_normal:'UI/DisabledButton.png'
+		size_hint:(0.3,0.1)
+		pos_hint: {'center_x': 0.8, 'y':0}
+		disabled: root.selected
+		on_release:
+			root.export_all()
 <Login_Popup_import>:
 	Label:
 		text:'Enter Credentials to authenticate the process: '
@@ -526,7 +604,6 @@ Screen_Manager:
 		id:username 
 		hint_text: 'Username'
 		halign:'center'
-		allow_copy:False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -543,7 +620,6 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		allow_copy:False
 		halign:'center'
 		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
 		size_hint: (None, 0.1)
@@ -594,8 +670,9 @@ Screen_Manager:
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
 		Button:
-			text: 'Import Passwords'
+			text: 'Import\nShared Passwords'
 			font_size:14
+			halign:'center'
 			pos_hint: {'x': 0 ,'y': 0.32 }
 			size_hint: (None, None)
 			size: (150,96)
@@ -603,7 +680,7 @@ Screen_Manager:
 			background_down: 'UI/Main Window Button Ondown.png'
 			on_release: root.Import_Passwords()
 		Button:
-			text: 'Export Passwords'
+			text: 'Share Passwords'
 			font_size:14
 			pos_hint: {'x': 0 ,'y': 0.48 }
 			size_hint: (None, None)
@@ -629,7 +706,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.18, 'top': 0.9}
 	TextInput:
 		id: title
-		halign:'left'
 		multiline: False
 		halign:'center'
 		foreground_color:(0.7,0.7,0.7,1)
@@ -665,7 +741,6 @@ Screen_Manager:
 	TextInput:
 		id: password
 		halign:'center'
-		halign:'left'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -750,7 +825,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.18, 'top': 0.9}
 	TextInput:
 		id: title
-		halign:'left'
 		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
@@ -785,7 +859,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.5}
 	TextInput:
 		id: password
-		halign:'left'
 		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
@@ -803,7 +876,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.3}
 	TextInput:
 		id:notes
-		halign:'left'
 		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
