@@ -82,7 +82,7 @@ class LoginWindow(Screen):
 		Master_Password_key = pbkdf2.PBKDF2(Master_Password, salt).read(32)
 		Master_Password=''
 		if CheckUser():
-			if CheckCredentials(self.username.text,Master_Password_key):    #To check if main credential file exists
+			if CheckCredentials(self.username.text,self.p.text,Master_Password_key):    #To check if main credential file exists
 				self.user_check.text=''
 				self.errortext.text=''
 				self.errortext.color=[1,1,1,1]
@@ -129,7 +129,7 @@ class SignUp_Pop(FloatLayout):
 			global MonitorData2 
 			MonitorData2=ModifiedFileTime(HomeDir('Data2.dat'))
 			sep='qwertyuiop***asdfghjklzxcvbnm'
-			file=open(HomeDir('Data1.data'),'bw')
+			file=open(HomeDir('Data1.dat'),'bw')
 			file.close()
 			#HideFile(HomeDir('Data1.txt'))
 			file=open(HomeDir('Data3.dat'),'bw')
@@ -196,7 +196,6 @@ class MainWindow(Screen):
 		design.ids.close.bind(on_release=win.dismiss)
 	def random_password(self):
 		pass_check=PassCheck(self.n)
-		d_check=DescriptionCheck(self.description)
 		if pass_check:
 			self.p_size_popup()
 			ColorChange(self.n,True,'Invalid\nSize')
@@ -205,11 +204,11 @@ class MainWindow(Screen):
 			self.ids.passwgen.text=PasswordGen(int(self.n.text))
 	def Add_New_Password(self):
 		sep='qwertyuiop***asdfghjklzxcvbnm'
-		if not DescriptionCheck(self.description) and len(self.passw.text)>=1:
+		global Master_Password_key
+		if not DescriptionCheck(self.description,Master_Password_key) and len(self.passw.text)>=1:
 			ColorChange(self.description,False,'Entry Title')
 			ColorChange(self.n,False,'Password\nSize')
 			ColorChange(self.passw,False,'Password')
-			global Master_Password_key
 			WriteEncrypt(HomeDir('Data3.dat'), self.description.text + sep + self.username.text + sep + self.passw.text + sep + self.notes.text, Master_Password_key)
 			design=Password_Added()
 			Added_pop=Popup(title='New Entry Added!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
@@ -325,7 +324,6 @@ class Password_Screen(Screen):
 		layout0.add_widget(Backbtn)
 		layout0.add_widget(self.searchbar)
 		self.mainlayout.add_widget(layout0)
-		self.showlist()
 		self.add_widget(self.mainlayout)
 
 	def showlist(self,*largs):

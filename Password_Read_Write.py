@@ -25,6 +25,41 @@ def WriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores pa
 	#Decrypt AES encryption
 	aes = pyaes.AESModeOfOperationCTR(AESkey)
 	decryptedUserKeys = aes.decrypt(Allkeys)
+	print(decryptedUserKeys)
+
+	#Break decrypted user key file into list 
+	UserKeyList = str(decryptedUserKeys, 'utf-8').split('\n')
+
+	#Create a new key, enigma encrypt the password and enigma encrypt the key using a random key from List 
+	key = One_Setting_Generator()
+	EncryptedMessage = EnigmaMachine(message, key)
+	keyNo = randint(0,49)
+	keyofkey = ''.join(UserKeyList[keyNo])
+	key = EnigmaMachine(key, keyofkey)
+	Nstr = EncryptedMessage + key + MapNumAlpha(keyNo)
+	
+	#AES encrypt Nstr
+	aes = pyaes.AESModeOfOperationCTR(AESkey)
+	EncryptedNstr = aes.encrypt(Nstr)
+
+	#Store key in file with name FileName
+	file = open(fileName , "ba")
+	if os.stat(fileName).st_size == 0:
+		file.write(EncryptedNstr)
+	else:
+		file.write('\n'+ EncryptedNstr)
+	file.close()
+
+def ReWriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores passwrd and encryption key in filename. paswrd and key are seperated by sep.
+	
+	#Get list all user keys
+	userkeyFile = open(HomeDir('Data2.dat') , "br")
+	Allkeys = userkeyFile.read()
+	userkeyFile.close()
+	
+	#Decrypt AES encryption
+	aes = pyaes.AESModeOfOperationCTR(AESkey)
+	decryptedUserKeys = aes.decrypt(Allkeys)
 
 	#Break decrypted user key file into list 
 	UserKeyList = decryptedUserKeys.split('\n')
@@ -39,48 +74,58 @@ def WriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores pa
 	
 	#AES encrypt Nstr
 	aes = pyaes.AESModeOfOperationCTR(AESkey)
-	EncryptedNstr = aes.encrypt(AESkey)
+	EncryptedNstr = aes.encrypt(Nstr)
 
 	#Store key in file with name FileName
-	file = open(fileName , "ab")
+	file = open(fileName , "ba")
 	if os.stat(fileName).st_size == 0:
 		file.write(EncryptedNstr)
 	else:
 		file.write('\n'+ EncryptedNstr)
 	file.close()
+'''
+salt = b'\x05;iBi\x17Q\xe0'
+key_32_bytes = pbkdf2.PBKDF2("Arjun2000@!", salt).read(32)
+Default_Unique_User_EnigmaSettings(key_32_bytes)
+WriteEncrypt(HomeDir('Data3.dat'), 'googleqwertyuiop***asdfghjklzxcvbnmmanusomvanshi@hotmail.comqwertyuiop***asdfghjklzxcvbnmmanu2002qwertyuiop***asdfghjklzxcvbnm something', key_32_bytes)
+'''
 
-def ReWriteEncrypt(fileName, paswrd): #This encrypts paswrd and stores passwrd and encryption key in filename. paswrd and key are seperated by sep.
-	userkeyFile = open(HomeDir('Data2.txt') , "r")
-	listofkeys = ReadFile(userkeyFile)
+def ReadDecrypt(filename, AESkey): #Reads a file and decrypts it using userkey. Returns list.
+	
+	#Read all user keys from Data2.dat
+	userkeyFile = open(HomeDir('Data2.dat') , "br")
+	Allkeys = userkeyFile.read()
 	userkeyFile.close()
-	key = One_Setting_Generator()
-	paswrd = EnigmaMachine(paswrd, key)
-	keyNo = randint(0,49)
-	keyofkey = ''.join(listofkeys[keyNo])
-	key = EnigmaMachine(key, keyofkey)
-	Nstr = paswrd + key + MapNumAlpha(keyNo)
-	file = open(fileName , "a")
-	WriteLine(file, Nstr)
+	
+	#Open filename and read all data from it 
+	file = open(filename, "br")
+	FileData = file.read()
 	file.close()
 
-def ReadDecrypt(filename): #Reads a file and decrypts it using userkey. Returns list.
-	userkeyFile = open(HomeDir('Data2.txt') , "r")
-	listofkeys = ReadFile(userkeyFile)
-	userkeyFile.close()
-	file = open(filename, "r")
-	Passwords = ReadFile(file)
-	file.close()
-	Passwords.pop()
+	#AES decrypt both files
+	aes = pyaes.AESModeOfOperationCTR(AESkey)
+	decryptedUserKeys = aes.decrypt(Allkeys)
+	aes = pyaes.AESModeOfOperationCTR(AESkey)
+	decryptedFileData = aes.decrypt(FileData)
+
+	#Create Lists for both files
+	UserKeyList = str(decryptedUserKeys, 'utf-8').split('\n')
+	FileDataList = str(decryptedFileData, 'utf-8').split('\n')
+
+
 	decp = []
-	for p in Passwords:
+	for p in FileDataList:
 		KeyAlpha = p[-1:]
 		keyNo = MapAlphaNum(KeyAlpha)
-		UserKey = listofkeys[keyNo]
+		UserKey = UserKeyList[keyNo]
 		randKeyIndex = len(p)-655
 		key = p[randKeyIndex:len(p)-1]
 		deckey = EnigmaMachine(key, UserKey)
 		decp.append(EnigmaMachine(p[0:randKeyIndex],deckey))
 	return decp
+'''salt = b'\x05;iBi\x17Q\xe0'
+key_32_bytes = pbkdf2.PBKDF2("Arjun2000@!", salt).read(32)
+print(ReadDecrypt(HomeDir('Data3.dat'), key_32_bytes))'''
 
 def SearchFile(Str): #searches for passwords in data3,txt and returns all information of required password. 
 	newList = []

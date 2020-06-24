@@ -16,20 +16,24 @@ def ColorChange(n,error,error_text='',color=(45/255,45/255,45/255,1)):
 		n.hint_text=error_text
 
 
-def DescriptionCheck(description):
-	used=False
-	entrylist=ReadDecrypt(HomeDir('Data3.txt'))
-	for entry in entrylist:
-		title=entry.split('qwertyuiop***asdfghjklzxcvbnm')
-		if description.text.lower()==title[0].lower():
-			used=True
-			break	
-	minimum_size=3
-	maximum_size=30
-	if len(description.text)<minimum_size or len(description.text)>maximum_size or used:
-		return True
-	else:
+def DescriptionCheck(description,key):
+	if os.stat(HomeDir('Data3.dat')).st_size == 0 and len(description.text)>minimum_size and len(description.text)<maximum_size:
 		return False
+	else:
+
+		used=False
+		entrylist=ReadDecrypt(HomeDir('Data3.dat'),key)
+		for entry in entrylist:
+			title=entry.split('qwertyuiop***asdfghjklzxcvbnm')
+			if description.text.lower()==title[0].lower():
+				used=True
+				break	
+		minimum_size=3
+		maximum_size=30
+		if len(description.text)<minimum_size or len(description.text)>maximum_size or used:
+			return True
+		else:
+			return False
 def PassCheck(n):
 	minimum_size=8
 	maximum_size=50

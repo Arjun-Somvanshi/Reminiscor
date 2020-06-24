@@ -74,17 +74,15 @@ def Default_Unique_User_EnigmaSettings(master_password):
 	user_keys=[]
 	for i in range(0,50):
 		if i==49:
-			user_keys.append(One_Setting_Generator()+'\n')####To SEPERATE SETTINGS BEFORE WRITIN EM INTO DATA 2
+			user_keys.append(One_Setting_Generator())####To SEPERATE SETTINGS BEFORE WRITIN EM INTO DATA 2
 		else:
-			user_keys.append(One_Setting_Generator())
+			user_keys.append(One_Setting_Generator()+'\n')
 
-	file=open(HomeDir('Data2.dat'),'wb')
-	for i in user_keys:
-		aes = pyaes.AESModeOfOperationCTR(master_password)
-		ciphertext = aes.encrypt(i)
-		file.write(ciphertext)
+	file=open(HomeDir('Data2.dat'),'bw')
+	aes = pyaes.AESModeOfOperationCTR(master_password)
+	ciphertext = aes.encrypt(''.join(user_keys))
+	file.write(ciphertext)
 	file.close()
-	#HideFile(HomeDir('Data2.txt'))#Default_Unique_User_EnigmaSettings()
 
 def EnigmaMachine(msg_str,enigma_setting_str):
 	enigma=enigma_setting_str.split('qwertyuiop***asdfghjklzxcvbnm') #stores the five rotors as strings in a list
