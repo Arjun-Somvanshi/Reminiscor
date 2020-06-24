@@ -171,6 +171,9 @@ class MainWindow(Screen):
 		self.ids.n.text=''
 		self.ids.notes.text=''
 		self.ids.description.text=''
+		global Master_Password_key
+		Master_Password_key=salt = b'\x05;iBi\x17Q\xe0'
+		Master_Password_key = pbkdf2.PBKDF2(str(randint(0,10000000)), salt).read(32)
 	def sendgenpass(self):
 		self.ids.passw.text=self.ids.passwgen.text
 	def copytoclip(self):

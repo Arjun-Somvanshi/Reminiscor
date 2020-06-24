@@ -17,6 +17,8 @@ def ColorChange(n,error,error_text='',color=(45/255,45/255,45/255,1)):
 
 
 def DescriptionCheck(description,key):
+	minimum_size=3
+	maximum_size=30
 	if os.stat(HomeDir('Data3.dat')).st_size == 0 and len(description.text)>minimum_size and len(description.text)<maximum_size:
 		return False
 	else:
@@ -28,8 +30,6 @@ def DescriptionCheck(description,key):
 			if description.text.lower()==title[0].lower():
 				used=True
 				break	
-		minimum_size=3
-		maximum_size=30
 		if len(description.text)<minimum_size or len(description.text)>maximum_size or used:
 			return True
 		else:
