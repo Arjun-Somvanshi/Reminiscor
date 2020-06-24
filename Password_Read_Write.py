@@ -1,10 +1,11 @@
 from FileHandling import *
 from EnigmaModule import *
+import pyaes
+import pbkdf2
 import string
 from random import randint
 from stat import S_IREAD, S_IRGRP, S_IROTH, S_IWUSR
-import pbkdf2
-import pyaes
+
 Alpha = string.ascii_letters
 
 def MapNumAlpha(n):
@@ -14,19 +15,43 @@ def MapAlphaNum(ch):
 	return Alpha.index(ch)
 
 
-def WriteEncrypt(fileName, paswrd,master_password): #This encrypts paswrd and stores passwrd and encryption key in filename. paswrd and key are seperated by sep.
+def WriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores passwrd and encryption key in filename. paswrd and key are seperated by sep.
+	
+	#Get list all user keys
+	userkeyFile = open(HomeDir('Data2.dat') , "br")
+	Allkeys = userkeyFile.read()
+	userkeyFile.close()
+	
+	#Decrypt AES encryption
+	aes = pyaes.AESModeOfOperationCTR(AESkey)
+	decryptedUserKeys = aes.decrypt(Allkeys)
+
+	#Break decrypted user key file into list 
+	UserKeyList = decryptedUserKeys.split('\n')
+
+	#Create a new key, enigma encrypt the password and enigma encrypt the key using a random key from List 
+	key = One_Setting_Generator()
+	EncryptedMessage = EnigmaMachine(message, key)
+	keyNo = randint(0,49)
+	keyofkey = ''.join(UserKeyList[keyNo])
+	key = EnigmaMachine(key, keyofkey)
+	Nstr = EncryptedMessage + key + MapNumAlpha(keyNo)
+	
+	#AES encrypt Nstr
+	aes = pyaes.AESModeOfOperationCTR(AESkey)
+	EncryptedNstr = aes.encrypt(AESkey)
+
+	#Store key in file with name FileName
+	file = open(fileName , "ab")
+	if os.stat(fileName).st_size == 0:
+		file.write(EncryptedNstr)
+	else:
+		file.write('\n'+ EncryptedNstr)
+	file.close()
+
+def ReWriteEncrypt(fileName, paswrd): #This encrypts paswrd and stores passwrd and encryption key in filename. paswrd and key are seperated by sep.
 	userkeyFile = open(HomeDir('Data2.txt') , "r")
-	listofkeys1 = ReadFile(userkeyFile)
-	listofkeys=[]
-	for i in listofkeys1:
-		key = pbkdf2.crypt(master_password)
-		key_32 = key[:32]
-		key_32_bytes=str.encode(key_32)
-		iv = "InitializationVe"
-		aes = pyaes.AESModeOfOperationCTR(key_32_bytes)
-		decrypted = aes.decrypt(i)
-		a=str(decrypted)
-		listofkeys.append(a)
+	listofkeys = ReadFile(userkeyFile)
 	userkeyFile.close()
 	key = One_Setting_Generator()
 	paswrd = EnigmaMachine(paswrd, key)
@@ -34,42 +59,16 @@ def WriteEncrypt(fileName, paswrd,master_password): #This encrypts paswrd and st
 	keyofkey = ''.join(listofkeys[keyNo])
 	key = EnigmaMachine(key, keyofkey)
 	Nstr = paswrd + key + MapNumAlpha(keyNo)
-	key = pbkdf2.crypt(master_password)
-	key_32 = key[:32]
-	key_32_bytes=str.encode(key_32)
-	iv = "InitializationVe"
-	aes = pyaes.AESModeOfOperationCTR(key_32_bytes)
-	ciphertext = aes.encrypt(Nstr)
 	file = open(fileName , "a")
-	WriteLine(file, str(ciphertext))
+	WriteLine(file, Nstr)
 	file.close()
 
-def ReadDecrypt(filename, master_password): #Reads a file and decrypts it using userkey. Returns list.
+def ReadDecrypt(filename): #Reads a file and decrypts it using userkey. Returns list.
 	userkeyFile = open(HomeDir('Data2.txt') , "r")
-	listofkeys1 = ReadFile(userkeyFile)
-	listofkeys=[]
-	for i in listofkeys1:
-		key = pbkdf2.crypt(master_password)
-		key_32 = key[:32]
-		key_32_bytes=str.encode(key_32)
-		iv = "InitializationVe"
-		aes = pyaes.AESModeOfOperationCTR(key_32_bytes)
-		decrypted = aes.decrypt(i)
-		a=str(decrypted,'utf-8')
-		listofkeys.append(a)
+	listofkeys = ReadFile(userkeyFile)
 	userkeyFile.close()
 	file = open(filename, "r")
-	Passwords1 = ReadFile(file)
-	Passwords=[]
-	for i in Passwords1:
-		key = pbkdf2.crypt(master_password)
-		key_32 = key[:32]
-		key_32_bytes=str.encode(key_32)
-		iv = "InitializationVe"
-		aes = pyaes.AESModeOfOperationCTR(key_32_bytes)
-		decrypted = aes.decrypt(i)
-		a=str(decrypted,'utf-8')
-		Passwords.append(a)
+	Passwords = ReadFile(file)
 	file.close()
 	Passwords.pop()
 	decp = []
@@ -83,9 +82,9 @@ def ReadDecrypt(filename, master_password): #Reads a file and decrypts it using 
 		decp.append(EnigmaMachine(p[0:randKeyIndex],deckey))
 	return decp
 
-def SearchFile(Str,master_password): #searches for passwords in data3,txt and returns all information of required password. 
+def SearchFile(Str): #searches for passwords in data3,txt and returns all information of required password. 
 	newList = []
-	List = ReadDecrypt(HomeDir('Data3.txt'),master_password)
+	List = ReadDecrypt(HomeDir('Data3.txt'))
 	ind=None
 	for ele in List:
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
@@ -102,8 +101,8 @@ def SearchFile(Str,master_password): #searches for passwords in data3,txt and re
 		return newList[ind]
 
 
-def Export(master_password):
-	List = ReadDecrypt(HomeDir('Data3.txt'),master_password)
+def Export():
+	List = ReadDecrypt(HomeDir('Data3.txt'))
 	if os.path.isfile(Import_Export_Dir('Password File.txt')):
 		os.chmod(Import_Export_Dir('Password File.txt'), S_IWUSR|S_IREAD)
 	temp = open(Import_Export_Dir('Password File.txt'), 'w')
@@ -118,7 +117,7 @@ def Export(master_password):
 	os.chmod(Import_Export_Dir('Password File.txt'), S_IREAD|S_IRGRP|S_IROTH)
 	file.close()
 #Export()
-def Import(master_password):
+def Import():
 	newList = []
 	newListData3 = []
 	if os.path.isfile(Import_Export_Dir('Password File.txt')) and os.stat(Import_Export_Dir('Password File.txt')).st_size is not 0:
@@ -128,7 +127,7 @@ def Import(master_password):
 			newList.append(ele.split('qwertyuiop***asdfghjklzxcvbnm'))
 		file.close()
 		pass_file = open(HomeDir('Data3.txt'), 'r')
-		Data3_List = ReadDecrypt(HomeDir('Data3.txt'),master_password)
+		Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
 		for ele in Data3_List:
 			Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 			newListData3.append(Sublist)
@@ -149,7 +148,7 @@ def Import(master_password):
 						password += subele + 'qwertyuiop***asdfghjklzxcvbnm'
 					else:
 						password += subele
-				WriteEncrypt(HomeDir('Data3.txt'), master_password)
+				WriteEncrypt(HomeDir('Data3.txt'), password)
 		os.chmod(Import_Export_Dir('Password File.txt'), S_IWUSR|S_IREAD)
 		temp1=open(Import_Export_Dir("Password File.txt"),'w')
 		temp1=deleteContent(temp1)
@@ -161,10 +160,10 @@ def Import(master_password):
 		return False
 #Import()
 
-def DelPassword(entry,master_password):
+def DelPassword(entry):
 	newListData3 = []
 	pass_file = open(HomeDir('Data3.txt'), 'r')
-	Data3_List = ReadDecrypt(HomeDir('Data3.txt'),master_password)
+	Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
 	for ele in Data3_List:
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newListData3.append(Sublist)
@@ -184,15 +183,15 @@ def DelPassword(entry,master_password):
 				else:
 					passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
 					a+=1
-			WriteEncrypt(HomeDir('Data3.txt'), master_passwrd)
+			ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
 	else:
 		pass
 
 
-def EditPassword(iniEntry, entry,master_password): #replaces iniEntry with entry
+def EditPassword(iniEntry, entry): #replaces iniEntry with entry
 	newListData3 = []
 	pass_file = open(HomeDir('Data3.txt'), 'r')
-	Data3_List = ReadDecrypt(HomeDir('Data3.txt'),master_password)
+	Data3_List = ReadDecrypt(HomeDir('Data3.txt'))
 	for ele in Data3_List:
 		Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
 		newListData3.append(Sublist)
@@ -217,7 +216,7 @@ def EditPassword(iniEntry, entry,master_password): #replaces iniEntry with entry
 					else:
 						passwrd += ele
 						a+=1
-				WriteEncrypt(HomeDir('Data3.txt'), master_passwrd)
+				ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
 			return False
 	else:
 		pass
