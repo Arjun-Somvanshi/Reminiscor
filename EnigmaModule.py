@@ -73,20 +73,16 @@ def KeyDerivationFunction(master_password,skey):
 def Default_Unique_User_EnigmaSettings(master_password):
 	user_keys=[]
 	for i in range(0,50):
-		user_keys.append(One_Setting_Generator())
-	file=open(HomeDir('Data2.txt'),'w')
-	for i in user_keys:
-		key = pbkdf2.crypt(master_password)
-		key_32 = key[:32]
-		key_32_bytes=str.encode(key_32)
-
-		iv = "InitializationVe"
-		aes = pyaes.AESModeOfOperationCTR(key_32_bytes)
-		ciphertext = aes.encrypt(i)
-		if not user_keys.index(i) == len(user_keys)-1:
-			file.write(str(ciphertext) + '\n')
+		if i==49:
+			user_keys.append(One_Setting_Generator()+'\n')####To SEPERATE SETTINGS BEFORE WRITIN EM INTO DATA 2
 		else:
-			file.write(str(ciphertext)) 
+			user_keys.append(One_Setting_Generator())
+
+	file=open(HomeDir('Data2.dat'),'wb')
+	for i in user_keys:
+		aes = pyaes.AESModeOfOperationCTR(master_password)
+		ciphertext = aes.encrypt(i)
+		file.write(ciphertext)
 	file.close()
 	#HideFile(HomeDir('Data2.txt'))#Default_Unique_User_EnigmaSettings()
 

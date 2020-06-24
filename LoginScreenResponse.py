@@ -7,13 +7,17 @@ def CheckUser():
 	else:
 		return False
 def CheckCredentials(usrName, paswrd):
-	Credentials_Data=ReadDecrypt(HomeDir('Data1.txt'),paswrd)
-	cred_string=''.join(Credentials_Data[0])
-	Credentials=cred_string.split('qwertyuiop***asdfghjklzxcvbnm')
-	if Credentials[0] == usrName and Credentials[1] == paswrd:
-		return True
-	else:
+	try:
+		Credentials_Data=ReadDecrypt(HomeDir('Data1.txt'),paswrd)
+	except:
 		return False
+	else:
+		cred_string=''.join(Credentials_Data[0])
+		Credentials=cred_string.split('qwertyuiop***asdfghjklzxcvbnm')
+		if Credentials[0] == usrName and Credentials[1] == paswrd:
+			return True
+		else:
+			return False
 
 
 

@@ -30,11 +30,12 @@ from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 Window.clearcolor = (30/255, 30/255, 30/255, 1)
 from functools import partial
-
+import pbkdf2
 Master_Password=''
+Master_Password_key=None
 MonitorData2=None
-if os.path.isfile(HomeDir('Data2.txt')):
-	MonitorData2=ModifiedFileTime(HomeDir('Data2.txt'))
+if os.path.isfile(HomeDir('Data2.dat')):
+	MonitorData2=ModifiedFileTime(HomeDir('Data2.dat'))
 else:
 	MonitorData2=None
 #----------------------------------------------------------------------LOGIN WINDOW------------------------------------------------------------------------------------------------------
@@ -74,10 +75,14 @@ class LoginWindow(Screen):
 		else:
 			self.user_error_popup()
 	def Login_Authenticate(self):
+		global Master_Password_key
+		global Master_Password
+		Master_Password=self.p.text
+		salt = b'\x05;iBi\x17Q\xe0'
+		Master_Password_key = pbkdf2.PBKDF2(Master_Password, salt).read(32)
+		Master_Password=''
 		if CheckUser():
-			if CheckCredentials(self.username.text,self.p.text):    #To check if main credential file exists
-				global Master_Password
-				Master_Password=self.p.text
+			if CheckCredentials(self.username.text,Master_Password_key):    #To check if main credential file exists
 				self.user_check.text=''
 				self.errortext.text=''
 				self.errortext.color=[1,1,1,1]
@@ -118,17 +123,19 @@ class SignUp_Pop(FloatLayout):
 			File_dir = os.path.expanduser('~') + '/Desktop'
 			direc = "Reminiscor Export_Import"
 			os.makedirs(os.path.join(File_dir, direc))
-			Default_Unique_User_EnigmaSettings(self.p1.text)
+			salt = b'\x05;iBi\x17Q\xe0'
+			key_32=pbkdf2.PBKDF2(self.p1.text, salt).read(32)
+			Default_Unique_User_EnigmaSettings(key_32)
 			global MonitorData2 
-			MonitorData2=ModifiedFileTime(HomeDir('Data2.txt'))
+			MonitorData2=ModifiedFileTime(HomeDir('Data2.dat'))
 			sep='qwertyuiop***asdfghjklzxcvbnm'
-			file=open(HomeDir('Data1.txt'),'w')
+			file=open(HomeDir('Data1.data'),'bw')
 			file.close()
 			#HideFile(HomeDir('Data1.txt'))
-			file=open(HomeDir('Data3.txt'),'w')
+			file=open(HomeDir('Data3.dat'),'bw')
 			file.close()
 			#`HideFile(HomeDir('Data3.txt'))
-			WriteEncrypt(HomeDir('Data1.txt'), self.user.text+sep+self.p1.text, self.p1.text)
+			WriteEncrypt(HomeDir('Data1.dat'), self.user.text+sep+self.p1.text, key_32)
 			label=Label(text='You\'ve successfully signed up!', size_hint=(0.1,0.1), pos_hint={'center_x':0.5,'center_y':0.225})
 			self.add_widget(label)
 			ColorChange(self.user,False,'Username')
@@ -202,8 +209,8 @@ class MainWindow(Screen):
 			ColorChange(self.description,False,'Entry Title')
 			ColorChange(self.n,False,'Password\nSize')
 			ColorChange(self.passw,False,'Password')
-			global Master_Password
-			WriteEncrypt(HomeDir('Data3.txt'), self.description.text + sep + self.username.text + sep + self.passw.text + sep + self.notes.text, Master_Password)
+			global Master_Password_key
+			WriteEncrypt(HomeDir('Data3.dat'), self.description.text + sep + self.username.text + sep + self.passw.text + sep + self.notes.text, Master_Password_key)
 			design=Password_Added()
 			Added_pop=Popup(title='New Entry Added!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			Added_pop.open()
@@ -333,9 +340,9 @@ class Password_Screen(Screen):
 			layout1.bind(minimum_height=layout1.setter('height'))
 			title_label=Label(text='[u][b]Entry List:[/b][/u]',markup=True, size_hint_y=None,height=60,font_size=20,color=[0,171/255,174/255,1])
 			parent.add_widget(title_label)
-			if os.path.isfile(HomeDir('Data3.txt')):
-				global Master_Password
-				password_list=ReadDecrypt(HomeDir('Data3.txt'),Master_Password)
+			if os.path.isfile(HomeDir('Data3.dat')):
+				global Master_Password_key
+				password_list=ReadDecrypt(HomeDir('Data3.dat'),Master_Password_key)
 				pass_len=len(password_list)
 				if pass_len>0:
 					for i in password_list:
@@ -368,8 +375,8 @@ class Password_Screen(Screen):
 				self.mainlayout.add_widget(parent)
 
 	def searchresult(self,instance):
-		global Master_Password
-		result=SearchFile(self.searchbar.text,Master_Password)
+		global Master_Password_key
+		result=SearchFile(self.searchbar.text,Master_Password_key)
 		if result==[]:
 			design=search_popup()
 			design.ids.title.text='No such entry exists'
@@ -440,8 +447,8 @@ class passwordpopup(FloatLayout):
 		entry.append(self.ids.username.text)
 		entry.append(self.ids.password.text)
 		entry.append(self.ids.notes.text)
-		global Master_Password
-		DelPassword(entry,Master_Password)
+		global Master_Password_key
+		DelPassword(entry,Master_Password_key)
 	def copytoclip1(self):
 		pyperclip.copy(self.ids.username.text)
 	def copytoclip2(self):
@@ -453,8 +460,8 @@ class passwordpopup(FloatLayout):
 		editedentry.append(self.ids.username.text)
 		editedentry.append(self.ids.password.text)
 		editedentry.append(self.ids.notes.text)
-		global Master_Password
-		check=EditPassword(entrydata,editedentry,Master_Password)
+		global Master_Password_key
+		check=EditPassword(entrydata,editedentry,Master_Password_key)
 		return check
 
 class search_popup(FloatLayout):
@@ -466,8 +473,8 @@ class search_popup(FloatLayout):
 		entry.append(self.ids.username.text)
 		entry.append(self.ids.password.text)
 		entry.append(self.ids.notes.text)
-		global Master_Password
-		DelPassword(entry,Master_Password)
+		global Master_Password_key
+		DelPassword(entry,Master_Password_key)
 	def copytoclip1(self):
 		pyperclip.copy(self.ids.username.text)
 	def copytoclip2(self):
@@ -480,8 +487,8 @@ class search_popup(FloatLayout):
 		editedentry.append(self.ids.username.text)
 		editedentry.append(self.ids.password.text)
 		editedentry.append(self.ids.notes.text)
-		global Master_Password
-		check=EditPassword(entrydata,editedentry,Master_Password)
+		global Master_Password_key
+		check=EditPassword(entrydata,editedentry,Master_Password_key)
 		return check
 class Delete_Confirmation(FloatLayout):
 	pass
@@ -494,8 +501,8 @@ kv=Builder.load_file("reminiscorGUI.kv")
 class ReminiscorApp(App):
 	def destruct(self, dt):
 		global MonitorData2
-		if os.path.isfile(HomeDir('Data2.txt')):
-			if CheckModified(MonitorData2,ModifiedFileTime(HomeDir('Data2.txt'))) and not MonitorData2==None:
+		if os.path.isfile(HomeDir('Data2.dat')):
+			if CheckModified(MonitorData2,ModifiedFileTime(HomeDir('Data2.dat'))) and not MonitorData2==None:
 				self.get_running_app().stop()
 	def build(self):
 		Clock.schedule_interval(self.destruct, 1.0/60.0)
