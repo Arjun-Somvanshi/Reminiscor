@@ -25,7 +25,6 @@ def WriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores pa
 	#Decrypt AES encryption
 	aes = pyaes.AESModeOfOperationCTR(AESkey)
 	decryptedUserKeys = aes.decrypt(Allkeys)
-	print(decryptedUserKeys)
 
 	#Break decrypted user key file into list 
 	UserKeyList = str(decryptedUserKeys, 'utf-8').split('\n')
@@ -38,51 +37,28 @@ def WriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores pa
 	key = EnigmaMachine(key, keyofkey)
 	Nstr = EncryptedMessage + key + MapNumAlpha(keyNo)
 	
+	#Read filename and decrypt it
+	fread = open(fileName, "br")
+	filedata = fread.read() 
+	fread.close()
+	aes = pyaes.AESModeOfOperationCTR(AESkey)
+	decryptedfiledata = str(aes.decrypt(filedata), 'utf-8')
+
+	#Append Nstr in filedata
+	if decryptedfiledata == '':
+		decryptedfiledata += Nstr
+	else:
+		decryptedfiledata += '\n' + Nstr
 	#AES encrypt Nstr
 	aes = pyaes.AESModeOfOperationCTR(AESkey)
-	EncryptedNstr=None
-	if os.stat(fileName).st_size == 0:
-		EncryptedNstr = aes.encrypt(Nstr)
-	else:
-		EncryptedNstr = aes.encrypt('\n'+ Nstr)
-	#Store key in file with name FileName
-	file = open(fileName , "ba")
-	file.write(EncryptedNstr)
-	file.close()
-
-def ReWriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores passwrd and encryption key in filename. paswrd and key are seperated by sep.
-	
-	#Get list all user keys
-	userkeyFile = open(HomeDir('Data2.dat') , "br")
-	Allkeys = userkeyFile.read()
-	userkeyFile.close()
-	
-	#Decrypt AES encryption
-	aes = pyaes.AESModeOfOperationCTR(AESkey)
-	decryptedUserKeys = aes.decrypt(Allkeys)
-
-	#Break decrypted user key file into list 
-	UserKeyList = decryptedUserKeys.split('\n')
-
-	#Create a new key, enigma encrypt the password and enigma encrypt the key using a random key from List 
-	key = One_Setting_Generator()
-	EncryptedMessage = EnigmaMachine(message, key)
-	keyNo = randint(0,49)
-	keyofkey = ''.join(UserKeyList[keyNo])
-	key = EnigmaMachine(key, keyofkey)
-	Nstr = EncryptedMessage + key + MapNumAlpha(keyNo)
-	
-	#AES encrypt Nstr
-	aes = pyaes.AESModeOfOperationCTR(AESkey)
-	EncryptedNstr = aes.encrypt(Nstr)
+	Encryptedfiledata = aes.encrypt(decryptedfiledata)
 
 	#Store key in file with name FileName
-	file = open(fileName , "ba")
-	if os.stat(fileName).st_size == 0:
-		file.write(EncryptedNstr)
-	else:
-		file.write('\n'+ EncryptedNstr)
+	file = open(fileName , "bw")
+	file.write(Encryptedfiledata)
 	file.close()
+
+
 '''
 salt = b'\x05;iBi\x17Q\xe0'
 key_32_bytes = pbkdf2.PBKDF2("Arjun2000@!", salt).read(32)
@@ -112,7 +88,7 @@ def ReadDecrypt(filename, AESkey): #Reads a file and decrypts it using userkey. 
 	UserKeyList = str(decryptedUserKeys, 'utf-8').split('\n')
 	FileDataList = str(decryptedFileData, 'utf-8').split('\n')
 
-
+	#Decrypt using Enigma key 
 	decp = []
 	for p in FileDataList:
 		KeyAlpha = p[-1:]
@@ -229,7 +205,7 @@ def DelPassword(entry):
 				else:
 					passwrd += ele + 'qwertyuiop***asdfghjklzxcvbnm'
 					a+=1
-			ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
+			WriteEncrypt(HomeDir('Data3.txt'), passwrd)
 	else:
 		pass
 
@@ -262,7 +238,7 @@ def EditPassword(iniEntry, entry): #replaces iniEntry with entry
 					else:
 						passwrd += ele
 						a+=1
-				ReWriteEncrypt(HomeDir('Data3.txt'), passwrd)
+				WriteEncrypt(HomeDir('Data3.txt'), passwrd)
 			return False
 	else:
 		pass
