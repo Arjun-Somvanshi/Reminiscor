@@ -2,7 +2,7 @@ from FileHandling import *
 #This compares password and confirm password 
 def CheckMainPassword(usrName, paswrd, repaswrd):
 
-    if paswrd == repaswrd and len(usrName) >= 8 and len(usrName) <= 50 and len(paswrd)>=8 and paswrd!=usrName:
+    if paswrd == repaswrd and len(usrName) >= 8 and len(usrName) <= 50 and len(paswrd)>=8 and paswrd!=usrName:       #Change minimum password size to 12
     	for i in usrName:
     		if i ==',':
     			return False
