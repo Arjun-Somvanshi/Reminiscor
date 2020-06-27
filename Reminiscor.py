@@ -121,11 +121,16 @@ class SignUp_Pop(FloatLayout):
 			directory = "Reminiscor"
 			os.makedirs(os.path.join(parent_dir, directory))
 			File_dir = os.path.expanduser('~') + '/Desktop'
-			direc = "Reminiscor Export_Import"
+			direc = "Reminiscor Files/Export"
+			File_dir1 = os.path.expanduser('~')+ "/Desktop/Reminiscor Files"
+			direc1 = "Import"
 			os.makedirs(os.path.join(File_dir, direc))
+			os.makedirs(os.path.join(File_dir1, direc1))
 			salt = b'\x05;iBi\x17Q\xe0'
 			key_32=pbkdf2.PBKDF2(self.p1.text, salt).read(32)
 			Default_Unique_User_EnigmaSettings(key_32)
+			data3 = open(HomeDir("Data3.dat"), "bw")
+			data3.close()
 			global MonitorData2 
 			MonitorData2=ModifiedFileTime(HomeDir('Data2.dat'))
 			sep='qwertyuiop***asdfghjklzxcvbnm'

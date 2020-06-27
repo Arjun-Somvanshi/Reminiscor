@@ -49,8 +49,8 @@ def WriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores pa
 		decryptedfiledata += Nstr
 	else:
 		decryptedfiledata += '\n' + Nstr
+		
 	#AES encrypt Nstr
-	print(decryptedfiledata)
 	aes = pyaes.AESModeOfOperationCTR(AESkey)
 	Encryptedfiledata = aes.encrypt(decryptedfiledata)
 
@@ -59,12 +59,11 @@ def WriteEncrypt(fileName, message, AESkey): #This encrypts paswrd and stores pa
 	file = deleteContent(file)
 	file.write(Encryptedfiledata)
 	file.close()
-
 '''
 salt = b'\x05;iBi\x17Q\xe0'
 key_32_bytes = pbkdf2.PBKDF2("Arjun2000@!", salt).read(32)
 #Default_Unique_User_EnigmaSettings(key_32_bytes)
-WriteEncrypt(HomeDir('Data3.dat'), 'Githubqwertyuiop***asdfghjklzxcvbnmmanusomvanshi@hotmail.comqwertyuiop***asdfghjklzxcvbnmmanu2002qwertyuiop***asdfghjklzxcvbnm something', key_32_bytes)
+WriteEncrypt(HomeDir('Data3.dat'), 'Netflixqwertyuiop***asdfghjklzxcvbnmmanusomvanshi@hotmail.comqwertyuiop***asdfghjklzxcvbnmmanu2002qwertyuiop***asdfghjklzxcvbnm something', key_32_bytes)
 '''
 def ReadDecrypt(filename, AESkey): #Reads a file and decrypts it using userkey. Returns list.
 	#Read all user keys from Data2.dat
@@ -82,7 +81,6 @@ def ReadDecrypt(filename, AESkey): #Reads a file and decrypts it using userkey. 
 	decryptedUserKeys = aes.decrypt(Allkeys)
 	aes = pyaes.AESModeOfOperationCTR(AESkey)
 	decryptedFileData = aes.decrypt(FileData)
-	print(decryptedFileData)
 	#Create Lists for both files
 	UserKeyList = str(decryptedUserKeys, 'utf-8').split('\n')
 	FileDataList = str(decryptedFileData, 'utf-8').split('\n')
@@ -121,66 +119,6 @@ def SearchFile(Str, AESkey): #searches for passwords in data3 and returns all in
 		return []
 	else:
 		return newList[ind]
-
-
-def Export(AESkey):
-	List = ReadDecrypt(HomeDir('Data3.dat'), AESkey)
-	if os.path.isfile(Import_Export_Dir('Password File.dat')):
-		os.chmod(Import_Export_Dir('Password File.dat'), S_IWUSR|S_IREAD)
-	temp = open(Import_Export_Dir('Password File.dat'), 'bw')
-	temp = deleteContent(temp)
-	temp.close()
-	file = open(Import_Export_Dir('Password File.dat'),'bw')
-	for ele in List:
-		if List.index(ele) == len(List) - 1:
-			file.write(ele)
-		else:
-			file.write(ele + '\n')
-	os.chmod(Import_Export_Dir('Password File.dat'), S_IREAD|S_IRGRP|S_IROTH)
-	file.close()
-#Export()
-def Import(AESkey):
-	newList = []
-	newListData3 = []
-	if os.path.isfile(Import_Export_Dir('Password File.dat')) and os.stat(Import_Export_Dir('Password File.dat')).st_size is not 0:
-		file = open(Import_Export_Dir('Password File.dat'), 'br')
-		List = ReadFile(file)
-		for ele in List:
-			newList.append(ele.split('qwertyuiop***asdfghjklzxcvbnm'))
-		file.close()
-		pass_file = open(HomeDir('Data3.dat'), 'br')
-		Data3_List = ReadDecrypt(HomeDir('Data3.dat'), AESkey)
-		for ele in Data3_List:
-			Sublist = ele.split('qwertyuiop***asdfghjklzxcvbnm')
-			newListData3.append(Sublist)
-		pass_file.close()
-		file_new = open(HomeDir('Data3.dat'), 'ba')
-		temp = False
-		for ele1 in newList:
-			for ele2 in newListData3:
-				if ele1[0].lower() == ele2[0].lower():
-					temp = True
-					break
-				else:
-					temp = False
-			if temp == False:
-				password = ''
-				for subele in ele1:
-					if not ele1.index(subele) == len(ele1)-1: 
-						password += subele + 'qwertyuiop***asdfghjklzxcvbnm'
-					else:
-						password += subele
-				WriteEncrypt(HomeDir('Data3.dat'), password, AESkey)
-		os.chmod(Import_Export_Dir('Password File.dat'), S_IWUSR|S_IREAD)
-		temp1=open(Import_Export_Dir("Password File.dat"),'w')
-		temp1=deleteContent(temp1)
-		temp1.close()
-		file_new.close()
-		
-		return True
-	else:
-		return False
-#Import()
 
 def DelPassword(entry,AESkey):
 	newListData3 = []
@@ -247,3 +185,131 @@ def CheckFunction(List, LOL):
 			return True
 	return False
 #print(ReadDecrypt(HomeDir('Data3.dat')))
+
+def ShareAll(UsernameList, CommonPassword, AESkey):
+
+	#Get list of all passwords from data3
+	AllPasswords = ReadDecrypt(HomeDir('Data3.dat'), AESkey)
+
+	#Generate Enigma key and encrypt ALl Passwords
+	Totalpassword = ''
+	for password in AllPasswords:
+		Enigmakey = One_Setting_Generator()
+		if not AllPasswords.index(password) == len(AllPasswords) - 1:
+			Totalpassword += EnigmaMachine(password, Enigmakey) + 'mnbvcxzlkjhgfdsapoiuytrewq' + Enigmakey + '\n'
+		else:
+			Totalpassword += EnigmaMachine(password, Enigmakey) + 'mnbvcxzlkjhgfdsapoiuytrewq' + Enigmakey
+
+	#Encrypt Username list with enigma and create a string
+	Totaluser = ''
+	for user in UsernameList:
+		Enigmakey = One_Setting_Generator()
+		if UsernameList.index(user) == len(UsernameList) -1:
+			Totaluser +=  EnigmaMachine(user, Enigmakey) + 'mnbvcxzlkjhgfdsapoiuytrewq' + Enigmakey
+		else:
+			Totaluser +=  EnigmaMachine(user, Enigmakey) + 'mnbvcxzlkjhgfdsapoiuytrewq' + Enigmakey + '\n'
+	Total = Totalpassword + '\n\n\n\n\n' + Totaluser
+
+	#Generate AES key for second layer of encryption and encrypt Total
+	salt = b'\x05;iBi\x17Q\xe0'
+	key_AES = pbkdf2.PBKDF2(CommonPassword, salt).read(32)
+	aes = pyaes.AESModeOfOperationCTR(key_AES)
+	EncryptedPasswords = aes.encrypt(Total)
+
+	#Write Encrypted passwords in a new file
+	ExportFile = open(ReminiscorFiles_Dir("Export/ShareFile.dat"), "bw")
+	ExportFile.write(EncryptedPasswords) 
+
+'''UsernameList = ['Arjun', 'Manu', 'Manvendra']
+CommonPassword = "Manvendra2002"
+salt = b'\x05;iBi\x17Q\xe0'
+AESkey = pbkdf2.PBKDF2("manvendra2", salt).read(32)
+aes = pyaes.AESModeOfOperationCTR(AESkey)
+ShareAll(UsernameList, CommonPassword, AESkey)'''
+
+def GetAllPasswordTitles(AESkey):
+
+	Data3datalist = ReadDecrypt(HomeDir('Data3.dat'), AESkey)
+	Titles = []
+	for Enigmapasswords in Data3datalist:
+		List = Enigmapasswords.split('qwertyuiop***asdfghjklzxcvbnm')
+		title = List[0]
+		Titles.append(title)
+	return Titles
+
+
+def Import(CommonPassword, Username,AESkey):
+
+	#Read from share file and AES decrypt
+	sharedfile = open(ReminiscorFiles_Dir('Import/ShareFile.dat'), 'br')
+	EncryptedSharedData = sharedfile.read()
+	salt = b'\x05;iBi\x17Q\xe0'
+	key_AES = pbkdf2.PBKDF2(CommonPassword, salt).read(32)
+	aes = pyaes.AESModeOfOperationCTR(key_AES)
+	SharedDataBytes = aes.decrypt(EncryptedSharedData)
+	SharedData = str(SharedDataBytes, 'utf-8')
+
+	#Seperate passwords and usernames
+	SharedDataList = SharedData.split('\n\n\n\n\n')
+	TotalPassword = SharedDataList[0]
+	Totaluser = SharedDataList[1]
+
+	#Create enigma encrypted password list and user list
+	PasswordList = TotalPassword.split('\n')
+	UserList = Totaluser.split('\n')
+
+	#Enigma decrypt all usernames
+	DecryptedUsers = []
+	for enigmauser in UserList:
+		encrypteduserlist = enigmauser.split('mnbvcxzlkjhgfdsapoiuytrewq')
+		encrypteduser = encrypteduserlist[0]
+		key = encrypteduserlist[1]
+		user = EnigmaMachine(encrypteduser, key)
+		DecryptedUsers.append(user)
+
+	#Check if current user is in list
+	if Username in DecryptedUsers:
+
+		#Enigma decypt passwordList
+		DecryptedPasswords = []
+		for enigmapassword in PasswordList:
+			encryptedpasswordlist = enigmapassword.split('mnbvcxzlkjhgfdsapoiuytrewq')
+			encryptedpassword = encryptedpasswordlist[0]
+			key = encryptedpasswordlist[1]
+			password = EnigmaMachine(encryptedpassword, key)
+			DecryptedPasswords.append(password)
+		
+		#Split all passwords into its components and extract the titles
+		Listoftitles = []
+		for password in DecryptedPasswords:
+			listofthings = password.split('qwertyuiop***asdfghjklzxcvbnm')
+			title = listofthings[0]
+			Listoftitles.append(title)
+		print(DecryptedPasswords)
+		#Get password titles from data3
+		Titles = GetAllPasswordTitles(AESkey)
+
+		#Write all passords in Data3
+		for password in DecryptedPasswords:
+			if not Listoftitles[DecryptedPasswords.index(password)] in Titles:
+				print(password)
+				WriteEncrypt(HomeDir('Data3.dat'), password, AESkey)
+		return True
+	else:
+		return False
+'''
+CommonPassword = "Manvendra2002"
+salt = b'\x05;iBi\x17Q\xe0'
+AESkey = pbkdf2.PBKDF2("manvendra2", salt).read(32)
+aes = pyaes.AESModeOfOperationCTR(AESkey)
+print(Import(CommonPassword,'Manvendra', AESkey))
+
+'''
+
+
+
+
+
+
+
+

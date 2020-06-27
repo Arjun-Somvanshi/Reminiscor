@@ -44,15 +44,15 @@ def CheckModified(a , b):
 	else:
 		return True
 
-def Import_Export_Dir(filename):
+def ReminiscorFiles_Dir(filename):
 	homedir = os.path.expanduser('~')
-	if os.path.isdir(homedir + '/Desktop/Reminiscor Export_Import/'):	
-		newdir = homedir + '/Desktop/Reminiscor Export_Import/'+ filename
+	if os.path.isdir(homedir + '/Desktop/Reminiscor Files/'):	
+		newdir = homedir + '/Desktop/Reminiscor Files/'+ filename
 	else:
 		File_dir = os.path.expanduser('~') + '/Desktop'
-		direc = "Reminiscor Export_Import"
+		direc = "Reminiscor Files"
 		os.makedirs(os.path.join(File_dir, direc))
-		newdir = homedir + '/Desktop/Reminiscor Export_Import/'+ filename
+		newdir = homedir + '/Desktop/Reminiscor Files/'+ filename
 	return newdir
 
 def deleteContent(pfile):
