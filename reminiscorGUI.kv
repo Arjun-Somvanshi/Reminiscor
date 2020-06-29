@@ -589,6 +589,35 @@ Screen_Manager:
 		disabled: root.selected
 		on_release:
 			root.export_all()
+<Common_Password_Required>:
+	Label:
+		text:'Enter the [color=00abae]common password[/color] here:'
+		text_size:(self.width,None)
+		markup:True
+		size_hint: (None, .1)
+		font_size: 14
+		width:350
+		pos_hint: {'center_x': 0.6, 'top': 0.85}
+	TextInput:
+		id:commonpassw
+		hint_text: 'Common Password'
+		halign:'center'
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		multiline: False
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+		size_hint: (None, 0.25)
+		width: 200
+	Button:
+		id:submit
+		text: 'Submit'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.8 ,'center_y': 0.1}
+		size_hint: (0.35, 0.25)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 <Login_Popup_import>:
 	Label:
 		text:'Enter Credentials to authenticate the process: '

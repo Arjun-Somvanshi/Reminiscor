@@ -261,38 +261,62 @@ class Choose_Export(FloatLayout):
 			Entries=self.ids.ChosenEntries.text.split(',')
 			#Share(Entries,usernames)
 			result=resultpop()
-			rwin=Popup(title='Share File Successfully Created!',title_align='center',content=result,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			rwin=Popup(title='Share File Successfully Created!',title_align='center',content=result,size_hint=(None,None),
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			rwin.open()
 		else:
 			result=resultpop()
-			rwin=Popup(title='Export Failed',title_align='center',content=result,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			rwin=Popup(title='Share Failed!',title_align='center',content=result,size_hint=(None,None),size=(400,200),
+						separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			rwin.open()
 	def export_all(self):
-		if not (self.ids.target_username.text==''):
-			usernames=self.ids.target_usernames.text.split(',')
-			#ShareAll(usernames)
+		if not self.ids.target_username.text=='' and not len(self.ids.commonpassw.text)<12:
+			usernames=self.ids.target_username.text.split(',')
+			global Master_Password_key
+			ShareAll(usernames,self.ids.commonpassw.text,Master_Password_key)
+			result=resultpop()
+			rwin=Popup(title='Share File Successfully Created!',title_align='center',content=result,size_hint=(None,None),
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			rwin.open()
 		else:
-			pass
+			result=resultpop()
+			rwin=Popup(title='Share Failed!',title_align='center',content=result,size_hint=(None,None),
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			rwin.open()
 class resultpop(FloatLayout):
 	pass
+class Common_Password_Required(FloatLayout):
+	def import_shared(self,username,Master_Password_key,*args):
+		try:
+			import_result=Import(self.ids.commonpassw.text,username,Master_Password_key)
+		except:
+			result=resultpop()
+			rwin=Popup(title='Share Failed!',title_align='center',content=result,size_hint=(None,None),
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			rwin.open()
+		else:
+			result=resultpop()
+			rwin=Popup(title='Imported Successfully',title_align='center',content=result,size_hint=(None,None),
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			rwin.open()
 class Login_Popup_import(FloatLayout):
 	def authenticate(self):
 		if(CheckUser()):
-			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
-				a=Import()
-				if a==True:
-					self.ids.label.text='Import Successful!'
-					self.ids.label.color=[0,171/255,174/255,1]
-					self.ids.label.color=[1,1,1,1]
-				else:
-					self.ids.label.text='Import File is not present or empty.'
-					self.ids.label.pos_hint={'center_x':0.6,'center_y':0.72}
-					self.ids.label.color=[204/255,0,0,1]
+			global Master_Password_key
+			if(CheckCredentials(self.ids.username.text,self.ids.p.text,Master_Password_key)):
+				design=Common_Password_Required()
+				win=Popup(title='Common Password Required!',title_align='center',content=design,size_hint=(None,None),size=(400,200),
+						separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+				win.open()
+				design.ids.submit.bind(on_release=partial(self.import_process,design,win))
 			else:
 				self.ids.label.text='Authentication Failed!'
 				self.ids.label.pos_hint={'center_x':0.75,'center_y':0.72}
 				self.ids.label.color=[204/255,0,0,1]
-
+	def import_process(self,design,win,*args):
+		global Master_Password_key
+		design.import_shared(self.ids.username.text,Master_Password_key)
+		win.dismiss()
 class Password_Size_Popup(FloatLayout):
 	pass
 
@@ -485,7 +509,6 @@ class search_popup(FloatLayout):
 	def copytoclip2(self):
 		pyperclip.copy(self.ids.password.text)
 	def edit(self,entrydata):
-		print('flow')
 		self.ids.edittoggle.state='normal'
 		editedentry=[]
 		editedentry.append(self.ids.title.text)

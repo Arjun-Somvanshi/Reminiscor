@@ -285,14 +285,12 @@ def Import(CommonPassword, Username,AESkey):
 			listofthings = password.split('qwertyuiop***asdfghjklzxcvbnm')
 			title = listofthings[0]
 			Listoftitles.append(title)
-		print(DecryptedPasswords)
 		#Get password titles from data3
 		Titles = GetAllPasswordTitles(AESkey)
 
 		#Write all passords in Data3
 		for password in DecryptedPasswords:
 			if not Listoftitles[DecryptedPasswords.index(password)] in Titles:
-				print(password)
 				WriteEncrypt(HomeDir('Data3.dat'), password, AESkey)
 		return True
 	else:
