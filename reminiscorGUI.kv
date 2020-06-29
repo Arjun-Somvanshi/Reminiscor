@@ -517,7 +517,7 @@ Screen_Manager:
 		width:380
 		font_size:14
 		markup:True
-		pos_hint:{'x':0,'top':0.87}
+		pos_hint:{'x':0,'top':0.88}
 	TextInput:
 		id: ChosenEntries
 		foreground_color:(0.7,0.7,0.7,1)
@@ -527,7 +527,7 @@ Screen_Manager:
 		hint_text: 'Entry List'
 		markup:True
 		disabled_foreground_color:[0.4,0.4,0.4,1]
-		pos_hint: {'center_x': 0.5,'center_y': 0.625}
+		pos_hint: {'center_x': 0.5,'center_y': 0.65}
 		size_hint: (0.7, 0.2)
 		disabled: not root.selected
 	Label:
@@ -537,20 +537,34 @@ Screen_Manager:
 		width:380
 		font_size:14
 		markup:True
-		pos_hint:{'x':0,'top':0.46}
+		pos_hint:{'x':0,'top':0.5}
 	TextInput:
 		id: target_username
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
-		hint_text: '(Username of friend/family)'
+		hint_text: '(Username(s) of friend/family)'
 		font_size:14
 		multiline: True
 		markup:True
 		disabled_foreground_color:[0.4,0.4,0.4,1]
-		pos_hint: {'center_x': 0.5,'center_y': 0.25}
-		size_hint: (0.7, 0.1)
+		pos_hint: {'center_x': 0.5,'center_y': 0.3}
+		size_hint: (0.6, 0.1)
+	TextInput:
+		id: commonpassw
+		foreground_color:(0.7,0.7,0.7,1)
+		color:(0.7,0.7,0.7)
+		cursor_color:(0,171/255,174/255,1)
+		background_color:(45/255,45/255,45/255,1)
+		hint_text: 'Common Password'
+		font_size:14
+		password:True
+		multiline: False
+		markup:True
+		disabled_foreground_color:[0.4,0.4,0.4,1]
+		pos_hint: {'center_x': 0.5,'center_y': 0.18}
+		size_hint: (0.6, 0.1)
 	Button:
 		id: ExportSelected
 		text:'Share Selected\nEntries'

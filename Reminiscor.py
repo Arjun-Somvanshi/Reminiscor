@@ -242,12 +242,13 @@ class UserError(FloatLayout):
 class Login_Popup_export(FloatLayout):
 	def authenticate(self):
 		if(CheckUser()):
-			if(CheckCredentials(self.ids.username.text,self.ids.p.text)):
+			global Master_Password_key
+			if(CheckCredentials(self.ids.username.text,self.ids.p.text,Master_Password_key)):
 				self.ids.label.color=[0,171/255,174/255,1]
 				self.ids.username.text=''
 				self.ids.p.text=''
 				export_design=Choose_Export()
-				export_extension=Popup(title='Choose Entries to Share',title_align='center',content=export_design,size_hint=(None,None),size=(400,500),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+				export_extension=Popup(title='Choose Entries to Share',title_align='center',content=export_design,size_hint=(None,None),size=(400,575),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 				export_extension.open()
 			else:
 				self.ids.label.text='Authentication Failed!'
