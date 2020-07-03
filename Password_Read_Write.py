@@ -5,7 +5,7 @@ import pbkdf2
 import string
 from random import randint
 from stat import S_IREAD, S_IRGRP, S_IROTH, S_IWUSR
-
+import os
 Alpha = string.ascii_letters
 
 def MapNumAlpha(n):
@@ -185,6 +185,44 @@ def CheckFunction(List, LOL):
 			return True
 	return False
 #print(ReadDecrypt(HomeDir('Data3.dat')))
+def ShareSelected(UsernameList, CommonPassword, EntryList, AESkey):
+
+	#Get list of all passwords from data3
+	Passwords = ReadDecrypt(HomeDir('Data3.dat'), AESkey)
+	AllPasswords=[]
+	for i in EntryList:
+		for j in Passwords:
+			p=j.split("qwertyuiop***asdfghjklzxcvbnm")
+			title=p[0]
+			if i==title:
+				AllPasswords.append(j)
+	#Generate Enigma key and encrypt ALl Passwords
+	Totalpassword = ''
+	for password in AllPasswords:
+		Enigmakey = One_Setting_Generator()
+		if not AllPasswords.index(password) == len(AllPasswords) - 1:
+			Totalpassword += EnigmaMachine(password, Enigmakey) + 'mnbvcxzlkjhgfdsapoiuytrewq' + Enigmakey + '\n'
+		else:
+			Totalpassword += EnigmaMachine(password, Enigmakey) + 'mnbvcxzlkjhgfdsapoiuytrewq' + Enigmakey
+	#Encrypt Username list with enigma and create a string
+	Totaluser = ''
+	for user in UsernameList:
+		Enigmakey = One_Setting_Generator()
+		if UsernameList.index(user) == len(UsernameList) -1:
+			Totaluser +=  EnigmaMachine(user, Enigmakey) + 'mnbvcxzlkjhgfdsapoiuytrewq' + Enigmakey
+		else:
+			Totaluser +=  EnigmaMachine(user, Enigmakey) + 'mnbvcxzlkjhgfdsapoiuytrewq' + Enigmakey + '\n'
+	Total = Totalpassword + '\n\n\n\n\n' + Totaluser
+
+	#Generate AES key for second layer of encryption and encrypt Total
+	salt = b'\x05;iBi\x17Q\xe0'
+	key_AES = pbkdf2.PBKDF2(CommonPassword, salt).read(32)
+	aes = pyaes.AESModeOfOperationCTR(key_AES)
+	EncryptedPasswords = aes.encrypt(Total)
+
+	#Write Encrypted passwords in a new file
+	ExportFile = open(ReminiscorFiles_Dir("Export/ShareFile.dat"), "bw")
+	ExportFile.write(EncryptedPasswords) 
 
 def ShareAll(UsernameList, CommonPassword, AESkey):
 
@@ -257,7 +295,6 @@ def Import(CommonPassword, Username,AESkey):
 	#Create enigma encrypted password list and user list
 	PasswordList = TotalPassword.split('\n')
 	UserList = Totaluser.split('\n')
-
 	#Enigma decrypt all usernames
 	DecryptedUsers = []
 	for enigmauser in UserList:
@@ -296,18 +333,51 @@ def Import(CommonPassword, Username,AESkey):
 	else:
 		return False
 '''
-CommonPassword = "Manvendra2002"
+CommonPassword = "manvendra2002"
 salt = b'\x05;iBi\x17Q\xe0'
 AESkey = pbkdf2.PBKDF2("manvendra2", salt).read(32)
 aes = pyaes.AESModeOfOperationCTR(AESkey)
-print(Import(CommonPassword,'Manvendra', AESkey))
-
+print(Import(CommonPassword,'manvendra', AESkey))
 '''
-
-
-
-
-
-
-
-
+def Backup_Data():
+	data1=open(HomeDir("Data1.dat"),'br')
+	data1_content=data1.read()
+	data1.close()
+	data2=open(HomeDir("Data2.dat"),'br')
+	data2_content=data2.read()
+	data2.close()
+	data3=open(HomeDir("Data3.dat"),'br')
+	data3_content=data3.read()
+	data3.close()
+	dir=homedir = os.path.expanduser('~')+'/Desktop/Reminiscor Files/Backup/'
+	file1=open(dir+"Data1_backup.dat",'bw')
+	file2=open(dir+"Data2_backup.dat",'bw')
+	file3=open(dir+"Data3_backup.dat",'bw')
+	file1.write(data1_content)
+	file2.write(data2_content)
+	file3.write(data3_content)
+	file1.close()
+	file2.close()
+	file3.close()
+def ImportBackup():
+	dir=homedir = os.path.expanduser('~')+'/Desktop/Reminiscor Files/Backup/'
+	file1=open(dir+"Data1_backup.dat", 'br')
+	file2=open(dir+"Data2_backup.dat", 'br')
+	file3=open(dir+"Data3_backup.dat", 'br')
+	data1_content=file1.read()
+	data2_content=file2.read()
+	data3_content=file3.read()
+	file1.close()
+	file2.close()
+	file3.close()
+	data1=open(HomeDir("Data1.dat"),"bw")
+	data2=open(HomeDir("Data2.dat"),"bw")
+	data3=open(HomeDir("Data3.dat"),"bw")
+	data1.write(data1_content)
+	data2.write(data2_content)
+	data3.write(data3_content)
+	data1.close()
+	data2.close()
+	data3.close()
+def clash():
+	Backup()

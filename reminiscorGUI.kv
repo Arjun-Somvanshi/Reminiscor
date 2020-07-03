@@ -756,7 +756,7 @@ Screen_Manager:
 			background_normal: 'UI/firstbutton.png'
 			background_down: 'UI/firstbuttondown.png'
 			on_release:
-				
+				root.Backup()
 		
 <passwordpopup>:
 	Label:
@@ -1039,3 +1039,36 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 		size_hint:(0.25,0.2)
 		pos_hint: {'center_x':0.8 , 'y':0.1}
+<Backup>:
+	Label:
+		text:'This will create a [color=00abae]Backup[/color] of your[color=00abae]user files[/color], the backup would be encrypted and you can store it remotely without hesitation.'
+		size_hint:(None,0.1)
+		text_size:(self.width, None)
+		width:350
+		markup:True
+		pos_hint:{'x':0,'top':0.9}
+	Button:
+		id: create
+		text:'Create Backup'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.35,0.2)
+		pos_hint: {'center_x':0.25 , 'y':0.5}
+		on_release:
+			root.backup()
+	Button:
+		id: import_back
+		text:'Import Backup'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.35,0.2)
+		pos_hint: {'center_x':0.75 , 'y':0.5}
+		on_release:
+			root.import_backup()
+	Button:
+		id: close
+		text:'Close'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		size_hint:(0.35,0.08)
+		pos_hint: {'center_x':0.8 , 'y':0.05}

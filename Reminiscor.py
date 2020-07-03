@@ -34,10 +34,6 @@ import pbkdf2
 Master_Password=''
 Master_Password_key=None
 MonitorData2=None
-if os.path.isfile(HomeDir('Data2.dat')):
-	MonitorData2=ModifiedFileTime(HomeDir('Data2.dat'))
-else:
-	MonitorData2=None
 #----------------------------------------------------------------------LOGIN WINDOW------------------------------------------------------------------------------------------------------
 class LoginWindow(Screen):
 	username=ObjectProperty()
@@ -120,19 +116,20 @@ class SignUp_Pop(FloatLayout):
 			parent_dir = os.path.expanduser('~') + '/AppData/Roaming'
 			directory = "Reminiscor"
 			os.makedirs(os.path.join(parent_dir, directory))
-			File_dir = os.path.expanduser('~') + '/Desktop'
-			direc = "Reminiscor Files/Export"
+			File_dir0 = os.path.expanduser('~') + '/Desktop'
+			direc0 = "Reminiscor Files/Export"
 			File_dir1 = os.path.expanduser('~')+ "/Desktop/Reminiscor Files"
 			direc1 = "Import"
-			os.makedirs(os.path.join(File_dir, direc))
+			File_dir2 = os.path.expanduser('~')+ "/Desktop/Reminiscor Files"
+			direc2 = "Backup"
+			os.makedirs(os.path.join(File_dir0, direc0))
 			os.makedirs(os.path.join(File_dir1, direc1))
+			os.makedirs(os.path.join(File_dir2, direc2))
 			salt = b'\x05;iBi\x17Q\xe0'
 			key_32=pbkdf2.PBKDF2(self.p1.text, salt).read(32)
 			Default_Unique_User_EnigmaSettings(key_32)
 			data3 = open(HomeDir("Data3.dat"), "bw")
 			data3.close()
-			global MonitorData2 
-			MonitorData2=ModifiedFileTime(HomeDir('Data2.dat'))
 			sep='qwertyuiop***asdfghjklzxcvbnm'
 			file=open(HomeDir('Data1.dat'),'bw')
 			file.close()
@@ -260,7 +257,9 @@ class Choose_Export(FloatLayout):
 		if not (self.ids.target_username.text=='' and self.ids.ChosenEntries.text==''):
 			usernames=self.ids.target_username.text.split(',')
 			Entries=self.ids.ChosenEntries.text.split(',')
-			#Share(Entries,usernames)
+			global Master_Password_key
+			print(usernames)
+			ShareSelected(usernames, self.ids.commonpassw.text, Entries, Master_Password_key)
 			result=resultpop()
 			rwin=Popup(title='Share File Successfully Created!',title_align='center',content=result,size_hint=(None,None),
 						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
@@ -440,6 +439,11 @@ class Password_Screen(Screen):
 			design.ids.delete.bind(on_release=partial(self.DeleteAndRefresh,design,search))
 			design.ids.edit.bind(on_release=partial(self.editflow,design,result))
 		self.searchbar.text=''
+	def Backup(self):
+		design=Backup()
+		Backupwin=Popup(title='Backup Your Data',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
+		Backupwin.open()
+		design.ids.close.bind(on_release=Backupwin.dismiss)	
 	def screenswitch(self,instance):
 		self.manager.transition=FadeTransition(duration=0)
 		self.manager.current = 'Main'
@@ -534,18 +538,38 @@ class Delete_Confirmation(FloatLayout):
 	pass
 class Edit_Confirmation(FloatLayout):
 	pass
+class Backup(FloatLayout):
+	def backup(self):
+		Backup_Data()
+		result=resultpop()
+		result.ids.info.text='Backup has been successfully created at [color=00abae]Desktop/Reminiscor Files/Backup![/color]'
+		rwin=Popup(title='Imported Successfully',title_align='center',content=result,size_hint=(None,None),
+					size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
+		result.ids.close.bind(on_release=rwin.dismiss)
+		rwin.open()
+	def import_backup(self):
+		try:
+			ImportBackup()
+		except:
+			result=resultpop()
+			result.ids.info.text='Backup was not imported! Check [color=c30101]Desktop/Reminiscor Files/Backup![/color]'
+			rwin=Popup(title='Imported Successfully',title_align='center',content=result,size_hint=(None,None),
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
+			result.ids.close.bind(on_release=rwin.dismiss)
+			rwin.open()
+		else:
+			result=resultpop()
+			result.ids.info.text='Backup has been successfully imported from [color=00abae]Desktop/Reminiscor Files/Backup![/color]'
+			rwin=Popup(title='Imported Successfully',title_align='center',content=result,size_hint=(None,None),
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
+			result.ids.close.bind(on_release=rwin.dismiss)
+			rwin.open()
 
 class Screen_Manager(ScreenManager):
 	pass
 kv=Builder.load_file("reminiscorGUI.kv")
 class ReminiscorApp(App):
-	def destruct(self, dt):
-		global MonitorData2
-		if os.path.isfile(HomeDir('Data2.dat')):
-			if CheckModified(MonitorData2,ModifiedFileTime(HomeDir('Data2.dat'))) and not MonitorData2==None:
-				self.get_running_app().stop()
 	def build(self):
-		Clock.schedule_interval(self.destruct, 1.0/60.0)
 		return kv
 if __name__ == '__main__':
 	ReminiscorApp().run()
