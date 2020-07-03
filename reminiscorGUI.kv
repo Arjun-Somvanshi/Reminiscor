@@ -426,7 +426,7 @@ Screen_Manager:
 <Password_Size_Popup>: #    Main Window Password Error
 	Label:
 		markup: True
-		text: 'The password generator/Entry addition process has encountered an error.\n\n[u]Try doing the following:[/u] \n\nRename the title with [color=00abae]atleast 3 characters.[/color]\nEntry Title should be [color=00abae]unique[/color] in [color=00abae]Entry List[/color]\n\nEnter a [color=00abae]password size(minimum 8)[/color] before hitting the generate password button[color=00abae](i.e if you are using the generator).[/color]\n\nNote: To add an [color=00abae]Entry[/color] you need to enter a [color=00abae]title and password[/color] atleast.'
+		text: 'The password generator/Entry addition process has encountered an error.\n\n[u]Try doing the following:[/u] \n\n\u2022 Rename the title with [color=00abae]atleast 3 characters.[/color]\n\u2022 Entry Title should be [color=00abae]unique[/color] in [color=00abae]Entry List[/color]\n\n\u2022 Enter a [color=00abae]password size(minimum 8)[/color] before hitting the generate password button[color=00abae](i.e if you are using the generator).[/color]\n\n\u2022 Note: To add an [color=00abae]Entry[/color] you need to enter a [color=00abae]title and password[/color] atleast.'
 		size_hint: (None,.1 )
 		text_size:(self.width,None)
 		width:350
@@ -618,6 +618,14 @@ Screen_Manager:
 		size_hint: (0.35, 0.25)
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
+	Button:
+		id:close
+		text: 'Close'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.2 ,'center_y': 0.1}
+		size_hint: (0.35, 0.25)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
 <Login_Popup_import>:
 	Label:
 		text:'Enter Credentials to authenticate the process: '
@@ -672,6 +680,24 @@ Screen_Manager:
 		color: (0.5, 0.5, 0.5, 1)
 		pos_hint: {'center_x': 0.5 ,'center_y': 0.125 }
 		size_hint: (0.35, 0.1)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+<resultpop>:
+	Label:
+		id: info
+		pos_hint:{'x':0,'top':0.69}
+		size_hint:(None,0.1)
+		width:350
+		font_size: 14
+		text_size:(self.width,None)
+		markup:True
+		text:''
+	Button:
+		id: close
+		text: 'Close'
+		color: (0.5, 0.5, 0.5, 1)
+		pos_hint: {'center_x': 0.8 ,'center_y': 0.125 }
+		size_hint: (0.35, 0.2)
 		background_normal: 'UI/login2normal.png'
 		background_down: 'UI/login2down.png'
 <Password_Added>:

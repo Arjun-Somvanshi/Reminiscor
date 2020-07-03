@@ -183,16 +183,17 @@ class MainWindow(Screen):
 		pyperclip.copy(self.ids.passwgen.text)
 	def Import_Passwords(self):
 		design=Login_Popup_import()
-		explain=Label(markup=True,text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.',text_size=(350,None),size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95},font_size=14)
+		explain=Label(markup=True,text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.',text_size=(350,None),
+					size_hint=(None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95},font_size=14)
 		design.add_widget(explain)
-		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
+		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png',auto_dismiss=False)
 		design.ids.close.bind(on_release=win.dismiss)
 		win.open()
 	def Export_Passwords(self):
 		design=Login_Popup_export()
 		explain=Label(markup=True,text='This process will [color=00abae]decrypt and export your passwords.[/color]', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
 		design.add_widget(explain)
-		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
+		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png',auto_dismiss=False)
 		design.ids.close.bind(on_release=win.dismiss)
 		win.open()
 	def p_size_popup(self):
@@ -275,14 +276,18 @@ class Choose_Export(FloatLayout):
 			global Master_Password_key
 			ShareAll(usernames,self.ids.commonpassw.text,Master_Password_key)
 			result=resultpop()
+			result.ids.info.text='All password entries from [color=00abae]your data[/color] have been exported to a share file in [color=ffcc00]Desktop/Reminiscor Files directory[/color]\nYou can now share this file with the intended users.'
 			rwin=Popup(title='Share File Successfully Created!',title_align='center',content=result,size_hint=(None,None),
 						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			rwin.open()
+			result.ids.close.bind(on_release=rwin.dismiss)
 		else:
 			result=resultpop()
+			result.ids.info.text='Share File could not be created.\nCommon Password must be atleast [color=c30101]12 characters long.[/color]\nEnter atleast [color=c30101]one username[/color] to share with.'
 			rwin=Popup(title='Share Failed!',title_align='center',content=result,size_hint=(None,None),
 						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			rwin.open()
+			result.ids.close.bind(on_release=rwin.dismiss)
 class resultpop(FloatLayout):
 	pass
 class Common_Password_Required(FloatLayout):
@@ -291,13 +296,17 @@ class Common_Password_Required(FloatLayout):
 			import_result=Import(self.ids.commonpassw.text,username,Master_Password_key)
 		except:
 			result=resultpop()
+			result.ids.info.text='The import process has [color=c30101]failed.[/color]\n\u2022 The import file maybe corrupted\n\u2022 Your [color=c30101]username/common-password[/color] has failed to authenticate.'
 			rwin=Popup(title='Share Failed!',title_align='center',content=result,size_hint=(None,None),
-						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
 			rwin.open()
+			result.ids.close.bind(on_release=rwin.dismiss)
 		else:
 			result=resultpop()
+			result.ids.info.text='All password entries from the [color=00abae]imported password file[/color] have been imported here.\nThese entries can be found in the [color=00abae]view passwords screens.[/color]'
 			rwin=Popup(title='Imported Successfully',title_align='center',content=result,size_hint=(None,None),
-						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
+			result.ids.close.bind(on_release=rwin.dismiss)
 			rwin.open()
 class Login_Popup_import(FloatLayout):
 	def authenticate(self):
@@ -306,8 +315,9 @@ class Login_Popup_import(FloatLayout):
 			if(CheckCredentials(self.ids.username.text,self.ids.p.text,Master_Password_key)):
 				design=Common_Password_Required()
 				win=Popup(title='Common Password Required!',title_align='center',content=design,size_hint=(None,None),size=(400,200),
-						separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+						separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png',auto_dismiss=False)
 				win.open()
+				design.ids.close.bind(on_release=win.dismiss)
 				design.ids.submit.bind(on_release=partial(self.import_process,design,win))
 			else:
 				self.ids.label.text='Authentication Failed!'
@@ -315,8 +325,9 @@ class Login_Popup_import(FloatLayout):
 				self.ids.label.color=[204/255,0,0,1]
 	def import_process(self,design,win,*args):
 		global Master_Password_key
-		design.import_shared(self.ids.username.text,Master_Password_key)
 		win.dismiss()
+		Clock.schedule_once(partial(design.import_shared, self.ids.username.text, Master_Password_key),0.15)
+		#design.import_shared(self.ids.username.text,Master_Password_key)
 class Password_Size_Popup(FloatLayout):
 	pass
 
@@ -331,6 +342,7 @@ class Password_Screen(Screen):
 		win=Popup(title='Authentication Prompt',content=design, size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png')
 		design.ids.close.bind(on_release=win.dismiss)
 		win.open()
+		win.bind(on_dismiss=self.showlist)
 	def Export_Passwords(self):
 		design=Login_Popup_export()
 		explain=Label(markup=True,text='This process will [color=00abae]decrypt and export your passwords.[/color]', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
@@ -464,10 +476,10 @@ class Password_Screen(Screen):
 		deletepop.ids.close.bind(on_release=deletewin.dismiss)
 		deletepop.ids.yes.bind(on_release=partial(self.confirm1,design,entry,deletewin))
 	def confirm1(self,design,entry,deletewin,*args):
-		design.delete()
 		deletewin.dismiss()
 		entry.dismiss()
-		self.showlist()
+		Clock.schedule_once(lambda dt: design.delete())
+		Clock.schedule_once(lambda dt: self.showlist())
 class passwordpopup(FloatLayout):
 	viewing = BooleanProperty(True)
 	def delete(self, *args):
