@@ -323,21 +323,33 @@ Screen_Manager:
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
 			readonly: True
-			background_color:(45/255,45/255,45/255,1)
+			background_color:(55/255,55/255,55/255,1)
 			hint_text: 'Generated Password'
 			multiline: False
 			pos_hint: {'center_x': 0.8 ,'center_y': 0.55 }
 			size_hint: (0.29, 0.08)
+			disabled:True
+			disabled_foreground_color:(0.5,0.5,0.5,1)
 		Button: 
 			text: 'Generate\nPassword'
 			color:(0.7,0.7,0.7,1)
 			font_size:13
-			pos_hint: {'center_x': 0.86 ,'center_y': 0.65 }
-			size_hint: (0.15, 0.07)
+			pos_hint: {'center_x': 0.81 ,'center_y': 0.65 }
+			size_hint: (0.10, 0.07)
 			background_normal: 'UI/Mainbutton.png'
 	    	background_down: 'UI/Mainbuttondown.png'
 			on_release:
 				root.random_password()
+		Button: 
+			text: 'Clear'
+			color:(0.7,0.7,0.7,1)
+			font_size:12.5
+			pos_hint: {'center_x': 0.9 ,'center_y': 0.635 }
+			size_hint: (0.05, 0.04)
+			background_normal: 'UI/Mainbutton.png'
+	    	background_down: 'UI/Mainbuttondown.png'
+			on_release:
+				root.clear()
 		Button:
 	    	id: copypass
 	    	size_hint:(None,None)
@@ -367,9 +379,10 @@ Screen_Manager:
 			cursor_color:(0,171/255,174/255,1)
 			background_color:(45/255,45/255,45/255,1)
 			hint_text: 'Password\nSize'
+			font_size:14
 			multiline: False
-			pos_hint: {'center_x': 0.715,'center_y': 0.65}
-			size_hint: (0.12, 0.08)
+			pos_hint: {'center_x': 0.705,'center_y': 0.65}
+			size_hint: (0.10, 0.08)
                                                                     	#Side Bar
 		Button: 
 			text: 'Log Out'
@@ -574,7 +587,7 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 		background_disabled_normal:'UI/DisabledButton.png'
 		size_hint:(0.3,0.1)
-		pos_hint: {'center_x': 0.2, 'y':0}
+		pos_hint: {'center_x': 0.5, 'y':0}
 		disabled: not root.selected
 		on_release:
 			root.export_selected()
@@ -585,10 +598,18 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 		background_disabled_normal:'UI/DisabledButton.png'
 		size_hint:(0.3,0.1)
-		pos_hint: {'center_x': 0.8, 'y':0}
+		pos_hint: {'center_x': 0.85, 'y':0}
 		disabled: root.selected
 		on_release:
 			root.export_all()
+	Button:
+		id: close
+		text:'Close'
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		background_disabled_normal:'UI/DisabledButton.png'
+		size_hint:(0.3,0.1)
+		pos_hint: {'center_x': 0.15, 'y':0}
 <Common_Password_Required>:
 	Label:
 		text:'Enter the [color=00abae]common password[/color] here:'
@@ -608,6 +629,7 @@ Screen_Manager:
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
 		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+		password: True
 		size_hint: (None, 0.25)
 		width: 200
 	Button:
@@ -702,7 +724,7 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 <Password_Added>:
 	Label:
-		pos_hint:{'x':0,'top':0.69}
+		pos_hint:{'x':0,'top':0.67}
 		size_hint:(None,0.1)
 		width:350
 		font_size: 14
@@ -770,11 +792,11 @@ Screen_Manager:
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
+		background_color:(55/255,55/255,55/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.9}
-		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
 	Label:
 		text:'Username: '
@@ -787,11 +809,11 @@ Screen_Manager:
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
+		background_color:(55/255,55/255,55/255,1)
 		text:''
 		size_hint:(0.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.7}
-		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
 	Label:
 		text:'Password: '
@@ -804,11 +826,11 @@ Screen_Manager:
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
+		background_color:(55/255,55/255,55/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
-		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
 	Label:
 		text:'Notes: '
@@ -822,11 +844,11 @@ Screen_Manager:
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
+		background_color:(55/255,55/255,55/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.3}
-		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
 	ToggleButton:
 		id:edittoggle 
@@ -889,11 +911,11 @@ Screen_Manager:
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
+		background_color:(55/255,55/255,55/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.9}
-		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
 	Label:
 		text:'Username: '
@@ -905,12 +927,12 @@ Screen_Manager:
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
+		background_color:(55/255,55/255,55/255,1)
 		text:''
 		halign:'center'
 		size_hint:(0.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.7}
-		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
 	Label:
 		text:'Password: '
@@ -923,11 +945,11 @@ Screen_Manager:
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
+		background_color:(55/255,55/255,55/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
-		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
 	Label:
 		text:'Notes: '
@@ -940,11 +962,11 @@ Screen_Manager:
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
-		background_color:(45/255,45/255,45/255,1)
+		background_color:(55/255,55/255,55/255,1)
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.3}
-		disabled_foreground_color:[0.4,0.4,0.4,1]
+		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
 	ToggleButton:
 		id:edittoggle 

@@ -188,7 +188,7 @@ class MainWindow(Screen):
 		win.open()
 	def Export_Passwords(self):
 		design=Login_Popup_export()
-		explain=Label(markup=True,text='This process will [color=00abae]decrypt and export your passwords.[/color]', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
+		explain=Label(markup=True,text='This process will [color=00abae]enable you to share your passwords with friends/family members.[/color]', text_size=(350,None),size_hint= (None, .1),width=400,pos_hint= {'center_x': 0.5, 'top': 0.95})
 		design.add_widget(explain)
 		win=Popup(title='Authentication Prompt',content=design,size_hint=(None,None), size=(400,450),separator_color=[0,171/255,174/255,1],background='UI/popup400x450.png',auto_dismiss=False)
 		design.ids.close.bind(on_release=win.dismiss)
@@ -206,6 +206,9 @@ class MainWindow(Screen):
 		else:
 			ColorChange(self.n,False,'Password\nSize')
 			self.ids.passwgen.text=PasswordGen(int(self.n.text))
+	def clear(self):
+		self.ids.passwgen.text=''
+		self.n.text=''
 	def Add_New_Password(self):
 		sep='qwertyuiop***asdfghjklzxcvbnm'
 		global Master_Password_key
@@ -215,7 +218,7 @@ class MainWindow(Screen):
 			ColorChange(self.passw,False,'Password')
 			WriteEncrypt(HomeDir('Data3.dat'), self.description.text + sep + self.username.text + sep + self.passw.text + sep + self.notes.text, Master_Password_key)
 			design=Password_Added()
-			Added_pop=Popup(title='New Entry Added!',title_align='center',content=design,size_hint=(None,None),size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
+			Added_pop=Popup(title='New Entry Added!',title_align='center',content=design,size_hint=(None,None),size=(400,250),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			Added_pop.open()
 			design.ids.close.bind(on_release=Added_pop.dismiss)
 			self.description.text=''
@@ -232,7 +235,12 @@ class MainWindow(Screen):
 		ColorChange(self.n,False,'Password\nSize')
 		ColorChange(self.passw,False,'Password')
 		self.manager.get_screen('PassDisp').showlist()
-
+		self.ids.passwgen.text=''
+		self.description.text=''
+		self.n.text=''
+		self.passw.text=''
+		self.ids.username.text=''
+		self.ids.notes.text=''
 class Password_Added(FloatLayout):
 	pass
 class UserError(FloatLayout):
@@ -246,8 +254,9 @@ class Login_Popup_export(FloatLayout):
 				self.ids.username.text=''
 				self.ids.p.text=''
 				export_design=Choose_Export()
-				export_extension=Popup(title='Choose Entries to Share',title_align='center',content=export_design,size_hint=(None,None),size=(400,575),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
+				export_extension=Popup(title='Choose Entries to Share',title_align='center',content=export_design,size_hint=(None,None),size=(400,575),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png',auto_dismiss=False)
 				export_extension.open()
+				export_design.ids.close.bind(on_release=export_extension.dismiss)
 			else:
 				self.ids.label.text='Authentication Failed!'
 				self.ids.label.color=[204/255,0,0,1]
@@ -261,14 +270,18 @@ class Choose_Export(FloatLayout):
 			print(usernames)
 			ShareSelected(usernames, self.ids.commonpassw.text, Entries, Master_Password_key)
 			result=resultpop()
+			result.ids.info.text='The password entries choosen from [color=00abae]your data[/color] have been exported to a share file in [color=ffcc00]Desktop/Reminiscor Files directory[/color]\nYou can now share this file with the intended users.'
 			rwin=Popup(title='Share File Successfully Created!',title_align='center',content=result,size_hint=(None,None),
 						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			rwin.open()
+			result.ids.close.bind(on_release=rwin.dismiss)
 		else:
 			result=resultpop()
+			result.ids.info.text='Share File could not be created.\n\u2022Common Password must be atleast [color=c30101]12 characters long.[/color]\n\u2022Enter atleast [color=c30101]one username[/color] to share with.\nEnter atleast one title of an entry to share.'
 			rwin=Popup(title='Share Failed!',title_align='center',content=result,size_hint=(None,None),size=(400,200),
 						separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			rwin.open()
+			result.ids.close.bind(on_release=rwin.dismiss)
 	def export_all(self):
 		if not self.ids.target_username.text=='' and not len(self.ids.commonpassw.text)<12:
 			usernames=self.ids.target_username.text.split(',')
@@ -282,7 +295,7 @@ class Choose_Export(FloatLayout):
 			result.ids.close.bind(on_release=rwin.dismiss)
 		else:
 			result=resultpop()
-			result.ids.info.text='Share File could not be created.\nCommon Password must be atleast [color=c30101]12 characters long.[/color]\nEnter atleast [color=c30101]one username[/color] to share with.'
+			result.ids.info.text='Share File could not be created.\n\u2022Common Password must be atleast [color=c30101]12 characters long.[/color]\n\u2022Enter atleast [color=c30101]one username[/color] to share with.'
 			rwin=Popup(title='Share Failed!',title_align='center',content=result,size_hint=(None,None),
 						size=(400,200),separator_color=[0,171/255,174/255,1],background='UI/popup400x200.png')
 			rwin.open()
