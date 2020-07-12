@@ -293,21 +293,22 @@ Screen_Manager:
 			multiline: False
 			pos_hint: {'center_x': 0.42 ,'center_y': 0.45 }
 			size_hint: (0.35, 0.08)
+		Label:
+			text:'Notes: '
+			pos_hint: {'center_x': 0.42 ,'center_y': 0.38 }
+			color:(0.5,0.5,0.5,1)
 		TextInput:
 			id: notes
-			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
 			background_color:(45/255,45/255,45/255,1)
-			halign: 'center' 
-			hint_text: 'Notes'
 			multiline: False
-			pos_hint: {'center_x': 0.42 ,'center_y': 0.35 }
+			pos_hint: {'center_x': 0.42 ,'center_y': 0.315 }
 			size_hint: (0.35, 0.08)
 		Button:
 			text: 'Save Password'
-			pos_hint: {'center_x': 0.51 ,'center_y': 0.25 }
+			pos_hint: {'center_x': 0.51 ,'center_y': 0.23 }
 			size_hint: (0.15, 0.06)
 			color:(0.7,0.7,0.7,1)
 			font_size:14
@@ -788,7 +789,6 @@ Screen_Manager:
 	TextInput:
 		id: title
 		multiline: False
-		halign:'center'
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -804,7 +804,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.7}
 	TextInput:
 		id: username
-		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -821,7 +820,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.5}
 	TextInput:
 		id: password
-		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -838,8 +836,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.3}
 	TextInput:
 		id:notes
-		halign:'left'
-		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -852,7 +848,7 @@ Screen_Manager:
 		disabled: root.viewing
 	ToggleButton:
 		id:edittoggle 
-        text: "Edit/Copy"
+        text: "Edit Toggle"
         font_size: 11
         state: 'normal' if root.viewing else 'down'
         on_state: root.viewing = not root.viewing
@@ -906,7 +902,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.18, 'top': 0.9}
 	TextInput:
 		id: title
-		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -929,7 +924,6 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(55/255,55/255,55/255,1)
 		text:''
-		halign:'center'
 		size_hint:(0.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.7}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
@@ -940,7 +934,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.5}
 	TextInput:
 		id: password
-		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -957,7 +950,6 @@ Screen_Manager:
 		pos_hint: {'x': 0.2, 'top': 0.3}
 	TextInput:
 		id:notes
-		halign:'center'
 		multiline: False
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -970,7 +962,7 @@ Screen_Manager:
 		disabled: root.viewing
 	ToggleButton:
 		id:edittoggle 
-        text: "Edit/Copy"
+        text: "Edit Toggle"
         font_size: 11
         state: 'normal' if root.viewing else 'down'
         on_state: root.viewing = not root.viewing

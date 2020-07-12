@@ -382,7 +382,7 @@ class Password_Screen(Screen):
 		self.add_widget(self.mainlayout)
 
 	def showlist(self,*largs):
-			#print('a') #to understand when show list is called 
+			print('a') #to understand when show list is called 
 			if len(self.mainlayout.children)>1:
 				a=0
 				for i in self.mainlayout.children:
@@ -457,6 +457,7 @@ class Password_Screen(Screen):
 		Backupwin=Popup(title='Backup Your Data',title_align='center',content=design,size_hint=(None,None),size=(400,400),separator_color=[0,171/255,174/255,1],background='UI/popup400x400.png')
 		Backupwin.open()
 		design.ids.close.bind(on_release=Backupwin.dismiss)	
+		Backupwin.bind(on_dismiss=self.showlist)
 	def screenswitch(self,instance):
 		self.manager.transition=FadeTransition(duration=0)
 		self.manager.current = 'Main'
