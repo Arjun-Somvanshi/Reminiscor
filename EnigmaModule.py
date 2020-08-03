@@ -173,8 +173,8 @@ def EnigmaMachine(msg_str, enigma_setting_str):
 # Module ends anything beneath is for testing the module
 
 
-def createuser():
-    Default_Unique_User_EnigmaSettings()
+def createuser(master_password):
+    Default_Unique_User_EnigmaSettings(master_password)
 
 
 def testmodule():

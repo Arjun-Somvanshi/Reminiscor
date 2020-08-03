@@ -15,7 +15,7 @@ Screen_Manager:
 	canvas:
 	    Color:
 	        rgba:30/255,30/255, 30/255, 1
-	    Rectangle: 
+		Rectangle: 
 	        size: self.size
 	        pos: self.pos
 	FloatLayout:
@@ -106,6 +106,7 @@ Screen_Manager:
 		markup: True
 		text:'The username and password protect [color=00abae]all your passwords in Reminiscor.[/color]\n\nTo keep your data safe on your device we have set the default allowable username size to [color=00abae]eight characters[/color] and the password size to [color=00abae]ten characters.[/color]\nThe username cannot include a comma, remaining special characters are allowed.'
 		text_size:(self.width,None)
+		font_size:13
 		size_hint: (None, .1)
 		width:350
 		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
