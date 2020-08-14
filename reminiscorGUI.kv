@@ -142,12 +142,12 @@ Screen_Manager:
 	signup:signup
 	Label:
 		markup: True
-		text: "This is the Sign-Up page. A user [color=00abae]doesn't[/color] exist!\nPlease remember your [color=00abae]Master Password[/color] and [color=00abae]Username[/color]"
-		font_size: 14
+		text: "This is the Sign-Up page. A user doesn't exist!\n\nSet a [color=00abae]Master Password[/color] [color=f4cf16](10 characters)[/color] and [color=00abae]Username[/color] [color=f4cf16](8 characters, comma (',') not allowed)[/color]"
+		font_size: 14.5
 		size_hint: (None, .1)
 		width:350
 		text_size: (self.width,None)
-		pos_hint: {'center_x': 0.5,'top': 0.95 }	
+		pos_hint: {'center_x': 0.5,'top': 0.94 }	
 	TextInput: 
 		id: user
 		hint_text: 'Username'
@@ -226,7 +226,7 @@ Screen_Manager:
 <Help1>:
 	Label:
 		markup: True
-		text: "This is the log in screen of Reminiscor.\n\nIf you are using Reminiscor after a fresh install, you would have encountered a [color=00abae]sign-up popup.[/color]\n\nIf you didn't sign-up yet, you can click on the [color=00abae]sign-up button.[/color]"
+		text: "This is the log-in screen of Reminiscor.\n\nIf you are using Reminiscor after a fresh install, you would have encountered a [color=00abae]sign-up popup.[/color]\n\nIf you didn't sign-up yet, you can click on the [color=00abae]sign-up button.[/color]"
 		font_size: 14
 		size_hint: (None, .1)
 		width:350
