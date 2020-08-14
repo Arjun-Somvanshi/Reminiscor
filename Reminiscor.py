@@ -633,7 +633,7 @@ class Password_Screen(Screen):
 
 class passwordpopup(FloatLayout):
     viewing = BooleanProperty(True)
-
+    mask = BooleanProperty(True)
     def delete(self, *args):
         entry = []
         entry.append(self.ids.title.text)
@@ -663,7 +663,7 @@ class passwordpopup(FloatLayout):
 
 class search_popup(FloatLayout):
     viewing = BooleanProperty(True)
-
+    mask = BooleanProperty(True)
     def delete(self, *args):
         entry = []
         entry.append(self.ids.title.text)

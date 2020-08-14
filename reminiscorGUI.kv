@@ -142,12 +142,12 @@ Screen_Manager:
 	signup:signup
 	Label:
 		markup: True
-		text: "This is the Sign-Up page. A user doesn't exist!\n\nSet a [color=00abae]Master Password[/color] [color=f4cf16](10 characters)[/color] and [color=00abae]Username[/color] [color=f4cf16](8 characters, comma (',') not allowed)[/color]"
-		font_size: 14.5
+		text: "This is the Sign-Up page. A user doesn't exist!\n\nSet a [color=00abae]Master Password[/color] [color=#B82E4A](10 characters)[/color] and [color=00abae]Username[/color] [color=#B82E4A](8 characters, comma (',') not allowed)[/color]"
+		font_size: 14
 		size_hint: (None, .1)
 		width:350
 		text_size: (self.width,None)
-		pos_hint: {'center_x': 0.5,'top': 0.94 }	
+		pos_hint: {'center_x': 0.5,'top': 0.9 }	
 	TextInput: 
 		id: user
 		hint_text: 'Username'
@@ -156,7 +156,7 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.35, 'top': 0.75}
+		pos_hint: {'center_x': 0.35, 'top': 0.7}
 		size_hint: (0.6, 0.09)
 		write_tab: False
 	TextInput:
@@ -180,7 +180,7 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		pos_hint: {'center_x': 0.35, 'top': 0.35}
+		pos_hint: {'center_x': 0.35, 'top': 0.4}
 		size_hint: (0.6, 0.09)
 		write_tab: False
 	Button:
@@ -746,7 +746,7 @@ Screen_Manager:
 		pos_hint:{'x':0,'top':0.7}
 		size_hint:(None,0.1)
 		width:350
-		font_size: 15
+		font_size: 13.8
 		text_size:(self.width,None)
 		text:'New Entry was added to your Entry List!\nYou can view it by pressing the [color=00abae]View Password[/color] button. All your entries are present on that window.\nYou can [color=00abae]edit, delete [/color]and [color=00abae]search[/color] for entries there.'
 		markup: True
@@ -849,6 +849,7 @@ Screen_Manager:
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(55/255,55/255,55/255,1)
+		password: root.mask
 		text:''
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
@@ -874,7 +875,7 @@ Screen_Manager:
 		write_tab: False
 	Label:
 		text:"[u][color=00abae]Press the edit toggle button to edit the Entry[/color][/u]"
-		pos_hint:{'x':0.53,'top':1}
+		pos_hint:{'x':0.58,'top':1}
 		font_size:12.5
 		size_hint:(.1,.1)
 		markup:True
@@ -888,6 +889,16 @@ Screen_Manager:
 		background_down: 'UI/editondown.png'
         size_hint:(0.2,0.065)
         pos_hint:{'x':0,'top':0.98}
+	ToggleButton:
+		id:mask
+        text: "View"
+        font_size: 11
+        state: 'normal' if root.mask else 'down'
+        on_state: root.mask = not root.mask
+        background_normal: 'UI/login2normal.png'
+		background_down: 'UI/editondown.png'
+        size_hint:(0.15,0.06)
+        pos_hint:{'center_x': 0.868, 'top': 0.4}
     Button:
     	id: copyuser
     	size_hint:(None,None)
@@ -974,6 +985,7 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(55/255,55/255,55/255,1)
 		text:''
+		password: root.mask
 		size_hint:(.5,.1)
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
@@ -998,7 +1010,7 @@ Screen_Manager:
 		write_tab: False
 	Label:
 		text:"[u][color=00abae]Press the edit toggle button to edit the Entry[/color][/u]"
-		pos_hint:{'x':0.53,'top':1}
+		pos_hint:{'x':0.58,'top':1}
 		font_size:12.5
 		size_hint:(.1,.1)
 		markup:True
@@ -1012,6 +1024,16 @@ Screen_Manager:
 		background_down: 'UI/editondown.png'
         size_hint:(0.2,0.065)
         pos_hint:{'x':0,'top':0.98}
+	ToggleButton:
+		id:mask
+        text: "View"
+        font_size: 11
+        state: 'normal' if root.mask else 'down'
+        on_state: root.mask = not root.mask
+        background_normal: 'UI/login2normal.png'
+		background_down: 'UI/editondown.png'
+        size_hint:(0.15,0.06)
+        pos_hint:{'center_x': 0.867, 'top': 0.4}
     Button:
     	id: copyuser
     	size_hint:(None,None)
