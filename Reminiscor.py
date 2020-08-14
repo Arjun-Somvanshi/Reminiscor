@@ -27,8 +27,7 @@ Config.set('graphics', 'width',  800)
 Config.set('graphics', 'height', 600)
 Config.set('graphics', 'resizable', False)
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
-Config.set('kivy', 'default_font',
-           '["Montserrat", "Fonts/Montserrat-Regular.ttf", "Fonts/Montserrat-Regular.ttf", "Fonts/Montserrat-Bold.ttf", "Fonts/Montserrat-Bold.ttf"]')
+Config.set('kivy', 'default_font','["Montserrat", "Fonts/Montserrat-Regular.ttf", "Fonts/Montserrat-Regular.ttf", "Fonts/Montserrat-Bold.ttf", "Fonts/Montserrat-Bold.ttf"]')
 Window.clearcolor = (30/255, 30/255, 30/255, 1)
 Master_Password = ''
 Master_Password_key = None
@@ -53,6 +52,7 @@ class LoginWindow(Screen):
             welcome_pop.open()
             design.ids.close.bind(on_release=welcome_pop.dismiss)
             welcome_pop.bind(on_dismiss=self.signup_pop)
+
 
     def welcome_screen1(self, *_):
         design = Welcome()
@@ -124,6 +124,8 @@ class LoginWindow(Screen):
 class signup_error(FloatLayout):
     pass
 
+class Success_Signup(FloatLayout):
+    pass
 
 class SignUp_Pop(FloatLayout):
     user = ObjectProperty()
@@ -131,7 +133,17 @@ class SignUp_Pop(FloatLayout):
     p2 = ObjectProperty()
     signup = ObjectProperty()
     cred_error = ObjectProperty()
+    
+    def successpop(self, *args):
+        design = Success_Signup()
+        swin = Popup(title='Success!', content=design, size_hint=(None, None), size=(400, 200), separator_color=[
+                        0, 171/255, 174/255, 1], background='UI/popup400x400.png', auto_dismiss=False)
+        swin.open()
+        design.ids.close.bind(on_release=swin.dismiss)
 
+    def check_and_disp(self):
+        if CheckUser():
+            Clock.schedule_once(self.successpop, 0.8)
     def check(self):
         if CheckMainPassword(self.user.text, self.p1.text, self.p2.text):
             parent_dir = os.path.expanduser('~') + '/AppData/Roaming'
@@ -158,9 +170,6 @@ class SignUp_Pop(FloatLayout):
             # `HideFile(HomeDir('Data3.txt'))
             WriteEncrypt(HomeDir('Data1.dat'), self.user.text +
                          sep+self.p1.text, key_32)
-            label = Label(text='You\'ve successfully signed up!', size_hint=(
-                0.1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.225})
-            self.add_widget(label)
             ColorChange(self.user, False, 'Username')
             ColorChange(self.p1, False, 'Master Password')
             ColorChange(self.p2, False, 'Confirm Master Passwords')
@@ -250,21 +259,31 @@ class MainWindow(Screen):
     def clear(self):
         self.ids.passwgen.text = ''
         self.n.text = ''
+    def clear_message(self, dt):
+        self.added_label.text=''
 
     def Add_New_Password(self):
         sep = 'qwertyuiop***asdfghjklzxcvbnm'
         global Master_Password_key
         if not DescriptionCheck(self.description, Master_Password_key) and len(self.passw.text) >= 1:
+            if ReadDecrypt(HomeDir("Data3.dat"), Master_Password_key)==[]:
+                design = Password_Added()
+                Added_pop = Popup(title='New Entry Added!', title_align='center', content=design, size_hint=(
+                    None, None), size=(400, 200), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x200.png')
+                Added_pop.open()
+                design.ids.close.bind(on_release=Added_pop.dismiss)
+            self.added_label = Label(
+                            text="Password Added!", 
+                            pos_hint= {'center_x': 0.33 ,'center_y': 0.248 },
+                            color=(0,171/255,174/255,1)
+                            )
+            Clock.schedule_once(self.clear_message,3)
+            WriteEncrypt(HomeDir('Data3.dat'), self.description.text + sep + self.username.text +
+                         sep + self.passw.text + sep + self.notes.text, Master_Password_key)
             ColorChange(self.description, False, 'Entry Title')
             ColorChange(self.n, False, 'Password\nSize')
             ColorChange(self.passw, False, 'Password')
-            WriteEncrypt(HomeDir('Data3.dat'), self.description.text + sep + self.username.text +
-                         sep + self.passw.text + sep + self.notes.text, Master_Password_key)
-            design = Password_Added()
-            Added_pop = Popup(title='New Entry Added!', title_align='center', content=design, size_hint=(
-                None, None), size=(400, 250), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x200.png')
-            Added_pop.open()
-            design.ids.close.bind(on_release=Added_pop.dismiss)
+            self.add_widget(self.added_label)
             self.description.text = ''
             self.n.text = ''
             self.passw.text = ''
@@ -420,22 +439,21 @@ class Password_Screen(Screen):
 
     def Import_Passwords(self):
         design = Login_Popup_import()
-        explain = Label(markup=True, text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.', text_size=(
-            350, None), size_hint=(None, .1), width=400, pos_hint={'center_x': 0.5, 'top': 0.95}, font_size=14)
+        explain = Label(markup=True, text='This is an [color=00abae]import process of passwords[/color], they will be added to your list if any.', text_size=(350, None),
+                        size_hint=(None, .1), width=400, pos_hint={'center_x': 0.5, 'top': 0.95}, font_size=14)
         design.add_widget(explain)
         win = Popup(title='Authentication Prompt', content=design, size_hint=(None, None), size=(
-            400, 450), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x450.png')
+            400, 450), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x450.png', auto_dismiss=False)
         design.ids.close.bind(on_release=win.dismiss)
         win.open()
-        win.bind(on_dismiss=self.showlist)
 
     def Export_Passwords(self):
         design = Login_Popup_export()
-        explain = Label(markup=True, text='This process will [color=00abae]decrypt and export your passwords.[/color]', text_size=(
+        explain = Label(markup=True, text='This process will [color=00abae]enable you to share your passwords with friends/family members.[/color]', text_size=(
             350, None), size_hint=(None, .1), width=400, pos_hint={'center_x': 0.5, 'top': 0.95})
         design.add_widget(explain)
         win = Popup(title='Authentication Prompt', content=design, size_hint=(None, None), size=(
-            400, 450), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x450.png')
+            400, 450), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x450.png', auto_dismiss=False)
         design.ids.close.bind(on_release=win.dismiss)
         win.open()
 
@@ -443,7 +461,7 @@ class Password_Screen(Screen):
         super(Password_Screen, self).__init__(**kwargs)
         self.mainlayout = BoxLayout(orientation='horizontal', spacing=10)
         layout0 = FloatLayout()
-        self.searchbar = TextInput(multiline=False, hint_text='Search for a Password', size_hint=(None, None), size=(200, 40), pos_hint={'x': 0, 'top': 1}, halign='center',
+        self.searchbar = TextInput(multiline=False, hint_text='Search for a Password', size_hint=(None, None), size=(200, 40), pos_hint={'x': 0, 'top': 1},
                                    foreground_color=(0.7, 0.7, 0.7, 1), color=(0.7, 0.7, 0.7), cursor_color=(0, 171/255, 174/255, 1), background_color=(45/255, 45/255, 45/255, 1))
         searchbtn = Button(size_hint=(None, None), size=(40, 40), pos_hint={
                            'x': 0.51, 'top': 1}, halign='center', on_release=self.searchresult)
@@ -459,6 +477,9 @@ class Password_Screen(Screen):
         layout0.add_widget(self.searchbar)
         self.mainlayout.add_widget(layout0)
         self.add_widget(self.mainlayout)
+    
+    def clear(self):
+        self.searchbar.text = ''
 
     def showlist(self, *largs):
         # print('a') #to understand when show list is called

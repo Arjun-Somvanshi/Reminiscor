@@ -37,19 +37,16 @@ Screen_Manager:
 			id:username 
 			hint_text: 'Username'
 			foreground_color:(0.7,0.7,0.7,1)
-
-			halign:'center'
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
 			background_color:(45/255,45/255,45/255,1)
 			multiline: False
 			pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 			size_hint: (0.20, 0.06)
+			write_tab: False
 		TextInput:
 			id: p
 			hint_text: 'Master Password' 
-
-			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			password: True
 			cursor_color:(0,171/255,174/255,1)
@@ -57,6 +54,7 @@ Screen_Manager:
 			multiline: False
 			pos_hint: {'center_x': 0.5, 'center_y': 0.4}
 			size_hint: (0.20, 0.06)
+			write_tab:False
 		Button:
 			text: 'Log in'
 			color: (0.5, 0.5, 0.5, 1)
@@ -144,7 +142,7 @@ Screen_Manager:
 	signup:signup
 	Label:
 		markup: True
-		text: 'This is the Sign-Up page. A user [color=00abae]doesn\'t[/color] exist!\nPlease remember your [color=00abae]Master Password[/color] and [color=00abae]Username[/color]'
+		text: "This is the Sign-Up page. A user [color=00abae]doesn't[/color] exist!\nPlease remember your [color=00abae]Master Password[/color] and [color=00abae]Username[/color]"
 		font_size: 14
 		size_hint: (None, .1)
 		width:350
@@ -154,17 +152,16 @@ Screen_Manager:
 		id: user
 		hint_text: 'Username'
 		foreground_color:(0.7,0.7,0.7,1)
-		halign:'center'
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
 		pos_hint: {'center_x': 0.35, 'top': 0.75}
 		size_hint: (0.6, 0.09)
+		write_tab: False
 	TextInput:
 		id: p1
 		hint_text: 'Master Password' 
-		halign:'center'
 		password: True
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
@@ -173,11 +170,11 @@ Screen_Manager:
 		multiline: False
 		pos_hint: {'center_x': 0.35, 'top': 0.55}
 		size_hint: (0.6, 0.09)
+		write_tab: False
 	TextInput:
 		id: p2
 		hint_text: 'Confirm Master Password' 
 		password: True
-		halign:'center'
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -185,6 +182,7 @@ Screen_Manager:
 		multiline: False
 		pos_hint: {'center_x': 0.35, 'top': 0.35}
 		size_hint: (0.6, 0.09)
+		write_tab: False
 	Button:
 		id:signup
 		text:'Sign-Up!'
@@ -193,7 +191,8 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 		size_hint: (0.3, 0.1)
 		on_release:
-			root.check()
+			app.root.get_screen('Login').close() if root.check() else app.root.get_screen('Login')
+			root.check_and_disp() 
 	Button:
 		id:close
 		text:'Back'
@@ -207,10 +206,27 @@ Screen_Manager:
 		size_hint: (0.3, 0.1)
 		on_release:
 			on_release: app.root.get_screen('Login').close()
+<Success_Signup>:
+	Label:
+		text: "You have signed up! Press continue and proceed to log-in."
+		size_hint: (None, .1)
+		width:350
+		text_size: (self.width,None)
+		pos_hint: {'center_x': 0.5,'top': 0.65}
+	Button:
+		id: close
+		text:'Continue'
+		halign: 'center'
+		text_size: (self.width,None)
+		background_normal: 'UI/login2normal.png'
+		background_down: 'UI/login2down.png'
+		pos_hint: {'center_x':0.8,'center_y':0.1}
+		size_hint:(0.3,0.2)
+
 <Help1>:
 	Label:
 		markup: True
-		text: 'This is the log in screen of Reminiscor.\n\nIf you are using Reminiscor after a fresh install, you would have encountered a [color=00abae]sign-up popup.[/color]\n\nIf you didn\'t sign-up yet, you can click on the [color=00abae]sign-up button.[/color]'
+		text: "This is the log in screen of Reminiscor.\n\nIf you are using Reminiscor after a fresh install, you would have encountered a [color=00abae]sign-up popup.[/color]\n\nIf you didn't sign-up yet, you can click on the [color=00abae]sign-up button.[/color]"
 		font_size: 14
 		size_hint: (None, .1)
 		width:350
@@ -263,7 +279,6 @@ Screen_Manager:
 			pos_hint:{'x':0,'y':0.8}
 		TextInput:
 			id: description
-			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -272,9 +287,9 @@ Screen_Manager:
 			multiline: False
 			pos_hint: {'center_x': 0.42 ,'center_y': 0.65 }
 			size_hint: (0.35, 0.08)
+			write_tab: False
 		TextInput:
 			id: username
-			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -283,9 +298,9 @@ Screen_Manager:
 			multiline: False
 			pos_hint: {'center_x': 0.42 ,'center_y': 0.55 }
 			size_hint: (0.35, 0.08)
+			write_tab: False
 		TextInput:
 			id: passw
-			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -294,22 +309,21 @@ Screen_Manager:
 			multiline: False
 			pos_hint: {'center_x': 0.42 ,'center_y': 0.45 }
 			size_hint: (0.35, 0.08)
-		Label:
-			text:'Notes: '
-			pos_hint: {'center_x': 0.42 ,'center_y': 0.38 }
-			color:(0.5,0.5,0.5,1)
+			write_tab: False
 		TextInput:
 			id: notes
+			hint_text:"Notes"
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
 			background_color:(45/255,45/255,45/255,1)
 			multiline: False
-			pos_hint: {'center_x': 0.42 ,'center_y': 0.315 }
+			pos_hint: {'center_x': 0.42 ,'center_y': 0.35 }
 			size_hint: (0.35, 0.08)
+			write_tab: False
 		Button:
 			text: 'Save Password'
-			pos_hint: {'center_x': 0.51 ,'center_y': 0.23 }
+			pos_hint: {'center_x': 0.51 ,'center_y': 0.25 }
 			size_hint: (0.15, 0.06)
 			color:(0.7,0.7,0.7,1)
 			font_size:14
@@ -320,7 +334,6 @@ Screen_Manager:
 		                                                                 #PASSWORD GENERATOR FROM HERE
 		TextInput:
 			id: passwgen
-			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -332,6 +345,7 @@ Screen_Manager:
 			size_hint: (0.29, 0.08)
 			disabled:True
 			disabled_foreground_color:(0.5,0.5,0.5,1)
+			write_tab: False
 		Button: 
 			text: 'Generate\nPassword'
 			color:(0.7,0.7,0.7,1)
@@ -375,7 +389,6 @@ Screen_Manager:
 	    	on_release:root.sendgenpass()
 		TextInput:
 			id: n
-			halign:'center'
 			foreground_color:(0.7,0.7,0.7,1)
 			color:(0.7,0.7,0.7)
 			cursor_color:(0,171/255,174/255,1)
@@ -385,6 +398,7 @@ Screen_Manager:
 			multiline: False
 			pos_hint: {'center_x': 0.705,'center_y': 0.65}
 			size_hint: (0.10, 0.08)
+			write_tab: False
                                                                     	#Side Bar
 		Button: 
 			text: 'Log Out'
@@ -473,7 +487,6 @@ Screen_Manager:
 	TextInput:
 		id:username 
 		hint_text: 'Username'
-		halign:'center'
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -482,18 +495,19 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
 		size_hint: (None, 0.1)
 		width: 200
+		write_tab: False
 	TextInput:
 		id: p
 		hint_text: 'Master Password' 
 		foreground_color:(0.7,0.7,0.7,1)
 		password: True
-		halign:'center'
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
 		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
 		size_hint: (None, 0.1)
 		width: 200
+		write_tab: False
 	Button:
 		text: 'Authenticate'
 		color: (0.5, 0.5, 0.5, 1)
@@ -545,6 +559,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.5,'center_y': 0.65}
 		size_hint: (0.7, 0.2)
 		disabled: not root.selected
+		write_tab: False
 	Label:
 		text:"Enter the friend's/family member's username(s) you want to share with.Enter a [color=00abae]list of usernames[/color] seperated with [color=00abae]commas[/color] if you are sharing with multiple people. For example: user1,user2..."
 		text_size:(self.width,None)
@@ -566,6 +581,7 @@ Screen_Manager:
 		disabled_foreground_color:[0.4,0.4,0.4,1]
 		pos_hint: {'center_x': 0.5,'center_y': 0.3}
 		size_hint: (0.6, 0.1)
+		write_tab: False
 	TextInput:
 		id: commonpassw
 		foreground_color:(0.7,0.7,0.7,1)
@@ -580,6 +596,7 @@ Screen_Manager:
 		disabled_foreground_color:[0.4,0.4,0.4,1]
 		pos_hint: {'center_x': 0.5,'center_y': 0.18}
 		size_hint: (0.6, 0.1)
+		write_tab: False
 	Button:
 		id: ExportSelected
 		text:'Share Selected\nEntries'
@@ -624,7 +641,6 @@ Screen_Manager:
 	TextInput:
 		id:commonpassw
 		hint_text: 'Common Password'
-		halign:'center'
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -634,6 +650,7 @@ Screen_Manager:
 		password: True
 		size_hint: (None, 0.25)
 		width: 200
+		write_tab: False
 	Button:
 		id:submit
 		text: 'Submit'
@@ -668,7 +685,6 @@ Screen_Manager:
 	TextInput:
 		id:username 
 		hint_text: 'Username'
-		halign:'center'
 		foreground_color:(0.7,0.7,0.7,1)
 		color:(0.7,0.7,0.7)
 		cursor_color:(0,171/255,174/255,1)
@@ -677,6 +693,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.5, 'center_y': 0.6}
 		size_hint: (None, 0.1)
 		width: 200
+		write_tab: False
 	TextInput:
 		id: p
 		hint_text: 'Master Password' 
@@ -685,10 +702,10 @@ Screen_Manager:
 		cursor_color:(0,171/255,174/255,1)
 		background_color:(45/255,45/255,45/255,1)
 		multiline: False
-		halign:'center'
 		pos_hint: {'center_x': 0.5, 'center_y': 0.45}
 		size_hint: (None, 0.1)
 		width: 200
+		write_tab: False
 	Button:
 		text: 'Authenticate'
 		color: (0.5, 0.5, 0.5, 1)
@@ -726,10 +743,10 @@ Screen_Manager:
 		background_down: 'UI/login2down.png'
 <Password_Added>:
 	Label:
-		pos_hint:{'x':0,'top':0.67}
+		pos_hint:{'x':0,'top':0.7}
 		size_hint:(None,0.1)
 		width:350
-		font_size: 14
+		font_size: 15
 		text_size:(self.width,None)
 		text:'New Entry was added to your Entry List!\nYou can view it by pressing the [color=00abae]View Password[/color] button. All your entries are present on that window.\nYou can [color=00abae]edit, delete [/color]and [color=00abae]search[/color] for entries there.'
 		markup: True
@@ -745,13 +762,17 @@ Screen_Manager:
 	name: 'PassDisp'
 	FloatLayout:
 		Button: 
-			text: 'Help'
+			text: 'Logout'
 			font_size:14
 			pos_hint: {'x': 0 ,'y': 0.16 }
 			size_hint: (None, None)
 			size: (150,96)
 			background_normal: 'UI/Main Window Button.png'
 			background_down: 'UI/Main Window Button Ondown.png'
+			on_release: 
+				app.root.transition=FadeTransition(duration=0.8)
+				app.root.current='Login'
+				root.clear()
 		Button:
 			text: 'Import\nShared Passwords'
 			font_size:14
@@ -799,6 +820,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.7, 'top': 0.9}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
+		write_tab: False
 	Label:
 		text:'Username: '
 		size_hint:(.1,.1)
@@ -815,6 +837,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.7, 'top': 0.7}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
+		write_tab: False
 	Label:
 		text:'Password: '
 		size_hint:(.1,.1)
@@ -831,6 +854,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
+		write_tab: False
 	Label:
 		text:'Notes: '
 		size_hint:(.1,.1)
@@ -847,6 +871,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.7, 'top': 0.3}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
+		write_tab: False
 	Label:
 		text:"[u][color=00abae]Press the edit toggle button to edit the Entry[/color][/u]"
 		pos_hint:{'x':0.53,'top':1}
@@ -919,6 +944,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.7, 'top': 0.9}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
+		write_tab: False
 	Label:
 		text:'Username: '
 		size_hint:(.1,.1)
@@ -935,6 +961,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.7, 'top': 0.7}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
+		write_tab: False
 	Label:
 		text:'Password: '
 		size_hint:(.1,.1)
@@ -951,6 +978,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.7, 'top': 0.5}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
+		write_tab: False
 	Label:
 		text:'Notes: '
 		size_hint:(.1,.1)
@@ -967,6 +995,7 @@ Screen_Manager:
 		pos_hint: {'center_x': 0.7, 'top': 0.3}
 		disabled_foreground_color:[0.7,0.7,0.7,1]
 		disabled: root.viewing
+		write_tab: False
 	Label:
 		text:"[u][color=00abae]Press the edit toggle button to edit the Entry[/color][/u]"
 		pos_hint:{'x':0.53,'top':1}
