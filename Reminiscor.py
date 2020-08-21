@@ -100,6 +100,16 @@ class LoginWindow(Screen):
                 self.p.text = ''
                 ColorChange(self.username, False, 'Username')
                 ColorChange(self.p, False, 'Master Password')
+                if (os.path.isdir(ReminiscorFiles_Dir(''))):
+                    File_dir0 = os.path.expanduser('~') + '/Desktop'
+                    direc0 = "Reminiscor Files/Export"
+                    File_dir1 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
+                    direc1 = "Import"
+                    File_dir2 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
+                    direc2 = "Backup"
+                    os.makedirs(os.path.join(File_dir0, direc0))
+                    os.makedirs(os.path.join(File_dir1, direc1))
+                    os.makedirs(os.path.join(File_dir2, direc2))
                 return True
             else:
                 self.errortext.text = '[u]Wrong credentials were entered. Try again![/u]'
@@ -149,31 +159,50 @@ class SignUp_Pop(FloatLayout):
             parent_dir = os.path.expanduser('~') + '/AppData/Roaming'
             directory = "Reminiscor"
             os.makedirs(os.path.join(parent_dir, directory))
-            File_dir0 = os.path.expanduser('~') + '/Desktop'
-            direc0 = "Reminiscor Files/Export"
-            File_dir1 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
-            direc1 = "Import"
-            File_dir2 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
-            direc2 = "Backup"
-            os.makedirs(os.path.join(File_dir0, direc0))
-            os.makedirs(os.path.join(File_dir1, direc1))
-            os.makedirs(os.path.join(File_dir2, direc2))
-            salt = b'\x05;iBi\x17Q\xe0'
-            key_32 = pbkdf2.PBKDF2(self.p1.text, salt).read(32)
-            Default_Unique_User_EnigmaSettings(key_32)
-            data3 = open(HomeDir("Data3.dat"), "bw")
-            data3.close()
-            sep = 'qwertyuiop***asdfghjklzxcvbnm'
-            file = open(HomeDir('Data1.dat'), 'bw')
-            file.close()
-            # HideFile(HomeDir('Data1.txt'))
-            # `HideFile(HomeDir('Data3.txt'))
-            WriteEncrypt(HomeDir('Data1.dat'), self.user.text +
-                         sep+self.p1.text, key_32)
-            ColorChange(self.user, False, 'Username')
-            ColorChange(self.p1, False, 'Master Password')
-            ColorChange(self.p2, False, 'Confirm Master Passwords')
-            return True
+            try:
+                File_dir0 = os.path.expanduser('~') + '/Desktop'
+                direc0 = "Reminiscor Files/Export"
+                File_dir1 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
+                direc1 = "Import"
+                File_dir2 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
+                direc2 = "Backup"
+                os.makedirs(os.path.join(File_dir0, direc0))
+                os.makedirs(os.path.join(File_dir1, direc1))
+                os.makedirs(os.path.join(File_dir2, direc2))
+            except:
+                salt = b'\x05;iBi\x17Q\xe0'
+                key_32 = pbkdf2.PBKDF2(self.p1.text, salt).read(32)
+                Default_Unique_User_EnigmaSettings(key_32)
+                data3 = open(HomeDir("Data3.dat"), "bw")
+                data3.close()
+                sep = 'qwertyuiop***asdfghjklzxcvbnm'
+                file = open(HomeDir('Data1.dat'), 'bw')
+                file.close()
+                # HideFile(HomeDir('Data1.txt'))
+                # `HideFile(HomeDir('Data3.txt'))
+                WriteEncrypt(HomeDir('Data1.dat'), self.user.text +
+                            sep+self.p1.text, key_32)
+                ColorChange(self.user, False, 'Username')
+                ColorChange(self.p1, False, 'Master Password')
+                ColorChange(self.p2, False, 'Confirm Master Passwords')
+                return True
+            else:
+                salt = b'\x05;iBi\x17Q\xe0'
+                key_32 = pbkdf2.PBKDF2(self.p1.text, salt).read(32)
+                Default_Unique_User_EnigmaSettings(key_32)
+                data3 = open(HomeDir("Data3.dat"), "bw")
+                data3.close()
+                sep = 'qwertyuiop***asdfghjklzxcvbnm'
+                file = open(HomeDir('Data1.dat'), 'bw')
+                file.close()
+                # HideFile(HomeDir('Data1.txt'))
+                # `HideFile(HomeDir('Data3.txt'))
+                WriteEncrypt(HomeDir('Data1.dat'), self.user.text +
+                            sep+self.p1.text, key_32)
+                ColorChange(self.user, False, 'Username')
+                ColorChange(self.p1, False, 'Master Password')
+                ColorChange(self.p2, False, 'Confirm Master Passwords')
+                return True
         else:
             errorpop = signup_error()
             error_win = Popup(title='Sign-Up Failed', content=errorpop, size_hint=(None, None), size=(

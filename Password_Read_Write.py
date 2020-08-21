@@ -415,6 +415,3 @@ def ImportBackup():
     data2.close()
     data3.close()
 
-
-def clash():
-    Backup()
