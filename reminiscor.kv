@@ -1,0 +1,169 @@
+#: import RGBA kivy.utils.rgba
+Screen_Manager:
+    Login:
+    Main:
+    AddEntry:
+<CustomLabel@Label>:
+    color: app.color['main']
+    font_name: 'Fonts/Montserrat-Light.ttf'
+<UIButton@Button>:
+    background_normal: 'UI/Mainbuttondown.png'
+    background_down: 'UI/Mainbutton.png'
+    markup: True
+    font_name: 'Fonts/Montserrat-Light.ttf'
+    font: sp(15)
+    color: app.color['font']
+<CustomTextInput>:
+    background_color:  app.color['middle']
+    foreground_color: app.color['font']
+    background_normal: ''
+    multiline: False
+    background_disabled_normal: ''
+    font_name: 'Fonts/Montserrat-Light.ttf'
+    font_size: sp(20)
+    cursor_color: app.color['main']
+    hint_text_color: app.color['darkgrey']
+    size_hint_y: None
+    write_tab: False
+<Login>:
+    name: 'login'
+    BoxLayout: # this boxlayout centers the grid layout that contains the text inpot and buttons 
+        canvas.before:
+            Color:
+                rgba:app.color['main']
+            Line:
+                points: [root.width/5,root.height,0,root.height,0,0]
+                width: 10
+                cap: "square"
+            Line:
+                points: [root.width-root.width/5,root.height,root.width,root.height,root.width,0]
+                width: 10
+                cap: "square"
+        Widget: # Added widgets on each side of the gridlayout so that it's in between
+            size_hint_x: 0.2 if app._platform!='android' else 0.08 # cause android has a lesser width
+        GridLayout:
+            cols: 1
+            size_hint_max_x: dp(800) # this holds the grid layout in center, other wise the boxlayout down below sticks to left
+            spacing: dp(30)
+            padding: dp(20)
+            CustomLabel:
+                size_hint_y: 0.1
+                text: 'Reminiscor'
+                font_name: 'Fonts/Colchester.ttf'
+                font_size: sp(80)
+            BoxLayout: # this box layout is messy 
+                canvas.before:
+                    Color:
+                        rgba: (37/255,37/255,37/255,1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: 15,15,15,15
+                size_hint_max_y: dp(450)
+                orientation: 'vertical'
+                padding: dp(40)
+                spacing: dp(10)
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(10)
+                    CustomLabel:
+                        text: 'LOGIN:'
+                        heigth: dp(30)
+                        font_size: sp(25)
+                    BoxLayout:
+                        padding: 5
+                        Widget: # These widgets keep the text input in the center as well
+                            size_hint_x: 0.1    
+                        CustomTextInput:
+                            id: password
+                            hint_text: 'Master Password'
+                            size_hint_y: None
+                            password: True
+                            font_size: sp(20)
+                            height: dp(50)
+                            size_hint_max_x: dp(600)
+                        Widget:
+                            size_hint_x: 0.1
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(20)
+                    UIButton:
+                        id: login
+                        text: 'Login'
+                        size_hint_max_y: dp(50)
+                        size_hint_x: 0.5
+                        pos_hint:{'center_x': 0.5}
+                        background_normal: 'UI/Mainbutton.png'
+                        background_down: 'UI/Mainbuttondown.png'
+                    UIButton:
+                        id: signup
+                        text: 'SignUp'
+                        size_hint_max_y: dp(50)
+                        size_hint_x: 0.5
+                        pos_hint:{'center_x': 0.5}
+                        background_normal: 'UI/Mainbutton.png'
+                        background_down: 'UI/Mainbuttondown.png'
+                        on_release: root.call_signup()
+            CustomLabel:
+                text: 'E N C R Y P T I N G    A N X I E T I E S'
+                font_size: sp(25)
+                size_hint_y: 0.1
+        Widget:
+            size_hint_x: 0.2 if app._platform!='android' else 0.08
+
+
+<Signup>:
+    padding: dp(10)
+    spacing: dp(20)
+    orientation: 'vertical'
+    CustomLabel:
+        text: 'SIGNUP'
+        font_size: sp(25)
+        size_hint_y: 0.2
+    CustomTextInput:
+        id: username
+        size_hint_y: 0.15
+        hint_text: 'Username'
+    CustomTextInput:
+        id: password
+        size_hint_y: 0.15
+        hint_text: 'Master Password'
+    CustomTextInput:
+        id: c_password
+        size_hint_y: 0.15
+        hint_text: 'Confirm Master Password'
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba:(25/255,25/255,25/255,1)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: 10,10,10,10
+        spacing: dp(5)
+        size_hint_y: 0.15
+        pos_hint:{'x':0}
+        CheckBox:
+            pos_hint: {'x': 0}
+            size_hint_x: 0.1
+            size_hint_max_x: dp(40)
+        CustomLabel:
+            font_size: root.width/28
+            font_name: "Fonts/Montserrat-Regular.ttf"
+            color: app.color['font']
+            text: 'Enable Key File Authentication during Login.'
+    GridLayout:
+        canvas.before:
+        size_hint_y: 0.25
+        spacing: dp(40)
+        padding: dp(20)
+        cols:2
+        UIButton:
+            id: close
+            size_hint_max_y: dp(60)
+            text: 'Close'
+        UIButton:
+            id: confirm
+            size_hint_max_y: dp(60)
+            text: 'Confirm'
+    

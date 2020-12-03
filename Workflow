@@ -1,0 +1,12 @@
+aes-kdf, to store the master password the string should be hashed
+ and then a component of the hash should be used to derive the key,
+ the hash value of this key should be stored in the text file for the
+ login procedure, so that dictionary and guessing attacks can be made
+ totally unpredictable
+
+ when you click on an entry the entry data is decrypted right there and
+ then once the password viewing is over the variables that hold the value
+ should be hashed and then unassigned.
+
+ if the user chooses to create a key-file for authentication, then encrypt
+ the generated key with the master password
