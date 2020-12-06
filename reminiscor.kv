@@ -33,7 +33,7 @@ Screen_Manager:
     write_tab: False
     disabled_foreground_color: self.foreground_color if self.text else self.hint_text_color
     disabled_background_color: self.background_color if self.text else self.hint_text_color
-<CustomModalView>:
+<CustomModalView, CustomPopup>:
     canvas.before:
         Color:
             rgba: 0, 0, 0, .75 * self._anim_alpha
@@ -121,7 +121,7 @@ Screen_Manager:
                         pos_hint:{'center_x': 0.5}
                         background_normal: 'UI/Mainbutton.png'
                         background_down: 'UI/Mainbuttondown.png'
-                        on_release: root.tutorial()
+                        on_release: root.welcome()
                     UIButton:
                         id: signup
                         text: 'SignUp'
@@ -212,13 +212,13 @@ Screen_Manager:
         id: username
         size_hint_y: 0.15
         size_hint_max_y: dp(60)
-        hint_text: 'Username'
+        hint_text: 'Username (minimum: 3)'
     CustomTextInput:
         id: password
         size_hint_y: 0.15
         size_hint_max_y: dp(60)
         password: True
-        hint_text: 'Master Password'
+        hint_text: 'Master Password (minimum: 8)'
     CustomTextInput:
         id: c_password
         size_hint_y: 0.15
@@ -264,3 +264,10 @@ Screen_Manager:
             size_hint_max_y: dp(50)
             size_hint_min_y: dp(40)
             text: 'Confirm'
+<Tutorial>:
+    BoxLayout:
+        ScrollView:
+            on_scroll_x: False
+            on_scroll_y: True
+            CustomLabel:
+                text: 

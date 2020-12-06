@@ -1,14 +1,30 @@
+# ----------------------------------------
+# for the signup and login process
+#------------------------------------------
 aes-kdf, to store the master password the string should be hashed
- and then a component of the hash should be used to derive the key,
- the hash value of this key should be stored in the text file for the
- login procedure, so that dictionary and guessing attacks can be made
- totally unpredictable
-
- when you click on an entry the entry data is decrypted right there and
- then once the password viewing is over the variables that hold the value
- should be hashed and then unassigned.
-
- if the user chooses to create a key-file for authentication, then encrypt
- the generated key with the master password
-
+and then a component of the hash should be used to derive the key,
+the hash value of this key should be stored in the text file for the
+login procedure, so that dictionary and guessing attacks can be made
+totally unpredictable
+# ----------------------------------------
+# general handling of passwords
+#------------------------------------------
+when you click on an entry the entry data is decrypted right there and
+then once the password viewing is over the variables that hold the value
+should be hashed and then unassigned.
+# ----------------------------------------
+# login and signup paradigms
+#------------------------------------------
+if the user chooses to create a key-file for authentication, then encrypt
+the generated key with the master password
+# ----------------------------------------
+# make a file for keeping track (manual file)
+#------------------------------------------
 make a txt file for tracking every where sensitive data travels
+shredding cycles can be set by user
+# ----------------------------------------
+# On Main window
+#------------------------------------------
+Always show the username on top of the screen, like a task bar sort 
+of thing, this sould be on every screen not just main screen so that
+the user remembers his username for reminiscor

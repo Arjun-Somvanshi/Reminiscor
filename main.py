@@ -12,6 +12,7 @@ from kivy.clock import Clock
 from functools import partial
 from kivy.properties import ListProperty, NumericProperty, StringProperty
 from FileHandling import *
+import time
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
 if platform == 'win':
@@ -22,14 +23,39 @@ class CustomTextInput(TextInput):
     def on_parent(self, *_):
         self._refresh_text(self.text)
 
-class CustomModalView(ModalView):
+class CustomPopup(Popup):
+    
+    def open(self, animate = True, *largs, **kwargs):
+        global app
+        if animate and app.animations:
+            size_hint_y = self.size_hint_y
+            max_y = self.size_hint_max_y
+            self.size_hint_max_y = dp(3000)
+            self.size_hint_y = 4*size_hint_y
+            self.opacity = 0
+            anim = Animation(size_hint_y = size_hint_y, size_hint_max_y = max_y, opacity=1, duration = 1)
+            anim.start(self)
+        super(CustomPopup, self).open(*largs, **kwargs)
 
+    def dismiss(self, animate = True, *largs, **kwargs):
+        if animate and app.animations:
+            anim = Animation(size_hint_y = self.size_hint_y*3.2, opacity = 0, duration = 0.5)
+            anim.start(self)
+            anim.bind(on_complete=self.finish_dismiss) 
+        else:
+            super(CustomPopup, self).dismiss()
+    def finish_dismiss(self, instance):
+        super(CustomPopup,self).dismiss()
+
+class CustomModalView(ModalView): # here I have made a custom modal view so that it can handle animations 
+                                  # instead of typing the whole deal over and over, the open and dismiss are new                  
     def open(self, pos_hint_initial = {}, pos_hint_final = {}, 
              t = '', d1=0.7, d2=1.5, animate = True, *largs, **kwargs):
         global app
         #print(app.animations)
-        if animate and app.animations:
-            #print('animating')
+        if animate and app.animations: # we have to parameters to decide whether animation should occur or
+        # not, incase, the user decides to not use animations on slow hardware, app.animations will be set to false, 
+        # if the developer doen't wanna use the animation then he/she can set animate to false
             self.pos_hint = pos_hint_initial
             anim = Animation(pos_hint = pos_hint_final, t = t, duration = d1)
             anim &= Animation(opacity = 1, t=t, duration=d2)
@@ -46,7 +72,7 @@ class CustomModalView(ModalView):
             anim = Animation(pos_hint = pos_hint_final, t = t, duration = d1)
             anim &= Animation(opacity = 0, t=t, duration = d2)
             anim.start(self)
-            anim.bind(on_complete = self.finish_dismiss)
+            anim.bind(on_complete = self.finish_dismiss) # binding the on_complete callback, to finish dismiss()
         else:
             super(CustomModalView, self).dismiss()
 
@@ -66,10 +92,16 @@ class Welcome(BoxLayout):
         super(Welcome, self).__init__(**kwargs)
         file = open('welcome.txt', 'r')
         self.text = '\n'.join(ReadFile(file))
-
+class Tutorial(BoxLayout):
+    text = StringProperty('')
+    def __init__(self, **kwargs):
+        super(Tutorial, self).__init__(**kwargs)
+        file = open('tutorial.txt', 'r')
+        self.text = '\n'.join(ReadFile(file))
 '''-------------------------------------------------------'''
 class Login(Screen):
-    def tutorial(self):
+    # This function is called when the user uses the app for the first time
+    def welcome(self):
         welcome_design = Welcome()
         welcome = CustomModalView(
                                 size_hint = (0.7, 0.8),
@@ -81,10 +113,22 @@ class Login(Screen):
                                 pos_hint = {'center_x': -2, 'center_y':0.5 }
                            )
         welcome.add_widget(welcome_design)
-        final_dismiss_pos_hint = {'center_x': -2, 'center_y':0.5 }
-        welcome_design.ids.close.bind(on_release= partial(welcome.dismiss,final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True))
+        self.final_dismiss_pos_hint = {'center_x': -2, 'center_y':0.5 } # this just saves space look in tutorial 
+        # binding the close button with the dismiss function defined in modal view for animations
+        welcome_design.ids.close.bind(on_release= partial(welcome.dismiss,self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True))
+        # binding take the tutorial button with self.tutorial, to close the window popup
+        # and then activate the tutorial
+        welcome_design.ids.tutorial.bind(on_release = partial(self.tutorial, welcome, False))
         welcome.open(welcome.pos_hint, {'center_x': 0.5, 'center_y': 0.5}, "out_expo")
-    
+    # This is a guided tutorial for reminiscor
+    def tutorial(self, welcome, start, instance):
+        if not start:    
+            welcome.dismiss(self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True)
+            welcome.bind(on_dismiss = partial(self.tutorial, welcome, True))
+        if start:
+            design = Tutorial()
+            global app
+            app.create_popup((dp(450),dp(550)), (dp(325), dp(400)), False, design, 'Tutorial')
     # Function to invoke signup
     def call_signup(self):
         design = Signup()
@@ -98,8 +142,9 @@ class Login(Screen):
                             pos_hint = {'center_x': 0.5, 'center_y': 2}
                           )
         self.signup.add_widget(design)
-        final_pos_hint = {'center_x': 0.5, 'center_y': -2}
-        design.ids.close.bind(on_release = partial(self.signup.dismiss, final_pos_hint,'in_expo', 0.7, 0.85, True))
+        final_dismiss_welcome_pos_hint = {'center_x': 0.5, 'center_y': -2}
+        design.ids.close.bind(on_release = partial(self.signup.dismiss, final_dismiss_welcome_pos_hint,
+                              'in_expo', 0.7, 0.85, True))
         self.signup.open(self.signup.pos_hint, {'center_x': 0.5, 'center_y': 0.5},'out_expo' )
 
 class Main(Screen):
@@ -134,15 +179,22 @@ class ReminiscorApp(App):
                     size = None, pos_hint={'center_x':0.5, 'center_y':0.5}):
         if multiple_allow:
             self.close_all_popups() 
-        popup = Popup(
+        popup = CustomPopup(
                         content = content,
                         title = title,
+                        title_align = 'center',
                         size_hint = size_hint,
                         size_hint_max = max_size,
                         size_hint_min = min_size,
+                        separator_color = self.color['main'],
                         auto_dismiss = False,
-                        pos_hint = pos_hint
+                        pos_hint = pos_hint,
+                        title_font = "Fonts/Montserrat-Light.ttf",
+                        title_color = self.color['font']
                      )
+        popup.title_size = popup.width/5
+        if popup.width/10>sp(22):
+            popup.title_size = sp(22)
         if size_hint == (None, None):
             popup.size = size
         popup.open()
