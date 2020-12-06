@@ -1,0 +1,2 @@
+Reminiscor is a password manager, an offline one. It uses encryption to protect all your data and all of it can be unlocked using only one master password. The software has several functionalities, and it also guides you through it. If this is the first time you are using Reminiscor, you can click on 'Take the tutorial' down below. Reminiscor roughly translates to rememberance in Latin, this software would gladly save you the trouble of remembering. Please read the license included with the copy before using it.
+Thank You for choosing Reminiscor!

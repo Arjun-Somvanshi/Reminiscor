@@ -10,3 +10,5 @@ aes-kdf, to store the master password the string should be hashed
 
  if the user chooses to create a key-file for authentication, then encrypt
  the generated key with the master password
+
+make a txt file for tracking every where sensitive data travels
