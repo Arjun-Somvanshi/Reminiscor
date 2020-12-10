@@ -8,6 +8,7 @@ Screen_Manager:
     color: app.color['main']
     font_name: 'Fonts/Montserrat-Light.ttf'
     disabled_color: self.color
+    markup: True
 <UIButton@Button>:
     background_normal: 'UI/Mainbuttondown.png'
     background_down: 'UI/Mainbutton.png'
@@ -33,19 +34,7 @@ Screen_Manager:
     write_tab: False
     disabled_foreground_color: self.foreground_color if self.text else self.hint_text_color
     disabled_background_color: self.background_color if self.text else self.hint_text_color
-<CustomModalView, CustomPopup>:
-    canvas.before:
-        Color:
-            rgba: 0, 0, 0, .75 * self._anim_alpha
-        Rectangle:
-            size: self._window.size if self._window else (0, 0)
-        Color:
-            rgba: app.color['background']
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    background_color: 1, 1, 1, 0
-    background: 'UI/transparent.png'
+
 #  --------------------- LGIN SCREEN -----------------
 
 
@@ -166,11 +155,15 @@ Screen_Manager:
         do_scroll_x: False
         do_scroll_y: True
         size_hint_y: 1
+        bar_width: 3
+        bar_color:[0,171/255,174/255,1]
+        scroll_type: ['content', 'bars']
         CustomLabel:
             padding: dp(10), dp(10)
             text: root.text
             height: self.texture_size[1]
             text_size: self.width,None
+            line_height: 1.5
             width: root.width - root.width/11
             halign: 'center'
             size_hint: None, None
@@ -225,7 +218,9 @@ Screen_Manager:
         size_hint_max_y: dp(60)
         password: True
         hint_text: 'Confirm Master Password'
+
     BoxLayout:
+        id: keyfile
         canvas.before:
             Color:
                 rgba:(25/255,25/255,25/255,1)
@@ -233,21 +228,26 @@ Screen_Manager:
                 size: self.size
                 pos: self.pos
                 radius: 10,10,10,10
-        spacing: dp(5)
         size_hint_y: 0.15
         size_hint_max_y: dp(60)
+        padding: dp(5), 0
+        spacing: dp(2)
         pos_hint:{'x':0}
         CheckBox:
+            id: enable
             pos_hint: {'x': 0}
             size_hint_x: 0.1
             size_hint_max_x: dp(40)
             background_checkbox_disabled_normal: self.background_checkbox_normal 
             background_checkbox_disabled_down: self.background_checkbox_down 
         CustomLabel:
-            font_size: root.width/28
+            font_size: root.width/28 if root.width/28>sp(13) else sp(13)
             font_name: "Fonts/Montserrat-Regular.ttf"
+            halign: 'center'
             color: app.color['font']
-            text: 'Enable Key File Authentication during Login.'
+            line_height: 1.2
+            text_size: keyfile.width-keyfile.width/10, None
+            text: 'Enable KeyFile Authentication during Login.'  if app._platform != 'android' else "KeyFiles are not convenient for android, choose a strong password."
     GridLayout:
         canvas.before:
         size_hint_y: 0.25
@@ -264,10 +264,46 @@ Screen_Manager:
             size_hint_max_y: dp(50)
             size_hint_min_y: dp(40)
             text: 'Confirm'
+
+
+
+
+
 <Tutorial>:
-    BoxLayout:
-        ScrollView:
-            on_scroll_x: False
-            on_scroll_y: True
-            CustomLabel:
-                text: 
+    orientation: 'vertical'
+    padding: dp(20)
+    spacing: dp(20)
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+        scroll_type: ['content', 'bars']
+        bar_width: 5
+        bar_color:[0,171/255,174/255,1]
+        CustomLabel:
+            padding: dp(10), dp(10)
+            text: root.text
+            height: self.texture_size[1]
+            text_size: self.width,None
+            width: root.width - root.width/11
+            #halign: 'center'
+            color: app.color['font']
+            line_height: 1.5
+            size_hint: None, None
+            font_size: sp(18)
+    GridLayout:
+        spacing: dp(40)
+        cols: 2
+        padding: dp(10)
+        size_hint_y: 0.2
+        UIButton:
+            id: exit
+            text: 'Exit Tutorial'
+            size_hint_max_y: dp(50)
+            size_hint_min_y: dp(40)
+            size_hint_min_x: dp(30)
+        UIButton:
+            id: next
+            text: 'Next'
+            size_hint_max_x: dp(300)
+            size_hint_max_y: dp(50)
+            size_hint_min_y: dp(40)

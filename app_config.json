@@ -1,0 +1,8 @@
+{
+    "argon2_settings":
+        {
+            "time_cost": 2,
+            "memory_cost": 512000,
+            "parallelism": 8
+        }
+}

@@ -28,3 +28,6 @@ shredding cycles can be set by user
 Always show the username on top of the screen, like a task bar sort 
 of thing, this sould be on every screen not just main screen so that
 the user remembers his username for reminiscor
+# ----------------------------------------
+# Make a file with just the title data which is encrypted with a faster algorithm
+#------------------------------------------

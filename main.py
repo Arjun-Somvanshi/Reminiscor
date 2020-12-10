@@ -11,13 +11,18 @@ from kivy.animation import Animation
 from kivy.clock import Clock
 from functools import partial
 from kivy.properties import ListProperty, NumericProperty, StringProperty
-from FileHandling import *
-import time
+from security import *
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
 if platform == 'win':
     Window.minimum_width = dp(480)
     Window.minimum_height = dp(500)
+
+'''-------------------Global------------------------------'''
+app = None
+app_path = None
+'''-------------------------------------------------------'''
+
 '''-----------------Custom Classes-----------------------'''
 class CustomTextInput(TextInput):
     def on_parent(self, *_):
@@ -28,43 +33,54 @@ class CustomPopup(Popup):
     def open(self, animate = True, *largs, **kwargs):
         global app
         if animate and app.animations:
+            self.disabled = True
             size_hint_y = self.size_hint_y
             max_y = self.size_hint_max_y
             self.size_hint_max_y = dp(3000)
             self.size_hint_y = 4*size_hint_y
             self.opacity = 0
-            anim = Animation(size_hint_y = size_hint_y, size_hint_max_y = max_y, opacity=1, duration = 1)
+            anim = Animation(size_hint_y = size_hint_y, size_hint_max_y = max_y, opacity=1, duration = 0.5)
             anim.start(self)
+            anim.bind(on_complete=self.enable_popup)
         super(CustomPopup, self).open(*largs, **kwargs)
+    
+    def enable_popup(self, *args):
+        self.disabled = False
 
     def dismiss(self, animate = True, *largs, **kwargs):
+        self.disabled = True
         if animate and app.animations:
-            anim = Animation(size_hint_y = self.size_hint_y*3.2, opacity = 0, duration = 0.5)
+            anim = Animation(size_hint_y = self.size_hint_y*4,size_hint_max_y = dp(3000), opacity=0, duration = 0.5)
             anim.start(self)
             anim.bind(on_complete=self.finish_dismiss) 
         else:
             super(CustomPopup, self).dismiss()
-    def finish_dismiss(self, instance):
+    def finish_dismiss(self, instance, *args):
         super(CustomPopup,self).dismiss()
 
 class CustomModalView(ModalView): # here I have made a custom modal view so that it can handle animations 
                                   # instead of typing the whole deal over and over, the open and dismiss are new                  
     def open(self, pos_hint_initial = {}, pos_hint_final = {}, 
-             t = '', d1=0.7, d2=1.5, animate = True, *largs, **kwargs):
+             t = '', d1=0.7, d2=0.7, animate = True, *largs, **kwargs):
         global app
         #print(app.animations)
         if animate and app.animations: # we have to parameters to decide whether animation should occur or
         # not, incase, the user decides to not use animations on slow hardware, app.animations will be set to false, 
         # if the developer doen't wanna use the animation then he/she can set animate to false
+            self.disabled = True
             self.pos_hint = pos_hint_initial
             anim = Animation(pos_hint = pos_hint_final, t = t, duration = d1)
             anim &= Animation(opacity = 1, t=t, duration=d2)
             anim.start(self)
+            anim.bind(on_complete=self.enable_popup)
         else: 
             self.opacity = 1
             self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
         super(CustomModalView, self).open(*largs, **kwargs)
-
+    
+    def enable_popup(self, *args):
+        self.disabled = False
+    
     def dismiss(self, pos_hint_final = {}, t = '', d1=0.7, d2=0.75, animate = True, *largs, **kwargs):
         #print('dismissing')
         self.disabled = True
@@ -79,10 +95,8 @@ class CustomModalView(ModalView): # here I have made a custom modal view so that
     def finish_dismiss(self, *args):
         super(CustomModalView, self).dismiss()
 '''------------------------------------------------------'''
-'''-------------------Global------------------------------'''
-app = None
-app_path = None
-'''-------------------------------------------------------'''
+
+
 '''--------------------Popups-----------------------------'''
 class Signup(BoxLayout):
     pass
@@ -92,15 +106,15 @@ class Welcome(BoxLayout):
         super(Welcome, self).__init__(**kwargs)
         file = open('welcome.txt', 'r')
         self.text = '\n'.join(ReadFile(file))
+        file.close()
 class Tutorial(BoxLayout):
     text = StringProperty('')
-    def __init__(self, **kwargs):
-        super(Tutorial, self).__init__(**kwargs)
-        file = open('tutorial.txt', 'r')
-        self.text = '\n'.join(ReadFile(file))
+        
 '''-------------------------------------------------------'''
 class Login(Screen):
     # This function is called when the user uses the app for the first time
+    def refactor_layout(self, signup, design):
+        design.ids.keyfile.remove_widget(design.ids.enable)
     def welcome(self):
         welcome_design = Welcome()
         welcome = CustomModalView(
@@ -120,15 +134,21 @@ class Login(Screen):
         # and then activate the tutorial
         welcome_design.ids.tutorial.bind(on_release = partial(self.tutorial, welcome, False))
         welcome.open(welcome.pos_hint, {'center_x': 0.5, 'center_y': 0.5}, "out_expo")
+
     # This is a guided tutorial for reminiscor
     def tutorial(self, welcome, start, instance):
+        global app
         if not start:    
             welcome.dismiss(self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True)
-            welcome.bind(on_dismiss = partial(self.tutorial, welcome, True))
+            welcome.bind(on_dismiss = partial(self.tutorial, welcome, True)) # This function is recurssive, depending on the value of 
+            # start it decides what part of the code to execute
         if start:
             design = Tutorial()
-            global app
-            app.create_popup((dp(450),dp(550)), (dp(325), dp(400)), False, design, 'Tutorial')
+            with open('tutorial.json') as f:
+                design.text = ' '.join(json.load(f)['tutorials']['tutorial1']['content'])
+            app.create_popup((dp(450),dp(550)), (dp(325), dp(400)), False, design, 'T U T O R I A L')
+            design.ids.exit.bind(on_release = app.close_popup)
+
     # Function to invoke signup
     def call_signup(self):
         design = Signup()
@@ -145,6 +165,8 @@ class Login(Screen):
         final_dismiss_welcome_pos_hint = {'center_x': 0.5, 'center_y': -2}
         design.ids.close.bind(on_release = partial(self.signup.dismiss, final_dismiss_welcome_pos_hint,
                               'in_expo', 0.7, 0.85, True))
+        if platform =='android':
+            self.refactor_layout(self.signup, design)
         self.signup.open(self.signup.pos_hint, {'center_x': 0.5, 'center_y': 0.5},'out_expo' )
 
 class Main(Screen):
@@ -161,16 +183,16 @@ class ReminiscorApp(App):
     color = {'background': (30/255,30/255,30/255,1), 
              'main': (0,171/255,174/255,1), 
              'middle': (45/255,45/255,45/255,1),
-             'font': (140/255,140/255,140/255,1),
+             'font': (160/255,160/255,160/255,1),
              'darkgrey': (90/255,90/255,90/255,1)
              }
     popups = []
     animations = True # Remmeber to add an option to disable this in the settings
-    def close_popup(self):
+    def close_popup(self, *args):
         if self.popups:
             self.popups[-1].dismiss()
 
-    def close_all_popups(self):
+    def close_all_popups(self, *args):
         while self.popups:
             self.close_popups()
     
@@ -190,11 +212,10 @@ class ReminiscorApp(App):
                         auto_dismiss = False,
                         pos_hint = pos_hint,
                         title_font = "Fonts/Montserrat-Light.ttf",
+                        background = 'UI/popup400x400.png',
                         title_color = self.color['font']
                      )
-        popup.title_size = popup.width/5
-        if popup.width/10>sp(22):
-            popup.title_size = sp(22)
+        popup.title_size = sp(20)
         if size_hint == (None, None):
             popup.size = size
         popup.open()
@@ -202,6 +223,9 @@ class ReminiscorApp(App):
 
     def build(self):
         global app
+        app_path = os.path.split(self.get_application_config())[0]
+        set_app_path(app_path)
+        write_AppConfig()
         app = self
 if __name__ == '__main__':
     ReminiscorApp().run()
