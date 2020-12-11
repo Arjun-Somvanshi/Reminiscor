@@ -28,11 +28,15 @@ def blake (data): # send strings or bytes
 
 def keyfile_encryption(key1):
     keyfile_data = get_random_bytes(16)
-    keyfile_cipher = ECB_encrypt(keyfile_data, key1[16:])
-    return keyfile_cipher
+    keyfile_cipher = ECB_encrypt(keyfile_data, key1[:16])
+    with open(HomeDir('KeyFile.dat', 'UserData'), 'wb') as f:
+        f.write(keyfile_cipher)
+    return keyfile_data
 
-def keyfile_decrypt(keyfile_cipher, key1):
-    keyfile_data = ECB_decrypt(keyfile_cipher, key1[16:])
+def keyfile_decrypt(key1):
+    with open(HomeDir('KeyFile.dat', 'UserData'), 'rb') as f:
+        keyfile_cipher = f.read() 
+    keyfile_data = ECB_decrypt(keyfile_cipher, key1[:16])
     return keyfile_data
 
 def master_key(key1, first = False, re_encrypting = False, key2 = None): #used to derive the master key from argon 2 using keyfile and master password

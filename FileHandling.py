@@ -35,7 +35,7 @@ def set_username(Username):
 
 def HomeDir(filename, sub_directory = ''): # Appends the subdirectory and filename to the path of the app
     global app_path
-    testing = True
+    testing = False
     if app_path and not testing:
             print('Here we are!', app_path+sub_directory+'/'+filename)
             return app_path+sub_directory+'/'+filename

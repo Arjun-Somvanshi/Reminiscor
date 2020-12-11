@@ -307,3 +307,30 @@ Screen_Manager:
             size_hint_max_x: dp(300)
             size_hint_max_y: dp(50)
             size_hint_min_y: dp(40)
+<QuickMessage>:
+    orientation: 'vertical'
+    spacing: dp(20)
+    padding: dp(10)
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+        scroll_type: ['content', 'bars']
+        bar_width: 5
+        bar_color:[0,171/255,174/255,1]
+        CustomLabel:
+            id: message
+            padding: dp(10), dp(10)
+            height: self.texture_size[1]
+            text_size: self.width,None
+            width: root.width - root.width/11
+            #halign: 'center'
+            color: app.color['font']
+            line_height: 1.5
+            size_hint: None, None
+            font_size: sp(16)
+    UIButton:
+        id: close
+        text: 'Close'
+        size_hint: 0.3, None
+        height: dp(35)
+        pos_hint: {'right': 1}

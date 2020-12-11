@@ -11,7 +11,7 @@ from kivy.animation import Animation
 from kivy.clock import Clock
 from functools import partial
 from kivy.properties import ListProperty, NumericProperty, StringProperty
-from security import *
+from response import *
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
 if platform == 'win':
@@ -21,6 +21,12 @@ if platform == 'win':
 '''-------------------Global------------------------------'''
 app = None
 app_path = None
+
+def quickmessage(title, message, *args):
+    design = QuickMessage()
+    design.ids.message.text = message
+    app.create_popup( (dp(400), dp(225)), (dp(400), dp(225)), True, design, title,(0.5, 0.5))
+    design.ids.close.bind(on_release=app.close_popup)
 '''-------------------------------------------------------'''
 
 '''-----------------Custom Classes-----------------------'''
@@ -99,7 +105,37 @@ class CustomModalView(ModalView): # here I have made a custom modal view so that
 
 '''--------------------Popups-----------------------------'''
 class Signup(BoxLayout):
-    pass
+    def on_keyfile_enable(self, value, *args):
+        if self.ids.enable.state == 'down':
+            message = '''A KeyFile adds an extra layer of security apart from the master password. You are supposed to store this file on external hardware securely. If you lose this file your database of passwords will be [color=00abae]lost forever.[/color] If you still decide to enable this feature, you will be asked to provide a path to the keyfile after Signup, this is the path where Reminiscor will look for the file. To know more take the tutorial.'''
+            global app
+            design = QuickMessage()
+            design.ids.message.text = message
+            design.ids.close.size_hint_x = 0.5
+            design.ids.close.text = 'I have read the text'
+            design.ids.close.bind(on_release=app.close_popup)
+            app.create_popup( (dp(400), dp(400)), (dp(400), dp(400)), True, design, 'What is a KeyFile?', (0.5,0.5))
+    
+    def on_confirm(self):
+        self.ids.username.background_color = app.color['middle']
+        self.ids.password.background_color = app.color['middle']
+        self.ids.c_password.background_color = app.color['middle']
+        result = signup_response(self.ids.username.text, self.ids.password.text, self.ids.c_password.text)
+        if 0 in result:
+            if result[0] == 0: # meaning the username is less than 3 chars
+                self.ids.username.background_color = app.color['error']
+                quickmessage('Username Error', "Your username should be atleast 3 characters long")
+            elif result[1] == 0: # password less than 8
+                self.ids.password.background_color = app.color['error']
+                quickmessage('Master Password Error', "Your password should be atleast 8 characters long")
+            elif result[2] == 0: # password do not match
+                self.ids.password.background_color = app.color['error']
+                self.ids.c_password.background_color = app.color['error']
+                quickmessage('Password Match Error', "Your passwords do not match!")
+            return False
+        else:
+            return True
+
 class Welcome(BoxLayout):
     text = StringProperty('')
     def __init__(self, **kwargs):
@@ -107,9 +143,12 @@ class Welcome(BoxLayout):
         file = open('welcome.txt', 'r')
         self.text = '\n'.join(ReadFile(file))
         file.close()
+
 class Tutorial(BoxLayout):
     text = StringProperty('')
-        
+
+class QuickMessage(BoxLayout):
+    pass
 '''-------------------------------------------------------'''
 class Login(Screen):
     # This function is called when the user uses the app for the first time
@@ -151,23 +190,43 @@ class Login(Screen):
 
     # Function to invoke signup
     def call_signup(self):
-        design = Signup()
-        self.signup = CustomModalView(
-                            size_hint = (0.5, 0.8),
-                            auto_dismiss = False,
-                            size_hint_max = (dp(500),dp(500)),
-                            size_hint_min = (dp(325),dp(400)),
-                            background = 'UI/popup400x400.png',
-                            opacity = 0,
-                            pos_hint = {'center_x': 0.5, 'center_y': 2}
-                          )
-        self.signup.add_widget(design)
-        final_dismiss_welcome_pos_hint = {'center_x': 0.5, 'center_y': -2}
-        design.ids.close.bind(on_release = partial(self.signup.dismiss, final_dismiss_welcome_pos_hint,
-                              'in_expo', 0.7, 0.85, True))
-        if platform =='android':
-            self.refactor_layout(self.signup, design)
-        self.signup.open(self.signup.pos_hint, {'center_x': 0.5, 'center_y': 0.5},'out_expo' )
+        try:
+            for fname in os.listdir(HomeDir('', 'UserData')):
+                print(fname)
+                if fname.endswith('.rem'): #if username.rem file exists then signup won't be called
+                    rem_exists = True
+                    break
+        except:
+            rem_exists = False
+        if rem_exists is not True:
+            design = Signup()
+            self.signup = CustomModalView(
+                                size_hint = (0.5, 0.8),
+                                auto_dismiss = False,
+                                size_hint_max = (dp(500),dp(500)),
+                                size_hint_min = (dp(325),dp(400)),
+                                background = 'UI/popup400x400.png',
+                                opacity = 0,
+                                pos_hint = {'center_x': 0.5, 'center_y': 2}
+                            )
+            self.signup.add_widget(design)
+            final_dismiss_welcome_pos_hint = {'center_x': 0.5, 'center_y': -2}
+            design.ids.close.bind(on_release = partial(self.signup.dismiss, final_dismiss_welcome_pos_hint,
+                                'in_expo', 0.7, 0.85, True))
+            design.ids.enable.bind(active = design.on_keyfile_enable)
+            design.ids.confirm.bind(on_release=partial(self.signup_complete, design))# had to make a separate function for confirm
+            if platform =='android':
+                self.refactor_layout(self.signup, design)
+            self.signup.open(self.signup.pos_hint, {'center_x': 0.5, 'center_y': 0.5},'out_expo' )
+        else:
+            quickmessage('User Error', 'There already seems to be a user assigned to this application')
+
+
+    def signup_complete(self, design, instance):
+        confirm = design.on_confirm()
+        if confirm:
+            self.signup.dismiss({'center_x': 0.5, 'center_y': -2}, 'in_expo', 0.7, 0.85, True)
+            on_sucess_signup(design.ids.username.text, design.ids.password.text, design.ids.enable.active)
 
 class Main(Screen):
     pass
@@ -184,7 +243,8 @@ class ReminiscorApp(App):
              'main': (0,171/255,174/255,1), 
              'middle': (45/255,45/255,45/255,1),
              'font': (160/255,160/255,160/255,1),
-             'darkgrey': (90/255,90/255,90/255,1)
+             'darkgrey': (90/255,90/255,90/255,1),
+             'error': (1,0,0,1)
              }
     popups = []
     animations = True # Remmeber to add an option to disable this in the settings
@@ -194,12 +254,12 @@ class ReminiscorApp(App):
 
     def close_all_popups(self, *args):
         while self.popups:
-            self.close_popups()
+            self.close_popup()
     
     def create_popup(self, max_size, min_size, multiple_allow, 
                     content, title, size_hint = (0.5,0.8), 
                     size = None, pos_hint={'center_x':0.5, 'center_y':0.5}):
-        if multiple_allow:
+        if not multiple_allow:
             self.close_all_popups() 
         popup = CustomPopup(
                         content = content,
@@ -223,9 +283,8 @@ class ReminiscorApp(App):
 
     def build(self):
         global app
+        app = self
         app_path = os.path.split(self.get_application_config())[0]
         set_app_path(app_path)
-        write_AppConfig()
-        app = self
 if __name__ == '__main__':
     ReminiscorApp().run()

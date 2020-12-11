@@ -1,0 +1,33 @@
+{
+"tutorials": 
+        { 
+        "tutorial1": {"heading":"How does the app secure my passwords?", 
+                      "content": ["Reminiscor uses [color=#00abae]AES-256[/color] (as the main algorithm) and an improved [color=#00abae]Enigma[/color] influenced polyalphabetic cipher algorithm",
+                                  "to secure a user's data, the process is fast and secure, due to the very nature of being [color=#00abae]offline[/color]",
+                                  "and having layers of diffusion, making it secure to most of the known attacks against symmetric ciphers.",
+                                  "Reminiscor uses a part of the [color=#00abae]Blake2[/color] algorithm's digest (A secure hashing algorithm) from the orignal plaintext", 
+                                  "of the master password to generate a", 
+                                  "[color=#00abae]Master key[/color] (without a KeyFile), if a KeyFile is also involved it's used too, These components are then passed",
+                                  "to a key derivation function, which returns the Master AES key. All data first goes through a layer of",
+                                  "Enigma encryption to increase diffusion of the entry data before AES encryption, this is fast and adds a layer",
+                                  "of security, while keeping the time complexity fairly simple\n",
+                                  "This password is set during the Signup process. There are two methods to securing your passwords:",
+                                  "\n\n[color=#00abae]\u2022 A Strong Master Password\n\u2022 A KeyFile with a Master Password[/color]",
+                                  "\n\n[b]A Strong Master Password[/b]\n",
+                                  "\nA Strong Master Password is very important for avoiding brute-force attacks and their variants.",
+                                  "According to mordern research, it takes about 3 months to break a 12 character password if given",
+                                  "the most powerful non-quantum computation abilities. Hence this shows the importance of having a",
+                                  "random (as much as possible) and lengthy password.",
+                                  "\n\n[b]What is a KeyFile?[/b]\n",
+                                  "\nA KeyFile is a file that contains a key, which is used to as a composnent to derive the final master",
+                                  "key, this key is then used to encrypt all of the user data along with the master password.",
+                                  "Reminiscor doesn't allow the only KeyFile option, here things are a bit different, the Key file is encrypted with a",
+                                  "component of the hash digest of the master password which is later decrypted during login. A KeyFile is supposed to be stored on a remote",
+                                  "storage device safely, like a disk, hardrive etc, though it's to be understood that this hardware can't be",
+                                  "misplaced, if it's misplaced the data is lost forever, unless someone knows the master password and has acess",
+                                  "to this KeyFile, choose this option with caution during the signup. It's impractical to have this option for Android",
+                                  ", hence this feature is not available for it."       
+                                ]
+                     }
+        }
+}
