@@ -128,9 +128,10 @@ def test_encryption(): # to test the encryption
     print(json.loads(d))
     '''tester = get_random_bytes(32)
     print(key, '\n', tester, sys.getsizeof(key), sys.getsizeof(tester))'''
-write_remfile(write=True)
+    
+'''write_remfile(write=True)
 write_AppConfig()
 key = composite_key_test(True)
 key1 = get_random_bytes(32)
 master_key_store(key)
-print(auth_hash(key1))
+print(auth_hash(key1))'''
