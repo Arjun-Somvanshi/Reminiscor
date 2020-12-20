@@ -1,4 +1,6 @@
 from kivy.app import App
+from kivy.config import Config
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
 from kivy.utils import platform
@@ -171,22 +173,21 @@ class Login(Screen):
         welcome_design.ids.close.bind(on_release= partial(welcome.dismiss,self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True))
         # binding take the tutorial button with self.tutorial, to close the window popup
         # and then activate the tutorial
-        welcome_design.ids.tutorial.bind(on_release = partial(self.tutorial, welcome, False))
+        welcome_design.ids.tutorial.bind(on_release = partial(self.tutorial_initiate, welcome))
         welcome.open(welcome.pos_hint, {'center_x': 0.5, 'center_y': 0.5}, "out_expo")
 
     # This is a guided tutorial for reminiscor
-    def tutorial(self, welcome, start, instance):
+    def tutorial_initiate(self, welcome, instance):
         global app
-        if not start:    
-            welcome.dismiss(self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True)
-            welcome.bind(on_dismiss = partial(self.tutorial, welcome, True)) # This function is recurssive, depending on the value of 
-            # start it decides what part of the code to execute
-        if start:
-            design = Tutorial()
-            with open('tutorial.json') as f:
-                design.text = ' '.join(json.load(f)['tutorials']['tutorial1']['content'])
-            app.create_popup((dp(450),dp(550)), (dp(325), dp(400)), False, design, 'T U T O R I A L')
-            design.ids.exit.bind(on_release = app.close_popup)
+        welcome.dismiss(self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True)
+        Clock.schedule_once(self.tutorial, 0.8)
+    def tutorial(self, *args):
+        print('tutorial starting')
+        design = Tutorial()
+        with open('tutorial.json') as f:
+            design.text = ' '.join(json.load(f)['tutorials']['tutorial1']['content'])
+        app.create_popup((dp(450),dp(550)), (dp(325), dp(400)), False, design, 'T U T O R I A L')
+        design.ids.exit.bind(on_release = app.close_popup)
 
     # Function to invoke signup
     def call_signup(self):
@@ -251,6 +252,7 @@ class ReminiscorApp(App):
     def close_popup(self, *args):
         if self.popups:
             self.popups[-1].dismiss()
+            self.popups.pop(-1)
 
     def close_all_popups(self, *args):
         while self.popups:
