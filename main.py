@@ -16,7 +16,7 @@ from kivy.properties import ListProperty, NumericProperty, StringProperty
 from response import *
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
-if platform is not 'android':
+if platform not 'android':
     Window.minimum_width = dp(480)
     Window.minimum_height = dp(500)
 
