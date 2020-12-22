@@ -1,7 +1,6 @@
 import os
 from zipfile import ZipFile
 import json
-from ruamel.std.zipfile import delete_from_zip_file
 '''-------------------------------------------------------------------------------------'''
 app_path = ''
 username = 'arjun' # make this empty string later
