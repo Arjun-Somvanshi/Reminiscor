@@ -1,6 +1,7 @@
 import os
 from zipfile import ZipFile
 import json
+from ruamel.std.zipfile import delete_from_zip_file
 '''-------------------------------------------------------------------------------------'''
 app_path = ''
 username = 'arjun' # make this empty string later
@@ -29,15 +30,10 @@ def set_app_path(path):
     global app_path
     app_path = path + '/'
 
-def set_username(Username):
-    global username
-    username = Username
-
 def HomeDir(filename, sub_directory = ''): # Appends the subdirectory and filename to the path of the app
     global app_path
     testing = False
     if app_path and not testing:
-            print('Here we are!', app_path+sub_directory+'/'+filename)
             return app_path+sub_directory+'/'+filename
     else:
         return sub_directory+'/'+filename
@@ -62,30 +58,48 @@ def CheckModified(a, b):
 
 # Used to write the appconfiguration to the json file
 '''WARNING before calling this function all data should be decrypted, new key should be generated to re-encrypt all data'''
-def write_AppConfig(time_cost = 2, memory_cost = 51200, parallelism = 8):
+def write_AppConfig(keyfile, time_cost = 2, memory_cost = 51200, parallelism = 8):
     global username
-    app_config = json.dumps({"argon2_settings":{"time_cost": time_cost,"memory_cost": memory_cost,"parallelism": parallelism}}, indent=2)
-    write_remfile('app_config.json', app_config)
+    app_config = {"argon2_settings":{"time_cost": time_cost,"memory_cost": memory_cost,"parallelism": parallelism}}
+    if keyfile:
+        app_config['KeyFile'] = True
+        write_remfile('app_config.json', app_config)
+    else:    
+        write_remfile('app_config.json', app_config)
 
 
 # This opens the .rem file with username as the file name in the UserData directory, here the archive is empty
 def write_remfile(filename = '', data = None, write = False, *args): # before sending json data dump it
-    global username
+    '''To write in the rem file (reminiscor archive). filename, name of the file you want to write (no appends), data is 
+    the content you want to write, write is only to be used when using this function for the first time (during signup)'''
     if write: # This is to be made on signup, this initaializes the file
         create_directory('UserData')
-        print(HomeDir(username + '.rem'))
-        with ZipFile(HomeDir(username + '.rem', 'UserData'), 'w') as rem:
-        #with ZipFile('UserData/' + username + '.rem', 'w') as rem: # comment this and use above line for the actual thing
-            rem.close()
     else:
-        with ZipFile(HomeDir(username + '.rem', 'UserData'), 'a') as rem:
-            rem.writestr(filename, data)
+        file_type = filename.split('.')[1]
+        if file_type =='json':
+            with open(HomeDir(filename, 'UserData'), 'w') as f:
+                json.dump(data,f,indent =2)
+        elif file_type == 'bin' or file_type == 'dat' or file_type == 'reminiscor':
+            with open(HomeDir(filename, 'UserData'), 'wb') as f:
+                f.write(data)
+        elif file_type == 'txt':
+            with open(HomeDir(filename, 'UserData'), 'w') as f:
+                f.write(data)
 
 def read_remfile(filename):
-    global username
-    with ZipFile(HomeDir(username + '.rem', 'UserData'), 'r') as rem:
-        data = rem.read(filename)
-        return data
+    '''read all the data from a particular file in the .rem archive'''
+    file_type = filename.split('.')[1]
+    if file_type =='json':
+        with open(HomeDir(filename, 'UserData'), 'r') as f:
+            data = json.load(f)
+            print("this is hte data from read_remfile ", data)
+    elif file_type == 'bin' or file_type == 'dat' or file_type == 'reminiscor':
+        with open(HomeDir(filename, 'UserData'), 'rb') as f:
+            data = f.read()
+    elif file_type == 'txt':
+        with open(HomeDir(filename, 'UserData'), 'r') as f:
+            data = f.read()
+    return data
 
 '''Test the read and write methods'''
 def test_read_write():
@@ -95,3 +109,6 @@ def test_read_write():
     json_data = json.loads(read_remfile('new2.json'))
     print(json_data['entry']['password']) 
     #write_remfile('arjun', 'new1.txt', 'hello2', append = True)
+'''app_config = json.loads(read_remfile('app_config.json'))
+app_config["This will work"] = True
+write_remfile('app_config.json', json.dumps(app_config))'''

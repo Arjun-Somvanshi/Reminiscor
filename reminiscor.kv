@@ -1,5 +1,6 @@
 #: import RGBA kivy.utils.rgba
 #: import Window kivy.core.window.Window
+#: import SlideTransition kivy.uix.screenmanager.SlideTransition
 Screen_Manager:
     Login:
     Main:
@@ -21,8 +22,8 @@ Screen_Manager:
     disabled_color: self.color
 <CustomTextInput>:
     background_color:  app.color['middle']
-    foreground_color: app.color['font']
     background_normal: ''
+    foreground_color: app.color['font']
     padding: 6,(self.height-self.line_height)/2,6,6
     multiline: False
     background_disabled_normal: ''
@@ -110,7 +111,9 @@ Screen_Manager:
                         pos_hint:{'center_x': 0.5}
                         background_normal: 'UI/Mainbutton.png'
                         background_down: 'UI/Mainbuttondown.png'
-                        on_release: root.welcome()
+                        on_release:
+                            app.root.transition =  SlideTransition(direction='left')
+                            app.root.current = 'main' if root.auth_login() else "login"
                     UIButton:
                         id: signup
                         text: 'SignUp'
@@ -126,8 +129,28 @@ Screen_Manager:
                 size_hint_y: 0.1
         Widget:
             size_hint_x: 0.2 if app._platform!='android' else 0.08
-
-
+    
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'top'
+        padding: dp(15), dp(10)
+        BoxLayout:
+            size_hint: None,None
+            size: dp(50), dp(110)
+            orientation: 'vertical'
+            spacing: dp(10)
+            UIButton:
+                text: '?'
+                font_size: sp(22)
+                size_hint_y: None
+                height: dp(50)
+                on_release: root.tutorial()
+            UIButton:
+                text: 'i'
+                font_size: sp(22)
+                size_hint_y: None
+                height: dp(50)
+                on_release: root.welcome()
 #  --------------------- WELCOME POPUP -----------------
 
 <Welcome>:
@@ -334,3 +357,9 @@ Screen_Manager:
         size_hint: 0.3, None
         height: dp(35)
         pos_hint: {'right': 1}
+
+<Main>:
+    name: "main"
+    BoxLayout:
+        padding: 100
+        UIButton:

@@ -16,7 +16,7 @@ from kivy.properties import ListProperty, NumericProperty, StringProperty
 from response import *
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
-if platform is not 'android':
+if platform != 'android':
     Window.minimum_width = dp(480)
     Window.minimum_height = dp(500)
 
@@ -125,7 +125,9 @@ class Signup(BoxLayout):
         result = signup_response(self.ids.username.text, self.ids.password.text, self.ids.c_password.text)
         if 0 in result:
             if result[0] == 0: # meaning the username is less than 3 chars
-                self.ids.username.background_color = app.color['error']
+                self.ids.username.background_color = (1,1,1,1)
+                self.ids.username.background_normal = 'UI/Mainbuttondown.png'
+                self.ids.username.background_active = 'UI/Mainbuttondown.png'
                 quickmessage('Username Error', "Your username should be atleast 3 characters long")
             elif result[1] == 0: # password less than 8
                 self.ids.password.background_color = app.color['error']
@@ -191,10 +193,11 @@ class Login(Screen):
 
     # Function to invoke signup
     def call_signup(self):
+        rem_exists = False
         try:
             for fname in os.listdir(HomeDir('', 'UserData')):
                 print(fname)
-                if fname.endswith('.rem'): #if username.rem file exists then signup won't be called
+                if fname.endswith('master_key_hash.bin'): #if master key hash file exists then signup won't be called
                     rem_exists = True
                     break
         except:
@@ -218,7 +221,7 @@ class Login(Screen):
             design.ids.confirm.bind(on_release=partial(self.signup_complete, design))# had to make a separate function for confirm
             if platform =='android':
                 self.refactor_layout(self.signup, design)
-            self.signup.open(self.signup.pos_hint, {'center_x': 0.5, 'center_y': 0.5},'out_expo' )
+            self.signup.open(self.signup.pos_hint, {'center_x': 0.5, 'center_y': 0.5},'out_expo')
         else:
             quickmessage('User Error', 'There already seems to be a user assigned to this application')
 
@@ -228,6 +231,14 @@ class Login(Screen):
         if confirm:
             self.signup.dismiss({'center_x': 0.5, 'center_y': -2}, 'in_expo', 0.7, 0.85, True)
             on_sucess_signup(design.ids.username.text, design.ids.password.text, design.ids.enable.active)
+    
+    def auth_login(self):
+        result = login_auth(self.ids.password.text, 'UserData/KeyFile.dat')
+        print('from login: ', result)
+        if result[0]:
+            return True
+        else:
+            return False
 
 class Main(Screen):
     pass
