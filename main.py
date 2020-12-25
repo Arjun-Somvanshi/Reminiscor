@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.config import Config
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
-from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.screenmanager import CardTransition, FadeTransition, FallOutTransition, NoTransition, RiseInTransition, Screen, ScreenManager, SlideTransition, SwapTransition, WipeTransition
 from kivy.core.window import Window
 from kivy.utils import platform
 from kivy.uix.boxlayout import BoxLayout
@@ -17,13 +17,13 @@ from response import *
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
 if platform != 'android':
-    Window.minimum_width = dp(480)
+    Window.minimum_width = dp(525)
     Window.minimum_height = dp(500)
 
 '''-------------------Global------------------------------'''
 app = None
 app_path = None
-
+user_exists = not check_user()
 def quickmessage(title, message, *args):
     design = QuickMessage()
     design.ids.message.text = message
@@ -138,6 +138,8 @@ class Signup(BoxLayout):
                 quickmessage('Password Match Error', "Your passwords do not match!")
             return False
         else:
+            global user_exists
+            user_exists = False
             return True
 
 class Welcome(BoxLayout):
@@ -156,9 +158,14 @@ class QuickMessage(BoxLayout):
 '''-------------------------------------------------------'''
 class Login(Screen):
     # This function is called when the user uses the app for the first time
+    def __init__(self, **kwargs):
+        super(Login, self).__init__(**kwargs)
+        if user_exists:
+            Clock.schedule_once(self.welcome)
     def refactor_layout(self, signup, design):
         design.ids.keyfile.remove_widget(design.ids.enable)
-    def welcome(self):
+    def welcome(self, *args):
+        print('welcome')
         welcome_design = Welcome()
         welcome = CustomModalView(
                                 size_hint = (0.7, 0.8),
@@ -173,6 +180,9 @@ class Login(Screen):
         self.final_dismiss_pos_hint = {'center_x': -2, 'center_y':0.5 } # this just saves space look in tutorial 
         # binding the close button with the dismiss function defined in modal view for animations
         welcome_design.ids.close.bind(on_release= partial(welcome.dismiss,self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True))
+        if user_exists:
+            print('user_exists')
+            welcome_design.ids.close.bind(on_release=self.first_signup)# if the user uses the app for the first time, signup shows up after welcome
         # binding take the tutorial button with self.tutorial, to close the window popup
         # and then activate the tutorial
         welcome_design.ids.tutorial.bind(on_release = partial(self.tutorial_initiate, welcome))
@@ -190,18 +200,13 @@ class Login(Screen):
             design.text = ' '.join(json.load(f)['tutorials']['tutorial1']['content'])
         app.create_popup((dp(450),dp(550)), (dp(325), dp(400)), False, design, 'T U T O R I A L')
         design.ids.exit.bind(on_release = app.close_popup)
-
+    
+    def first_signup(self, *args):
+        '''function to invoke signup after welcome view is dismissed, this happens only when there is no user assigned to the app'''
+        Clock.schedule_once(self.call_signup, 0.75)
     # Function to invoke signup
-    def call_signup(self):
-        rem_exists = False
-        try:
-            for fname in os.listdir(HomeDir('', 'UserData')):
-                print(fname)
-                if fname.endswith('master_key_hash.bin'): #if master key hash file exists then signup won't be called
-                    rem_exists = True
-                    break
-        except:
-            rem_exists = False
+    def call_signup(self, *args):
+        rem_exists = check_user()
         if rem_exists is not True:
             design = Signup()
             self.signup = CustomModalView(
@@ -231,14 +236,42 @@ class Login(Screen):
         if confirm:
             self.signup.dismiss({'center_x': 0.5, 'center_y': -2}, 'in_expo', 0.7, 0.85, True)
             on_sucess_signup(design.ids.username.text, design.ids.password.text, design.ids.enable.active)
-    
+ 
     def auth_login(self):
-        result = login_auth(self.ids.password.text, 'UserData/KeyFile.dat')
-        print('from login: ', result)
-        if result[0]:
-            return True
+        result = [False, None]
+        global user_exists
+        if user_exists:
+            quickmessage('User Error', 'No user was found for Reminiscor, Please [color=#00abae]Signup[/color] first.')
         else:
-            return False
+            try:
+                result = login_auth(self.ids.password.text, 'UserData/KeyFile.dat')
+            except:
+                missing = []
+                error_message = ''
+                file_list = ['app_config.json', 'master_key_hash.bin', 'master_salt.bin', 'username.txt']
+                for fname in os.listdir(HomeDir('', 'UserData')):
+                    if fname not in file_list:
+                        missing.append(fname)
+                if missing:
+                    error_message = 'The following file/files seem to be missing in the [color=#a93226]UserData[/color] directory:[color=#00abae]'
+                    for fname in missing:
+                        error_message.append('\n\u2022'+fname)
+                else:
+                    error_message = 'Your KeyFile has not loaded please check the directory where the [color=#a93226]KeyFile[/color] is to be found.'
+                design = QuickMessage()
+                app.create_popup((dp(500), dp(500)), (dp(400), dp(400)), False, design, 'Warning')
+                design.ids.message.text = error_message
+                design.ids.close.bind(on_release = app.close_popup)
+            print('from login: ', result)
+            if result[0]:
+                #self.ids.password.text = ''
+                Clock.schedule_once(self.transition)
+            else:
+                quickmessage('Login Error', 'The Master Password is [color=#a93226]wrong.[/color]')
+
+    def transition(self, *args):
+        app.root.transition = FadeTransition(duration=0.5)
+        app.root.current = "main"
 
 class Main(Screen):
     pass
@@ -256,7 +289,7 @@ class ReminiscorApp(App):
              'middle': (45/255,45/255,45/255,1),
              'font': (160/255,160/255,160/255,1),
              'darkgrey': (90/255,90/255,90/255,1),
-             'error': (1,0,0,1)
+             'error': '#a93226'
              }
     popups = []
     animations = True # Remmeber to add an option to disable this in the settings
@@ -295,8 +328,8 @@ class ReminiscorApp(App):
         self.popups.append(popup)
 
     def build(self):
-        global app
-        app = self
+        global app, user_exists
+        app=self
         app_path = os.path.split(self.get_application_config())[0]
         set_app_path(app_path)
 if __name__ == '__main__':

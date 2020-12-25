@@ -1,5 +1,17 @@
 from security import *
 
+def check_user():
+    rem_exists = False
+    try:
+        for fname in os.listdir(HomeDir('', 'UserData')):
+            print(fname)
+            if fname.endswith('master_key_hash.bin'): #if master key hash file exists then signup won't be called
+                rem_exists = True
+                break
+    except:
+        rem_exists = False
+    return rem_exists
+
 def signup_response(username, password, c_password):
     result = [1,1,1]
     if len(username)<3:
@@ -31,7 +43,6 @@ def on_sucess_signup(username, password, keyfile = False):
 
 def login_auth(master_password, keyfile_dir):
     hash_of_master = blake(master_password)
-    print(hash_of_master)
     if keyfile_dir != None:
         key2 = keyfile_decrypt(hash_of_master.encode('utf-8'), keyfile_dir)
         m_key = master_key(key1=hash_of_master, key2=key2)

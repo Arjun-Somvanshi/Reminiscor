@@ -40,6 +40,12 @@ Screen_Manager:
 
 
 <Login>:
+    canvas:
+	    Color:
+	        rgba:30/255,30/255, 30/255, 1
+		Rectangle: 
+	        size: self.size
+	        pos: self.pos
     name: 'login'
     BoxLayout: # this boxlayout centers the grid layout that contains the text inpot and buttons 
         canvas.before:
@@ -86,18 +92,30 @@ Screen_Manager:
                         heigth: dp(30)
                         font_size: sp(30)
                     BoxLayout:
-                        padding: 5
+                        padding: dp(5)
+                        spacing: dp(10)
                         Widget: # These widgets keep the text input in the center as well
                             size_hint_x: 0.1    
                         CustomTextInput:
                             id: password
+                            text: 'arjun2000'#remove this
                             hint_text: 'Master Password'
                             size_hint_y: None
-                            password: True
+                            password: True if view.state!='down' else False
                             font_size: sp(20)
                             height: dp(50)
                             size_hint_max_x: dp(600)
-                            size_hint_min_x: dp(150)
+                            size_hint_min_x: dp(170)
+                        ToggleButton:
+                            id:view
+                            text: 'View'
+                            color: app.color['main']
+                            markup: True
+                            size_hint: 0.2, None
+                            height: dp(25)
+                            size_hint_min_x: dp(42)
+                            background_normal: 'UI/Mainbutton.png'
+                            background_down: 'UI/editondown.png'
                         Widget:
                             size_hint_x: 0.1
                 BoxLayout:
@@ -112,8 +130,7 @@ Screen_Manager:
                         background_normal: 'UI/Mainbutton.png'
                         background_down: 'UI/Mainbuttondown.png'
                         on_release:
-                            app.root.transition =  SlideTransition(direction='left')
-                            app.root.current = 'main' if root.auth_login() else "login"
+                            root.auth_login()
                     UIButton:
                         id: signup
                         text: 'SignUp'
@@ -129,10 +146,9 @@ Screen_Manager:
                 size_hint_y: 0.1
         Widget:
             size_hint_x: 0.2 if app._platform!='android' else 0.08
-    
     AnchorLayout:
         anchor_x: 'right'
-        anchor_y: 'top'
+        anchor_y: 'bottom'
         padding: dp(15), dp(10)
         BoxLayout:
             size_hint: None,None
@@ -303,6 +319,7 @@ Screen_Manager:
         bar_width: 5
         bar_color:[0,171/255,174/255,1]
         CustomLabel:
+            id: label
             padding: dp(10), dp(10)
             text: root.text
             height: self.texture_size[1]
@@ -359,7 +376,16 @@ Screen_Manager:
         pos_hint: {'right': 1}
 
 <Main>:
+    canvas:
+	    Color:
+	        rgba:30/255,30/255, 30/255, 1
+		Rectangle: 
+	        size: self.size
+	        pos: self.pos
     name: "main"
     BoxLayout:
         padding: 100
         UIButton:
+            on_release:
+                app.root.transition = SlideTransition(direction='right')
+                app.root.current = 'login'
