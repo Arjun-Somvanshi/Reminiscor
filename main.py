@@ -165,7 +165,6 @@ class Login(Screen):
     def refactor_layout(self, signup, design):
         design.ids.keyfile.remove_widget(design.ids.enable)
     def welcome(self, *args):
-        print('welcome')
         welcome_design = Welcome()
         welcome = CustomModalView(
                                 size_hint = (0.7, 0.8),
@@ -181,7 +180,6 @@ class Login(Screen):
         # binding the close button with the dismiss function defined in modal view for animations
         welcome_design.ids.close.bind(on_release= partial(welcome.dismiss,self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True))
         if user_exists:
-            print('user_exists')
             welcome_design.ids.close.bind(on_release=self.first_signup)# if the user uses the app for the first time, signup shows up after welcome
         # binding take the tutorial button with self.tutorial, to close the window popup
         # and then activate the tutorial
@@ -194,7 +192,6 @@ class Login(Screen):
         welcome.dismiss(self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True)
         Clock.schedule_once(self.tutorial, 0.8)
     def tutorial(self, *args):
-        print('tutorial starting')
         design = Tutorial()
         with open('tutorial.json') as f:
             design.text = ' '.join(json.load(f)['tutorials']['tutorial1']['content'])
@@ -289,7 +286,7 @@ class ReminiscorApp(App):
              'middle': (45/255,45/255,45/255,1),
              'font': (160/255,160/255,160/255,1),
              'darkgrey': (90/255,90/255,90/255,1),
-             'error': '#a93226'
+             'error': (1,0,0,1)
              }
     popups = []
     animations = True # Remmeber to add an option to disable this in the settings
