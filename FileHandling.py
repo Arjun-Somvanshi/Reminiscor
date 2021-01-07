@@ -55,6 +55,10 @@ def CheckModified(a, b):
     else:
         return True
 
+def return_username():
+    with open(HomeDir('username.txt', 'UserData'), 'r') as f:
+        return f.read()
+
 # Used to write the appconfiguration to the json file
 '''WARNING before calling this function all data should be decrypted, new key should be generated to re-encrypt all data'''
 def write_AppConfig(keyfile, time_cost = 2, memory_cost = 51200, parallelism = 8):

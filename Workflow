@@ -31,3 +31,8 @@ the user remembers his username for reminiscor
 # ----------------------------------------
 # Make a file with just the title data which is encrypted with a faster algorithm
 #------------------------------------------
+
+# ----------------------------------------
+How to bind the exit key on android to exit the app
+#------------------------------------------
+for android bind key 27 to exit

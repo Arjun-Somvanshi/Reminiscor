@@ -36,7 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,pycryptodome
+requirements = python3,kivy,pycryptodome,argon2-cffi
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -217,7 +217,7 @@ fullscreen = 0
 #android.uses_library =
 
 # (str) Android logcat filters to use
-#android.logcat_filters = *:S python:D
+android.logcat_filters = *:S python:D
 
 # (bool) Copy library instead of making a libpymodules.so
 #android.copy_libs = 1
@@ -240,10 +240,10 @@ android.allow_backup = True
 #
 
 # (str) python-for-android fork to use, defaults to upstream (kivy)
-#p4a.fork = kivy
+p4a.fork = Arjun-Somvanshi
 
 # (str) python-for-android branch to use, defaults to master
-#p4a.branch = master
+p4a.branch = develop
 
 # (str) python-for-android git clone directory (if empty, it will be automatically cloned from github)
 #p4a.source_dir =

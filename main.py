@@ -5,20 +5,23 @@ from kivy.uix.screenmanager import CardTransition, FadeTransition, FallOutTransi
 from kivy.core.window import Window
 from kivy.utils import platform
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp, sp
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.modalview import ModalView
 from kivy.animation import Animation
 from kivy.clock import Clock
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from functools import partial
-from kivy.properties import ListProperty, NumericProperty, StringProperty
+from kivy.properties import ListProperty, NumericProperty, StringProperty, ObjectProperty
 from response import *
+import platform
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
 if platform != 'android':
-    Window.minimum_width = dp(525)
-    Window.minimum_height = dp(500)
+    Window.minimum_width = dp(490)
+    Window.minimum_height = dp(550)
 
 '''-------------------Global------------------------------'''
 app = None
@@ -241,7 +244,7 @@ class Login(Screen):
             quickmessage('User Error', 'No user was found for Reminiscor, Please [color=#00abae]Signup[/color] first.')
         else:
             try:
-                result = login_auth(self.ids.password.text, 'UserData/KeyFile.dat')
+                result = login_auth(self.ids.password.text, None)
             except:
                 missing = []
                 error_message = ''
@@ -261,8 +264,14 @@ class Login(Screen):
                 design.ids.close.bind(on_release = app.close_popup)
             print('from login: ', result)
             if result[0]:
-                #self.ids.password.text = ''
-                Clock.schedule_once(self.transition)
+                self.ids.password.text = ''
+                try:
+                    with open(HomeDir('database.json', 'UserData')) as f:
+                        encrypted_data =  json.load(f)
+                    app.database = AES_Decrypt(result[1], encrypted_data)
+                except:
+                    pass
+                self.transition()
             else:
                 quickmessage('Login Error', 'The Master Password is [color=#a93226]wrong.[/color]')
 
@@ -270,9 +279,18 @@ class Login(Screen):
         app.root.transition = FadeTransition(duration=0.5)
         app.root.current = "main"
 
-class Main(Screen):
-    pass
+class Entry(RecycleDataViewBehavior, GridLayout):
+    serial_no = StringProperty()
+    name = StringProperty()
+    url =  StringProperty()
+    database_name = StringProperty()
+    category = StringProperty()
+    owner = ObjectProperty()
 
+class Main(Screen):
+   username = StringProperty()
+   def on_enter_main(self):
+       username = return_username()
 class AddEntry(Screen):
     pass
 
@@ -290,6 +308,7 @@ class ReminiscorApp(App):
              }
     popups = []
     animations = True # Remmeber to add an option to disable this in the settings
+    database = ListProperty()
     def close_popup(self, *args):
         if self.popups:
             self.popups[-1].dismiss()
@@ -328,6 +347,7 @@ class ReminiscorApp(App):
         global app, user_exists
         app=self
         app_path = os.path.split(self.get_application_config())[0]
+        #self.database.append({'serial_no': '1', 'name':'Empty Database', 'url': '', 'database_name': '', 'category': 'some', 'owner': self})
         set_app_path(app_path)
 if __name__ == '__main__':
     ReminiscorApp().run()

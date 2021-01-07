@@ -105,7 +105,13 @@ Screen_Manager:
                             font_size: sp(20)
                             height: dp(50)
                             size_hint_max_x: dp(600)
-                            size_hint_min_x: dp(170)
+                            size_hint_min_x: dp(160)
+                        Widget:
+                            size_hint_x: 0.1
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(25)
+                        Widget:
                         ToggleButton:
                             id:view
                             text: 'View'
@@ -117,7 +123,6 @@ Screen_Manager:
                             background_normal: 'UI/Mainbutton.png'
                             background_down: 'UI/editondown.png'
                         Widget:
-                            size_hint_x: 0.1
                 BoxLayout:
                     orientation: 'vertical'
                     spacing: dp(20)
@@ -376,16 +381,181 @@ Screen_Manager:
         pos_hint: {'right': 1}
 
 <Main>:
+    name: "main"
     canvas:
 	    Color:
 	        rgba:30/255,30/255, 30/255, 1
 		Rectangle: 
 	        size: self.size
 	        pos: self.pos
-    name: "main"
     BoxLayout:
-        padding: 100
+        canvas.before:
+            Color:
+                rgba:app.color["main"]
+            Line:
+                points: [root.width/3, root.height-dp(80), 5, root.height-dp(80), 5, 0]
+                width: 5
+                cap: "square"
+            Line:
+                points: [root.width - root.width/3, root.height-dp(80), root.width - 5, root.height-dp(80), root.width-5, 0]
+                width: 5
+                cap: "square"
+        orientation: 'vertical'
+        spacing: dp(10)
+        GridLayout:
+            cols: 3
+            size_hint_y: None
+            height: dp(60)
+            padding: dp(10)
+            BoxLayout:
+                CustomLabel:
+                    width: self.texture_size[0]
+                    size_hint_x: None
+                    text: 'Reminiscor'
+                    font_name: 'Fonts/Colchester.ttf'
+                    font_size: sp(40)
+            CustomLabel:
+                text: 'Welcome, ' + root.username
+                font_size: sp(20)
+            BoxLayout:
+                Widget:
+                UIButton:
+                    id: settings
+                    size_hint_x: None
+                    width: dp(50)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(45)
+            Widget:
+            CustomTextInput:
+                size_hint_y: None
+                height: dp(45)
+                hint_text: 'Search the Database' 
+                size_hint_min_x: dp(275)
+            Widget:
+        BoxLayout:
+            opacity: 0 if app.database == [] else 1
+            padding: 0,dp(40),0,0
+            BoxLayout:
+                orientation: 'vertical'
+                GridLayout:
+                    id: attributes
+                    canvas.before:
+                        Color:
+                            rgba:(40/255,40/255,40/255,1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    cols: 5
+                    size_hint:None, None
+                    width: rv.width
+                    pos_hint: {'center_x': 0.5}
+                    height: dp(50)
+                    padding: dp(20), dp(10), dp(20), 0
+                    UIButton:
+                        background_down: 'UI/Mainbuttondown.png'
+                        color: app.color['main']
+                        size_hint_x: None
+                        width: cm(0.7)
+                    UIButton:
+                        background_down: 'UI/Mainbuttondown.png'
+                        color: app.color['main']
+                        text: 'Entry Name'
+                        size_hint_x: 0.3
+                        size_hint_min_x: cm(2)
+                    UIButton:
+                        text: 'Copy Data'
+                        background_down: 'UI/Mainbuttondown.png'
+                        color: app.color['main']
+                        font_size: sp(14)
+                        size_hint_x: 0.2
+                    UIButton:
+                        text: 'URL'
+                        background_down: 'UI/Mainbuttondown.png'
+                        color: app.color['main']
+                        size_hint_x: 0.1
+                    UIButton:
+                        text: 'Category'
+                        color: app.color['main']
+                        font_size: sp(14)
+                        text_size: self.width - self.width/10, None
+                        shorten: True
+                        halign: 'center'
+                        shorten_from: 'right'
+                        background_down: 'UI/Mainbuttondown.png'
+                        size_hint_x: 0.2
+                BoxLayout:
+                    Widget:
+                        size_hint_x: 0.1
+                    RecycleView:
+                        viewclass: "Entry"
+                        data: app.database
+                        RecycleGridLayout:
+                            id: rv
+                            canvas.before:
+                                Color:
+                                    rgba:(40/255,40/255,40/255,1)
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
+                            cols: 1
+                            padding: dp(20),0, dp(20), dp(10)
+                            default_size_hint: 1, None
+                            default_size: None, dp(80)
+                            size_hint: 1, None
+                            height: self.minimum_height
+                    Widget:        
+                        size_hint_x: 0.1
+<Entry>:
+    cols: 5
+    UIButton:
+        background_down: 'UI/Mainbuttondown.png'
+        id: entry_serial_no
+        text: root.serial_no
+        size_hint_x: None
+        width: cm(0.7)
+    UIButton:
+        id: entry_name_url
+        font_size: sp(14.5)
+        shorten: True
+        shorten_from: 'right'
+        text_size: self.width-self.width/10, None
+        halign: 'center'
+        text: root.name
+        size_hint_x: 0.3
+        size_hint_min_x: cm(2)
+    BoxLayout:
+        id: copy_col
+        orientation: 'vertical'
+        size_hint_x: 0.2
         UIButton:
-            on_release:
-                app.root.transition = SlideTransition(direction='right')
-                app.root.current = 'login'
+            text: "Copy Username" 
+            text_size: self.width - self.width/10, None
+            halign: 'center'
+            font_size: sp(14)
+            shorten: True
+            shorten_from: 'right'
+        UIButton:
+            text: "Copy Password"
+            text_size: self.width - self.width/10, None
+            halign: 'center'
+            shorten: True
+            shorten_from: 'right'
+            font_size: sp(14)
+    UIButton:
+        id: open_url
+        size_hint_x: 0.1
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba:(30/255,30/255,30/255,1)
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        id: database_and_category
+        size_hint_x: 0.2
+        orientation: 'vertical'
+        UIButton:
+            background_down: 'UI/Mainbuttondown.png'
+        UIButton:
+            background_down: 'UI/Mainbuttondown.png'
