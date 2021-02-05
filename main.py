@@ -1,6 +1,5 @@
 from kivy.app import App
 from kivy.config import Config
-Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 from kivy.uix.screenmanager import CardTransition, FadeTransition, FallOutTransition, NoTransition, RiseInTransition, Screen, ScreenManager, SlideTransition, SwapTransition, WipeTransition
 from kivy.core.window import Window
 from kivy.utils import platform
@@ -14,9 +13,10 @@ from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from functools import partial
-from kivy.properties import ListProperty, NumericProperty, StringProperty, ObjectProperty
+from kivy.properties import ListProperty, NumericProperty, StringProperty, ObjectProperty, BooleanProperty
 from response import *
-import platform
+from kivy.logger import Logger, LOG_LEVELS
+Logger.setLevel(LOG_LEVELS["debug"])
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
 if platform != 'android':
@@ -26,11 +26,18 @@ if platform != 'android':
 '''-------------------Global------------------------------'''
 app = None
 app_path = None
-user_exists = not check_user()
+no_user = None
 def quickmessage(title, message, *args):
     design = QuickMessage()
     design.ids.message.text = message
-    app.create_popup( (dp(400), dp(225)), (dp(400), dp(225)), True, design, title,(0.5, 0.5))
+    if app._platform == 'android':
+        max_size = (dp(400), dp(250))
+        min_size = (dp(300), dp(250))
+    else:
+        max_size = (dp(400), dp(225))
+        min_size = (dp(300), dp(225))
+    Logger.debug('max size: %s', max_size)
+    app.create_popup(max_size, min_size, True, design, title,(0.5, 0.5))
     design.ids.close.bind(on_release=app.close_popup)
 '''-------------------------------------------------------'''
 
@@ -141,8 +148,8 @@ class Signup(BoxLayout):
                 quickmessage('Password Match Error', "Your passwords do not match!")
             return False
         else:
-            global user_exists
-            user_exists = False
+            global no_user
+            no_user = False
             return True
 
 class Welcome(BoxLayout):
@@ -163,11 +170,15 @@ class Login(Screen):
     # This function is called when the user uses the app for the first time
     def __init__(self, **kwargs):
         super(Login, self).__init__(**kwargs)
-        if user_exists:
-            Clock.schedule_once(self.welcome)
+        global no_user
+        no_user =  not check_user()
+        Logger.debug('User Status: %s', no_user)
+        if no_user:
+            Clock.schedule_once(self.welcome, 1)
     def refactor_layout(self, signup, design):
         design.ids.keyfile.remove_widget(design.ids.enable)
     def welcome(self, *args):
+        Logger.debug('Welcome was called')
         welcome_design = Welcome()
         welcome = CustomModalView(
                                 size_hint = (0.7, 0.8),
@@ -182,7 +193,7 @@ class Login(Screen):
         self.final_dismiss_pos_hint = {'center_x': -2, 'center_y':0.5 } # this just saves space look in tutorial 
         # binding the close button with the dismiss function defined in modal view for animations
         welcome_design.ids.close.bind(on_release= partial(welcome.dismiss,self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True))
-        if user_exists:
+        if no_user:
             welcome_design.ids.close.bind(on_release=self.first_signup)# if the user uses the app for the first time, signup shows up after welcome
         # binding take the tutorial button with self.tutorial, to close the window popup
         # and then activate the tutorial
@@ -205,7 +216,7 @@ class Login(Screen):
         '''function to invoke signup after welcome view is dismissed, this happens only when there is no user assigned to the app'''
         Clock.schedule_once(self.call_signup, 0.75)
     # Function to invoke signup
-    def call_signup(self, *args):
+    def call_signup(self, *args):             
         rem_exists = check_user()
         if rem_exists is not True:
             design = Signup()
@@ -226,7 +237,9 @@ class Login(Screen):
             design.ids.confirm.bind(on_release=partial(self.signup_complete, design))# had to make a separate function for confirm
             if platform =='android':
                 self.refactor_layout(self.signup, design)
+            Logger.debug('Signup was called here')
             self.signup.open(self.signup.pos_hint, {'center_x': 0.5, 'center_y': 0.5},'out_expo')
+
         else:
             quickmessage('User Error', 'There already seems to be a user assigned to this application')
 
@@ -239,13 +252,16 @@ class Login(Screen):
  
     def auth_login(self):
         result = [False, None]
-        global user_exists
-        if user_exists:
+        global no_user
+        Logger.debug('User Status: %s', no_user)
+        if no_user:
+            Logger.debug('User Status: %s', no_user)
             quickmessage('User Error', 'No user was found for Reminiscor, Please [color=#00abae]Signup[/color] first.')
         else:
             try:
                 result = login_auth(self.ids.password.text, None)
-            except:
+            except Exception as e:
+                Logger.debug("The exception is: %s",e)
                 missing = []
                 error_message = ''
                 file_list = ['app_config.json', 'master_key_hash.bin', 'master_salt.bin', 'username.txt']
@@ -290,7 +306,7 @@ class Entry(RecycleDataViewBehavior, GridLayout):
 class Main(Screen):
    username = StringProperty()
    def on_enter_main(self):
-       username = return_username()
+       self.username = return_username()
 class AddEntry(Screen):
     pass
 
@@ -309,6 +325,7 @@ class ReminiscorApp(App):
     popups = []
     animations = True # Remmeber to add an option to disable this in the settings
     database = ListProperty()
+    portable = BooleanProperty(True)
     def close_popup(self, *args):
         if self.popups:
             self.popups[-1].dismiss()
@@ -344,10 +361,18 @@ class ReminiscorApp(App):
         self.popups.append(popup)
 
     def build(self):
-        global app, user_exists
+        global app, no_user, app_path
+        Logger.info('Platform: %s', self._platform)
         app=self
-        app_path = os.path.split(self.get_application_config())[0]
+        if self.portable and self._platform != 'android':
+            Logger.debug('Path Search: For Desktop')
+            path = os.path.split(self.get_application_config())[0]
+            app_path = set_app_path(self._platform, '/Reminiscor', self.portable, path)
+        else:
+            Logger.debug('Path Search: For Android')
+            app_path = set_app_path(self._platform, '/Reminiscor', self.portable, '/sdcard')
+        print(app_path)
+        Logger.info('Path: %s', app_path) #/sdcard/
         #self.database.append({'serial_no': '1', 'name':'Empty Database', 'url': '', 'database_name': '', 'category': 'some', 'owner': self})
-        set_app_path(app_path)
 if __name__ == '__main__':
     ReminiscorApp().run()

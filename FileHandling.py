@@ -1,9 +1,10 @@
 import os
 from zipfile import ZipFile
 import json
+from os.path import dirname, join
 '''-------------------------------------------------------------------------------------'''
 app_path = ''
-username = 'arjun' # make this empty string later
+username = '' # make this empty string later
 '''-------------------------------------------------------------------------------------'''
 
 def EOF(file):  # This checks if pointer has reached end of file
@@ -25,9 +26,27 @@ def ReadFile(file):  # This reads whole file line by line and returns it as list
 def WriteLine(file, info):  # Writes line with \n included
     file.writelines(info + '\n')
 
-def set_app_path(path):
+def set_app_path(platform, app_name, portable = False, path = ""):
     global app_path
-    app_path = path + '/'
+    if portable and platform!= 'android':
+        app_path = path 
+    else:
+        print("The platform is: ", platform)
+        if platform == 'win':
+            app_path = os.getenv('APPDATA') + os.path.sep + app_name
+        elif platform == 'linux':
+            app_path = os.path.expanduser('~') + os.path.sep + "."+app_name.lower()
+        elif platform == 'macosx':
+            app_path = os.path.expanduser('~/Library/Application Support/{}'.format(app_name))
+        elif platform == 'android':
+            from jnius import autoclass, cast
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            context = cast('android.content.Context', PythonActivity.mActivity)
+            file_p = cast('java.io.File', context.getFilesDir())
+            app_path = file_p.getAbsolutePath()
+
+    app_path += '/'
+    return app_path
 
 def HomeDir(filename, sub_directory = ''): # Appends the subdirectory and filename to the path of the app
     global app_path

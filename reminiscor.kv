@@ -94,8 +94,6 @@ Screen_Manager:
                     BoxLayout:
                         padding: dp(5)
                         spacing: dp(10)
-                        Widget: # These widgets keep the text input in the center as well
-                            size_hint_x: 0.1    
                         CustomTextInput:
                             id: password
                             text: 'arjun2000'#remove this
@@ -104,10 +102,11 @@ Screen_Manager:
                             password: True if view.state!='down' else False
                             font_size: sp(20)
                             height: dp(50)
+                            halign: 'center'
+                            size_hint_x: 0.8
                             size_hint_max_x: dp(600)
                             size_hint_min_x: dp(160)
-                        Widget:
-                            size_hint_x: 0.1
+                            pos_hint: {'center_x': 0.5}
                     BoxLayout:
                         size_hint_y: None
                         height: dp(25)
@@ -382,6 +381,7 @@ Screen_Manager:
 
 <Main>:
     name: "main"
+    on_pre_enter: root.on_enter_main()
     canvas:
 	    Color:
 	        rgba:30/255,30/255, 30/255, 1
