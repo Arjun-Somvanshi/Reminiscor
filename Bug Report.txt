@@ -1,0 +1,27 @@
+Signup bug
+------------
+* After giving storage permission if user minimizes the app, and then comes back to it for the sign up process, the signup fails
+  The error is log is the following:
+***************************************************
+                    LOG
+Traceback (most recent call last):
+02-08 20:47:58.593 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/app/main.py", line 399, in <module>
+02-08 20:47:58.601 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/app.py", line 950, in run
+02-08 20:47:58.602 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 582, in runTouchApp
+02-08 20:47:58.604 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 347, in mainloop
+02-08 20:47:58.605 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 391, in idle
+02-08 20:47:58.607 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 342, in dispatch_input
+02-08 20:47:58.609 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 308, in post_dispatch_input
+02-08 20:47:58.610 19905 19968 I python  :    File "kivy/_event.pyx", line 709, in kivy._event.EventDispatcher.dispatch
+02-08 20:47:58.611 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/uix/behaviors/button.py", line 179, in on_touch_up
+02-08 20:47:58.613 19905 19968 I python  :    File "kivy/_event.pyx", line 705, in kivy._event.EventDispatcher.dispatch
+02-08 20:47:58.614 19905 19968 I python  :    File "kivy/_event.pyx", line 1248, in kivy._event.EventObservers.dispatch
+02-08 20:47:58.615 19905 19968 I python  :    File "kivy/_event.pyx", line 1172, in kivy._event.EventObservers._dispatch
+02-08 20:47:58.617 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/app/main.py", line 248, in signup_complete
+02-08 20:47:58.618 19905 19968 I python  :    File "kivy/properties.pyx", line 861, in kivy.properties.ObservableDict.__getattr__
+02-08 20:47:58.619 19905 19968 I python  :    File "kivy/properties.pyx", line 855, in kivy.properties.ObservableDict._weak_return
+02-08 20:47:58.621 19905 19968 I python  :    File "kivy/weakproxy.pyx", line 42, in kivy.weakproxy.WeakProxy.__class__.__get__
+02-08 20:47:58.622 19905 19968 I python  :    File "kivy/weakproxy.pyx", line 28, in kivy.weakproxy.WeakProxy.__ref__
+02-08 20:47:58.623 19905 19968 I python  :  ReferenceError: weakly-referenced object no longer exists
+***************************************************
+* This probably has something to do with the response.py reading writing process, not sure though

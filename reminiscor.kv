@@ -341,7 +341,7 @@ Screen_Manager:
         size_hint_y: 0.2
         UIButton:
             id: exit
-            text: 'Exit Tutorial'
+            text: 'Exit'
             size_hint_max_y: dp(50)
             size_hint_min_y: dp(40)
             size_hint_min_x: dp(30)
@@ -401,28 +401,52 @@ Screen_Manager:
                 width: 5
                 cap: "square"
         orientation: 'vertical'
-        spacing: dp(10)
+        spacing: dp(4)
         GridLayout:
-            cols: 3
+            id: navigation_bar
+            cols: 4
             size_hint_y: None
-            height: dp(60)
+            height: dp(70)
             padding: dp(10)
+            Image:
+                id: logo
+                size_hint: None, None
+                size: dp(55), dp(55)
+                source: 'UI/logowithborder.png'
             BoxLayout:
+                orientation: 'vertical'
+                padding: dp(10)
+                spacing: dp(25)
                 CustomLabel:
                     width: self.texture_size[0]
                     size_hint_x: None
                     text: 'Reminiscor'
                     font_name: 'Fonts/Colchester.ttf'
                     font_size: sp(40)
-            CustomLabel:
-                text: 'Welcome, ' + root.username
-                font_size: sp(20)
+                CustomLabel:
+                    size_hint_x: None
+                    width: self.texture_size[0] + dp(5)
+                    text: 'Welcome, ' + root.username
+                    text_size: dp(160), None
+                    shorten: True 
+                    shorten_from: 'right'
+                    font_size: sp(16) if self.texture_size[0]<=dp(150) else sp(14)
             BoxLayout:
+                id: nav_bar_buttons
                 Widget:
                 UIButton:
-                    id: settings
+                    id: logout
+                    text: 'Logout'
+                    size_hint: None, None
+                    size: dp(80), dp(50)
+                    on_release: root.Logout()
+                Widget:
                     size_hint_x: None
-                    width: dp(50)
+                    width: dp(25)
+                UIButton:
+                    id: settings
+                    size_hint: None, None
+                    size: dp(50), dp(50)
         BoxLayout:
             size_hint_y: None
             height: dp(45)

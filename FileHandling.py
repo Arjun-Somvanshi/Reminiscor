@@ -2,8 +2,10 @@ import os
 from zipfile import ZipFile
 import json
 from os.path import dirname, join
+
 '''-------------------------------------------------------------------------------------'''
 app_path = ''
+external_path = ''
 username = '' # make this empty string later
 '''-------------------------------------------------------------------------------------'''
 
@@ -27,7 +29,7 @@ def WriteLine(file, info):  # Writes line with \n included
     file.writelines(info + '\n')
 
 def set_app_path(platform, app_name, portable = False, path = ""):
-    global app_path
+    global app_path, external_path
     if portable and platform!= 'android':
         app_path = path 
     else:
@@ -39,21 +41,20 @@ def set_app_path(platform, app_name, portable = False, path = ""):
         elif platform == 'macosx':
             app_path = os.path.expanduser('~/Library/Application Support/{}'.format(app_name))
         elif platform == 'android':
-            from jnius import autoclass, cast
-            PythonActivity = autoclass('org.kivy.android.PythonActivity')
-            context = cast('android.content.Context', PythonActivity.mActivity)
-            file_p = cast('java.io.File', context.getFilesDir())
-            app_path = file_p.getAbsolutePath()
-
+            from android.storage import app_storage_path, primary_external_storage_path
+            app_path = app_storage_path()
+            external_path = primary_external_storage_path()
     app_path += '/'
-    return app_path
+    return app_path, external_path
 
 def HomeDir(filename, sub_directory = ''): # Appends the subdirectory and filename to the path of the app
     global app_path
     testing = False
     if app_path and not testing:
             return app_path+sub_directory+'/'+filename
+            print("HomeDir is: ", sub_directory+'/'+filename)
     else:
+        print("HomeDir is: ", sub_directory+'/'+filename)
         return sub_directory+'/'+filename
 
 def create_directory(subdirectory): # creates a subdirectory

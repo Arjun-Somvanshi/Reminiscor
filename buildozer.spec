@@ -36,7 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,pycryptodome,argon2-cffi
+requirements = python3,kivy,pycryptodome,argon2-cffi,android
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes

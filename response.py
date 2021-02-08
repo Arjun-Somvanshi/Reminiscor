@@ -1,15 +1,16 @@
 from security import *
-
 def check_user():
     rem_exists = False
     try:
+        print(HomeDir('', 'UserData'))
         for fname in os.listdir(HomeDir('', 'UserData')):
-            print(fname)
             if fname.endswith('master_key_hash.bin'): #if master key hash file exists then signup won't be called
+                print("Master Key Hash Bin is found :(")
                 rem_exists = True
                 break
     except:
         rem_exists = False
+        print("I HAVE BEEN FOOLED")
     return rem_exists
 
 def signup_response(username, password, c_password):

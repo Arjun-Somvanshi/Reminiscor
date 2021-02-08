@@ -19,13 +19,14 @@ from kivy.logger import Logger, LOG_LEVELS
 Logger.setLevel(LOG_LEVELS["debug"])
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
-if platform != 'android':
+if platform != 'android' and 1==0:
     Window.minimum_width = dp(490)
     Window.minimum_height = dp(550)
 
 '''-------------------Global------------------------------'''
 app = None
 app_path = None
+external_path = None
 no_user = None
 def quickmessage(title, message, *args):
     design = QuickMessage()
@@ -170,11 +171,7 @@ class Login(Screen):
     # This function is called when the user uses the app for the first time
     def __init__(self, **kwargs):
         super(Login, self).__init__(**kwargs)
-        global no_user
-        no_user =  not check_user()
-        Logger.debug('User Status: %s', no_user)
-        if no_user:
-            Clock.schedule_once(self.welcome, 1)
+        pass
     def refactor_layout(self, signup, design):
         design.ids.keyfile.remove_widget(design.ids.enable)
     def welcome(self, *args):
@@ -304,9 +301,19 @@ class Entry(RecycleDataViewBehavior, GridLayout):
     owner = ObjectProperty()
 
 class Main(Screen):
-   username = StringProperty()
-   def on_enter_main(self):
-       self.username = return_username()
+    username = StringProperty()
+    def on_enter_main(self):
+        self.username = return_username()
+        self.refactor_layout()
+    def refactor_layout(self):
+        if platform == 'android':
+            self.ids.navigation_bar.remove_widget(self.ids.logo)
+    def Logout(self):
+        '''This function logs the user out, deletes/unassigns all decrypted data from memory'''
+        # for now I am just switching screens need to rewrite this code later
+        self.manager.transition = SlideTransition(direction = 'right') 
+        self.manager.current = 'login'
+       
 class AddEntry(Screen):
     pass
 
@@ -361,7 +368,7 @@ class ReminiscorApp(App):
         self.popups.append(popup)
 
     def build(self):
-        global app, no_user, app_path
+        global app, no_user, app_path, external_path
         Logger.info('Platform: %s', self._platform)
         app=self
         if self.portable and self._platform != 'android':
@@ -370,9 +377,27 @@ class ReminiscorApp(App):
             app_path = set_app_path(self._platform, '/Reminiscor', self.portable, path)
         else:
             Logger.debug('Path Search: For Android')
-            app_path = set_app_path(self._platform, '/Reminiscor', self.portable, '/sdcard')
-        print(app_path)
+            app_path, external_path = set_app_path(self._platform, '/Reminiscor', self.portable, '/sdcard')
         Logger.info('Path: %s', app_path) #/sdcard/
+        self.first_use()
+
+    def on_start(self):
+        '''This function is an event to handle the start of the app, here we are going to ask for permissions'''
+        if platform == 'android':
+            from android.permissions import request_permissions, Permission
+            self.write_external_permission = request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
+            
+    def first_use(self):
+        global app, no_user, app_path, external_path
+        no_user = not check_user()
+        if self.write_external_permission:
+            pass
+        else:
+            app.Exit()
+        if no_user:
+            login_screen = app.root.get_screen('login')
+            Logger.debug('Welcome is called from here the first time.')
+            Clock.schedule_once(login_screen.welcome, 1)
         #self.database.append({'serial_no': '1', 'name':'Empty Database', 'url': '', 'database_name': '', 'category': 'some', 'owner': self})
 if __name__ == '__main__':
     ReminiscorApp().run()

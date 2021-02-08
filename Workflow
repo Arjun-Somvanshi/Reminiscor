@@ -36,3 +36,4 @@ the user remembers his username for reminiscor
 How to bind the exit key on android to exit the app
 #------------------------------------------
 for android bind key 27 to exit
+recent tabs should just lock the app, (logout) where as the back button should exit the app
