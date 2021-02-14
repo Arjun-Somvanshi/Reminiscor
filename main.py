@@ -220,7 +220,7 @@ class Login(Screen):
             self.signup = CustomModalView(
                                 size_hint = (0.5, 0.8),
                                 auto_dismiss = False,
-                                size_hint_max = (dp(500),dp(500)),
+                                size_hint_max = (dp(450),dp(500)),
                                 size_hint_min = (dp(325),dp(400)),
                                 background = 'UI/popup400x400.png',
                                 opacity = 0,
@@ -256,6 +256,7 @@ class Login(Screen):
             quickmessage('User Error', 'No user was found for Reminiscor, Please [color=#00abae]Signup[/color] first.')
         else:
             try:
+                print('hello')
                 result = login_auth(self.ids.password.text, None)
             except Exception as e:
                 Logger.debug("The exception is: %s",e)
@@ -374,26 +375,43 @@ class ReminiscorApp(App):
         if self.portable and self._platform != 'android':
             Logger.debug('Path Search: For Desktop')
             path = os.path.split(self.get_application_config())[0]
-            app_path = set_app_path(self._platform, '/Reminiscor', self.portable, path)
+            app_path, external_path = set_app_path(self._platform, '/Reminiscor', self.portable, path)
         else:
             Logger.debug('Path Search: For Android')
             app_path, external_path = set_app_path(self._platform, '/Reminiscor', self.portable, '/sdcard')
         Logger.info('Path: %s', app_path) #/sdcard/
-        self.first_use()
 
     def on_start(self):
         '''This function is an event to handle the start of the app, here we are going to ask for permissions'''
         if platform == 'android':
-            from android.permissions import request_permissions, Permission
-            self.write_external_permission = request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
+            from android.permissions import request_permissions, check_permission, Permission
+            self.write_external_permission = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
+            if not self.write_external_permission:
+                Logger.info("Permission:%s", "Storage Permission")
+                request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
+                self.first_use()
+            else:
+                self.first_use()
+        else:
+            self.first_use()
             
     def first_use(self):
         global app, no_user, app_path, external_path
-        no_user = not check_user()
-        if self.write_external_permission:
-            pass
-        else:
-            app.Exit()
+        # first we have to request a permission upon first use
+        time = 0
+        if platform == 'android':
+            while True:
+                from android.permissions import check_permission, Permission
+                self.write_external_permission = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
+                if self.write_external_permission:
+                    break
+                elif time>100000:
+                    app.Exit()
+                else:
+                    print(time)
+                    time+=1
+        # here we are ensuring that the welcome screen is called and if it's a first use of the app
+        no_user = not check_user()        
         if no_user:
             login_screen = app.root.get_screen('login')
             Logger.debug('Welcome is called from here the first time.')

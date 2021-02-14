@@ -100,11 +100,10 @@ Screen_Manager:
                             hint_text: 'Master Password'
                             size_hint_y: None
                             password: True if view.state!='down' else False
-                            font_size: sp(20)
                             height: dp(50)
+                            font_size: self.width-self.width + sp(18)
                             halign: 'center'
                             size_hint_x: 0.8
-                            size_hint_max_x: dp(600)
                             size_hint_min_x: dp(160)
                             pos_hint: {'center_x': 0.5}
                     BoxLayout:
