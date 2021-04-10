@@ -1,3 +1,20 @@
+'''
+Reminiscor is a free offline password manager.
+Copyright (C) 2020 Arjun Somvanshi & Manvendra Somvanshi
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+'''
 from kivy.app import App
 from kivy.config import Config
 from kivy.uix.screenmanager import CardTransition, FadeTransition, FallOutTransition, NoTransition, RiseInTransition, Screen, ScreenManager, SlideTransition, SwapTransition, WipeTransition
@@ -161,6 +178,14 @@ class Welcome(BoxLayout):
         self.text = '\n'.join(ReadFile(file))
         file.close()
 
+class NavigationView(BoxLayout):
+    def on_touch_down(self, touch):
+        global app
+        if not (touch.x > self.x and touch.x<self.right and touch.y > self.y and touch.y<self.top):
+            main = app.root.get_screen('main')
+            main.nav.dismiss({'right': 2, 'center_y': 0.5}, 'linear', 0.5, 0.55)
+        super(NavigationView, self).on_touch_down(touch)
+
 class Tutorial(BoxLayout):
     text = StringProperty('')
 
@@ -299,7 +324,9 @@ class Entry(RecycleDataViewBehavior, GridLayout):
     url =  StringProperty()
     database_name = StringProperty()
     category = StringProperty()
+    date = ListProperty()
     owner = ObjectProperty()
+    index = NumericProperty()
 
 class Main(Screen):
     username = StringProperty()
@@ -309,12 +336,28 @@ class Main(Screen):
     def refactor_layout(self):
         if platform == 'android':
             self.ids.navigation_bar.remove_widget(self.ids.logo)
-    def Logout(self):
+    def logout(self):
         '''This function logs the user out, deletes/unassigns all decrypted data from memory'''
         # for now I am just switching screens need to rewrite this code later
         self.manager.transition = SlideTransition(direction = 'right') 
         self.manager.current = 'login'
-       
+    def navigation(self):
+        global app
+        nav_content = NavigationView()
+        self.nav = CustomModalView(
+                            size_hint = (0.5, 1),
+                            size_hint_max = (dp(250), None),
+                            size_hint_min = (dp(100), None),
+                            background = 'UI/popup400x400.png',
+                            auto_dismiss = False,
+                            overlay_color= (0,0,0,0.5),
+                            opacity = 0, 
+                            pos_hint = {'right': 2, 'center_y': 0.5}
+                        )
+        self.nav.add_widget(nav_content)
+        self.nav.open({'right':2, 'center_y': 0.5}, {'right': 1, 'center_y': 0.5}, 'linear', 0.5, 0.55)
+        
+        
 class AddEntry(Screen):
     pass
 
@@ -405,7 +448,7 @@ class ReminiscorApp(App):
                 self.write_external_permission = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
                 if self.write_external_permission:
                     break
-                elif time>100000:
+                elif time>20000:
                     app.Exit()
                 else:
                     print(time)
@@ -416,6 +459,6 @@ class ReminiscorApp(App):
             login_screen = app.root.get_screen('login')
             Logger.debug('Welcome is called from here the first time.')
             Clock.schedule_once(login_screen.welcome, 1)
-        #self.database.append({'serial_no': '1', 'name':'Empty Database', 'url': '', 'database_name': '', 'category': 'some', 'owner': self})
+        self.database.append({'serial_no': '1', 'name':'Empty Database', 'url': '', 'database_name': '', 'category': 'some', 'owner': self})
 if __name__ == '__main__':
     ReminiscorApp().run()

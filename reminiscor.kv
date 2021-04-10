@@ -1,3 +1,19 @@
+#Reminiscor is a free offline password manager.
+#Copyright (C) 2020 Arjun Somvanshi & Manvendra Somvanshi
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #: import RGBA kivy.utils.rgba
 #: import Window kivy.core.window.Window
 #: import SlideTransition kivy.uix.screenmanager.SlideTransition
@@ -36,7 +52,7 @@ Screen_Manager:
     disabled_foreground_color: self.foreground_color if self.text else self.hint_text_color
     disabled_background_color: self.background_color if self.text else self.hint_text_color
 
-#  --------------------- LGIN SCREEN -----------------
+#  --------------------- LOGIN SCREEN -----------------
 
 
 <Login>:
@@ -378,6 +394,44 @@ Screen_Manager:
         height: dp(35)
         pos_hint: {'right': 1}
 
+<NavigationView>:
+    orientation: 'vertical'
+    BoxLayout:
+        orientation:'vertical'
+        spacing: dp(15)
+        CustomLabel:
+            text: 'N A V I G A T I O N'
+            size_hint_y: None
+            height: self.texture_size[1] + dp(20)
+        BoxLayout:
+            size_hint_y: None
+            height: self.minimum_height
+            Image:
+                size_hint_min_y: dp(90)
+                size_hint_max_y: dp(150)
+                source: 'UI/logowithborder.png'
+        BoxLayout:
+            Widget:
+                size_hint_max_y: dp(30)
+                size_hint_y: 0.7
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: None
+        height: root.height*2/3
+        UIButton:
+            text: 'New Entry'
+        UIButton:
+            text: 'Import Entries'
+        UIButton:
+            text: 'Export Entries'
+        UIButton:
+            text: 'Backup'
+        UIButton:
+            text:'Settings'
+        CustomLabel:
+            text: 'Version 2.0.0'
+
+
 <Main>:
     name: "main"
     on_pre_enter: root.on_enter_main()
@@ -438,14 +492,15 @@ Screen_Manager:
                     text: 'Logout'
                     size_hint: None, None
                     size: dp(80), dp(50)
-                    on_release: root.Logout()
+                    on_release: root.logout()
                 Widget:
                     size_hint_x: None
                     width: dp(25)
                 UIButton:
-                    id: settings
+                    id: nav
                     size_hint: None, None
                     size: dp(50), dp(50)
+                    on_release: root.navigation()
         BoxLayout:
             size_hint_y: None
             height: dp(45)

@@ -37,3 +37,10 @@ How to bind the exit key on android to exit the app
 #------------------------------------------
 for android bind key 27 to exit
 recent tabs should just lock the app, (logout) where as the back button should exit the app
+
+What to do the next time you open this? (09/04/2020)
+*****************************************
+- Figure out the app paths on each platform
+- log them and write comments to understand what is happening
+- have to make a file picker to choose the location of Exports and keyfile
+-  

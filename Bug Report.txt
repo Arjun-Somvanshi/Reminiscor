@@ -1,7 +1,10 @@
 Signup bug
 ------------
+**************************************************
+[THIS BUG IS SOLVED WHILE RUNNING KIVY 2.0.0]
+**************************************************
 * After giving storage permission if user minimizes the app, and then comes back to it for the sign up process, the signup fails
-  The error is log is the following:
+  The error is log is the following: #[THIS BUG IS SOLVED WHILE RUNNING KIVY 2.0.0]
 ***************************************************
                     LOG
 Traceback (most recent call last):
@@ -9,7 +12,7 @@ Traceback (most recent call last):
 02-08 20:47:58.601 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/app.py", line 950, in run
 02-08 20:47:58.602 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 582, in runTouchApp
 02-08 20:47:58.604 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 347, in mainloop
-02-08 20:47:58.605 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 391, in idle
+02-08 20:47:58.605 19905 19968 I python  :    File "/home/Tkivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 391, in idle
 02-08 20:47:58.607 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 342, in dispatch_input
 02-08 20:47:58.609 19905 19968 I python  :    File "/home/kivy/Reminiscor/.buildozer/android/platform/build-armeabi-v7a/build/python-installs/reminiscor/kivy/base.py", line 308, in post_dispatch_input
 02-08 20:47:58.610 19905 19968 I python  :    File "kivy/_event.pyx", line 709, in kivy._event.EventDispatcher.dispatch
