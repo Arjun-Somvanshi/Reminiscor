@@ -524,6 +524,12 @@ Screen_Manager:
                         Rectangle:
                             size: self.size
                             pos: self.pos
+                        Color:
+                            rgba: app.color['main']
+                        Line:
+                            points: [self.x + dp(20), self.y + dp(1), self.x + dp(20), self.y+self.height - dp(11)]
+                            width: dp(1.2)
+                            cap: 'square'
                     cols: 5
                     size_hint:None, None
                     width: rv.width
@@ -586,6 +592,12 @@ Screen_Manager:
                         size_hint_x: 0.1
 <Entry>:
     cols: 5
+    canvas.before:
+        Color:
+            rgba: app.color['main']
+        Line:
+            points: [self.x, self.y + dp(1), self.x, self.y + self.height - dp(1)]
+            width: dp(1.2)
     UIButton:
         background_down: 'UI/Mainbuttondown.png'
         id: entry_serial_no
