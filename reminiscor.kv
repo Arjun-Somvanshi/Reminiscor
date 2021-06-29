@@ -52,6 +52,93 @@ Screen_Manager:
     disabled_foreground_color: self.foreground_color if self.text else self.hint_text_color
     disabled_background_color: self.background_color if self.text else self.hint_text_color
 
+<UIDropDownItem>:
+    canvas.before:
+        Color:
+            rgba: ((root.item_color[0] if self.state == 'normal' else root.item_color[1]) if root.rounded == False else (0,0,0,0))
+        Rectangle:
+            size: self.size
+            pos: self.pos
+        Color: 
+            rgba: ((root.item_color[0] if self.state == 'normal' else root.item_color[1]) if root.rounded == True else (0,0,0,0))
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [self.height/2]
+        Color:
+            rgba: app.color['font']
+        Line:
+            points: [self.x, self.y, self.x + self.width, self.y]
+            width: dp(0.25)
+    background_color: (1,1,1,0)
+    background_normal: root.background_img_normal
+    backgrond_down: root.background_img_down
+    font_name: root.item_font
+    font_size: root.item_font_size
+    color: root.item_font_color
+
+<UIDropDownContent>:
+    canvas.before:
+        Color:
+            rgba: root.background_color 
+        Rectangle:
+            size: self.size
+            pos: self.pos
+        Color:
+            rgba: app.color['main']
+        Line:
+            points: [self.x + (self.width*0.125), self.y, self.x, self.y, self.x, self.y + self.height, self.x + (self.width*0.125), self.y + self.height]
+            width: dp(1.5)
+        Line:
+            points: [self.x + self.width - (self.width*0.125), self.y, self.x + self.width, self.y, self.x + self.width, self.y + self.height, self.x + self.width - (self.width*0.125), self.y + self.height]
+            width: dp(1.5)
+    RecycleView:
+        id: dropdownrv
+        viewclass: 'UIDropDownItem'        
+        data: root.Elements
+        RecycleBoxLayout:
+            default_size_hint: root.item_size_hint_x, None
+            default_size: None, root.item_height 
+            spacing: dp(15)
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+            padding: dp(20)
+<UIDropDown>: 
+    default_item: ''
+    elements: []
+    dd_size: [self.dd_width, self.dd_height]
+    dd_width: dp(400)
+    dd_height: dp(400)
+    dd_background_color: [0,0,0,1]
+    dd_item_height: dp(30)
+    dd_item_color: [[1,1,1,1], [1,1,1,0.5]]
+    dd_item_isrounded: False
+    dd_item_img_down: self.background_down
+    dd_item_img_normal: self.background_normal
+    dd_item_size_hint_x: 1
+    dd_item_font_size: sp(15)
+    dd_item_font_color: [0,0,0,1]
+    dd_item_font: 'Roboto'
+    show_items: 1 
+    calculate_ddheight: False
+    font_name: 'Fonts/Montserrat-Light.ttf'
+    #custom attributes here onwards
+    background_normal: ''
+    background_down: ''
+    color: app.color['font']
+    background_color: (0,0,0,0)
+    canvas.before:
+        Color:
+            rgba: [40/255,40/255,40/255,1] if self.state == 'normal' else app.color['middle']
+        Rectangle:
+            size: self.size
+            pos: self.pos
+        Color:
+            rgba: app.color['font']
+        Line:
+            points: [self.x, self.y, self.x, self.y + self.height]
+    text: self.default_item 
 #  --------------------- LOGIN SCREEN -----------------
 
 
@@ -497,8 +584,32 @@ Screen_Manager:
                     size_hint_x: None
                     width: dp(25)
                 UIButton:
+                    canvas.before:
+                        Color:
+                            rgba: app.color['background'] if self.state == 'normal' else app.color['middle']
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: app.color['darkgrey']
+                        Line:
+                            points: [self.x + self.width/2, self.y + self.height*0.2, self.x + self.width - dp(5), self.y + self.height*0.2]
+                            width: (2)
+                            cap: 'square'
+                        Line:
+                            points: [self.x + self.width/3, self.y + self.height*0.5, self.x + self.width - dp(5), self.y + self.height*0.5]
+                            width: (2)
+                            cap: 'square'
+                        Line:
+                            points: [self.x + self.width/6.5, self.y + self.height*0.8, self.x + self.width - dp(5), self.y + self.height*0.8]
+                            width: (2)
+                            cap: 'square'
+
                     id: nav
                     size_hint: None, None
+                    background_down: ''
+                    background_normal:''
+                    background_color: 0,0,0,0
                     size: dp(50), dp(50)
                     on_release: root.navigation()
         BoxLayout:
@@ -516,80 +627,158 @@ Screen_Manager:
             padding: 0,dp(40),0,0
             BoxLayout:
                 orientation: 'vertical'
-                GridLayout:
-                    id: attributes
-                    canvas.before:
-                        Color:
-                            rgba:(40/255,40/255,40/255,1)
-                        Rectangle:
-                            size: self.size
-                            pos: self.pos
-                        Color:
-                            rgba: app.color['main']
-                        Line:
-                            points: [self.x + dp(20), self.y + dp(1), self.x + dp(20), self.y+self.height - dp(11)]
-                            width: dp(1.2)
-                            cap: 'square'
-                    cols: 5
-                    size_hint:None, None
-                    width: rv.width
-                    pos_hint: {'center_x': 0.5}
-                    height: dp(50)
-                    padding: dp(20), dp(10), dp(20), 0
-                    UIButton:
-                        background_down: 'UI/Mainbuttondown.png'
-                        color: app.color['main']
-                        size_hint_x: None
-                        width: cm(0.7)
-                    UIButton:
-                        background_down: 'UI/Mainbuttondown.png'
-                        color: app.color['main']
-                        text: 'Entry Name'
-                        size_hint_x: 0.3
-                        size_hint_min_x: cm(2)
-                    UIButton:
-                        text: 'Copy Data'
-                        background_down: 'UI/Mainbuttondown.png'
-                        color: app.color['main']
-                        font_size: sp(14)
-                        size_hint_x: 0.2
-                    UIButton:
-                        text: 'URL'
-                        background_down: 'UI/Mainbuttondown.png'
-                        color: app.color['main']
-                        size_hint_x: 0.1
-                    UIButton:
-                        text: 'Category'
-                        color: app.color['main']
-                        font_size: sp(14)
-                        text_size: self.width - self.width/10, None
-                        shorten: True
-                        halign: 'center'
-                        shorten_from: 'right'
-                        background_down: 'UI/Mainbuttondown.png'
-                        size_hint_x: 0.2
                 BoxLayout:
-                    Widget:
-                        size_hint_x: 0.1
-                    RecycleView:
-                        viewclass: "Entry"
-                        data: app.database
-                        RecycleGridLayout:
-                            id: rv
+                    id: container
+                    size_hint_x: None if Window.width>dp(800) else 1
+                    width: Window.width - Window.width/8
+                    pos_hint: {'center_x': 0.5}
+                    orientation: 'vertical'
+                    BoxLayout:
+                        id: taskbar
+                        size_hint: None, None
+                        width: rv.width
+                        height: dp(40)
+                        pos_hint: {'center_x': 0.5}
+                        UIButton:
+                            text: 'New Entry'
+                            background_down: ''
+                            background_normal: ''
+                            background_color: 0,0,0,0
                             canvas.before:
                                 Color:
-                                    rgba:(40/255,40/255,40/255,1)
+                                    rgba: [40/255,40/255,40/255,1] if self.state == 'normal' else app.color['middle']
                                 Rectangle:
-                                    size: self.size
                                     pos: self.pos
-                            cols: 1
-                            padding: dp(20),0, dp(20), dp(10)
-                            default_size_hint: 1, None
-                            default_size: None, dp(80)
-                            size_hint: 1, None
-                            height: self.minimum_height
-                    Widget:        
-                        size_hint_x: 0.1
+                                    size: self.size
+
+                        UIDropDown:
+                            elements: ['Sort By', 'A-Z (default)', 'Z-A', 'Newest', 'Oldest']
+                            default_item: 'Sort By'
+                            dd_background_color: app.color['background'] 
+                            dd_item_height: dp(40)
+                            dd_item_img_down: ''
+                            dd_item_img_normal: ''
+                            dd_item_color: [app.color['background'], app.color['darkgrey']]
+                            dd_item_isrounded: False 
+                            dd_item_font_color: app.color['font'] 
+                            dd_item_font: 'Fonts/Montserrat-Light.ttf'
+                            dd_item_size_hint_x: 1 
+                            dd_width: self.width + dp(40) 
+                            dd_open_vertical: 'down'
+                            dd_open_horizontal: 'center'
+                            calculate_ddheight: True
+                            show_items: 5 
+                        UIDropDown:
+                            elements: ['Database [main]', 'placeholder-1', 'placeholder-2']
+                            default_item: 'Database [main]'
+                            dd_background_color: app.color['background'] 
+                            dd_item_height: dp(40)
+                            dd_item_img_down: ''
+                            dd_item_img_normal: ''
+                            dd_item_color: [app.color['background'], app.color['darkgrey']]
+                            dd_item_isrounded: False 
+                            dd_item_font_color: app.color['font'] 
+                            dd_item_font: 'Fonts/Montserrat-Light.ttf'
+                            dd_item_size_hint_x: 1 
+                            dd_width: self.width + dp(40) 
+                            dd_open_vertical: 'down'
+                            dd_open_horizontal: 'center'
+                            calculate_ddheight: True
+                            show_items: 3
+                        UIDropDown:
+                            elements: ['Category', 'category-1', 'category-2', 'category-3']
+                            default_item: 'Category'
+                            dd_background_color: app.color['background'] 
+                            dd_item_height: dp(40)
+                            dd_item_img_down: ''
+                            dd_item_img_normal: ''
+                            dd_item_color: [app.color['background'], app.color['darkgrey']]
+                            dd_item_isrounded: False 
+                            dd_item_font_color: app.color['font'] 
+                            dd_item_font: 'Fonts/Montserrat-Light.ttf'
+                            dd_item_size_hint_x: 1 
+                            dd_width: self.width + dp(40) 
+                            dd_open_vertical: 'down'
+                            dd_open_horizontal: 'center'
+                            calculate_ddheight: True
+                            show_items: 3
+                    Widget:
+                        size_hint_y: None
+                        height: dp(20)
+                    GridLayout:
+                        id: attributes
+                        canvas.before:
+                            Color:
+                                rgba:(40/255,40/255,40/255,1)
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                            Color:
+                                rgba: app.color['main']
+                            Line:
+                                points: [self.x + dp(20), self.y + dp(1), self.x + dp(20), self.y+self.height - dp(11)]
+                                width: dp(1.2)
+                                cap: 'square'
+                        cols: 5
+                        size_hint:None, None
+                        width: rv.width
+                        pos_hint: {'center_x': 0.5}
+                        height: dp(50)
+                        padding: dp(20), dp(10), dp(20), 0
+                        UIButton:
+                            background_down: 'UI/Mainbuttondown.png'
+                            color: app.color['main']
+                            size_hint_x: None
+                            width: cm(0.7)
+                        UIButton:
+                            background_down: 'UI/Mainbuttondown.png'
+                            color: app.color['main']
+                            text: 'Entry Name'
+                            size_hint_x: 0.3
+                            size_hint_min_x: cm(2)
+                        UIButton:
+                            text: 'Copy Data'
+                            background_down: 'UI/Mainbuttondown.png'
+                            color: app.color['main']
+                            font_size: sp(14)
+                            size_hint_x: 0.2
+                        UIButton:
+                            text: 'URL'
+                            background_down: 'UI/Mainbuttondown.png'
+                            color: app.color['main']
+                            size_hint_x: 0.1
+                        UIButton:
+                            text: 'Category'
+                            color: app.color['main']
+                            font_size: sp(14)
+                            text_size: self.width - self.width/10, None
+                            shorten: True
+                            halign: 'center'
+                            shorten_from: 'right'
+                            background_down: 'UI/Mainbuttondown.png'
+                            size_hint_x: 0.2
+                    BoxLayout:
+                        Widget:
+                            size_hint_x: 0.1
+                        RecycleView:
+                            viewclass: "Entry"
+                            data: app.database
+                            RecycleGridLayout:
+                                id: rv
+                                canvas.before:
+                                    Color:
+                                        rgba:(40/255,40/255,40/255,1)
+                                    Rectangle:
+                                        size: self.size
+                                        pos: self.pos
+                                cols: 1
+                                padding: dp(20),0, dp(20), dp(10)
+                                default_size_hint: 1, None
+                                default_size: None, dp(80)
+                                size_hint: 1, None
+                                height: self.minimum_height
+                        Widget:        
+                            size_hint_x: 0.1
 <Entry>:
     cols: 5
     canvas.before:
@@ -646,6 +835,5 @@ Screen_Manager:
         size_hint_x: 0.2
         orientation: 'vertical'
         UIButton:
-            background_down: 'UI/Mainbuttondown.png'
-        UIButton:
+            text: root.category
             background_down: 'UI/Mainbuttondown.png'
