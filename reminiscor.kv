@@ -578,39 +578,38 @@ Screen_Manager:
                     id: logout
                     text: 'Logout'
                     size_hint: None, None
-                    size: dp(80), dp(50)
+                    size: dp(80), dp(40)
+                    pos_hint: {'center_y': 0.5}
                     on_release: root.logout()
                 Widget:
                     size_hint_x: None
-                    width: dp(25)
+                    width: dp(45)
                 UIButton:
                     canvas.before:
                         Color:
-                            rgba: app.color['background'] if self.state == 'normal' else app.color['middle']
+                            rgba: app.color['background'] 
                         Rectangle:
                             pos: self.pos
                             size: self.size
                         Color:
-                            rgba: app.color['darkgrey']
-                        Line:
-                            points: [self.x + self.width/2, self.y + self.height*0.2, self.x + self.width - dp(5), self.y + self.height*0.2]
-                            width: (2)
-                            cap: 'square'
-                        Line:
-                            points: [self.x + self.width/3, self.y + self.height*0.5, self.x + self.width - dp(5), self.y + self.height*0.5]
-                            width: (2)
-                            cap: 'square'
-                        Line:
-                            points: [self.x + self.width/6.5, self.y + self.height*0.8, self.x + self.width - dp(5), self.y + self.height*0.8]
-                            width: (2)
-                            cap: 'square'
+                            rgba: app.color['font'] if self.state == 'normal' else app.color['darkgrey']
+                        Ellipse: 
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.center_y - dp(2.5)
+                        Ellipse:
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.y 
+                        Ellipse:
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.y + self.height - dp(5)  
 
                     id: nav
                     size_hint: None, None
                     background_down: ''
                     background_normal:''
                     background_color: 0,0,0,0
-                    size: dp(50), dp(50)
+                    pos_hint: {'center_y': 0.5}
+                    size: dp(40), dp(30)
                     on_release: root.navigation()
         BoxLayout:
             size_hint_y: None
