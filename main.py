@@ -461,7 +461,10 @@ class Main(Screen):
                         )
         self.nav.add_widget(nav_content)
         self.nav.open({'right':2, 'center_y': 0.5}, {'right': 1, 'center_y': 0.5}, 'linear', 0.5, 0.55)
-        
+    def search_limit(self):
+        '''This limits the search bars characters from exeding 32'''
+        if len(self.ids.search_bar.text) > 32:
+            self.ids.search_bar.text = self.ids.search_bar.text[:-1]
         
 class AddEntry(Screen):
     pass

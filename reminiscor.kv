@@ -139,6 +139,11 @@ Screen_Manager:
         Line:
             points: [self.x, self.y, self.x, self.y + self.height]
     text: self.default_item 
+    # for text fitting in drop down
+    text_size: self.width - dp(10), None
+    shorten: True
+    shorten_from: 'right'
+    halign: 'center'
 #  --------------------- LOGIN SCREEN -----------------
 
 
@@ -615,11 +620,27 @@ Screen_Manager:
             size_hint_y: None
             height: dp(45)
             Widget:
-            CustomTextInput:
+            TextInput:
+                id: search_bar
                 size_hint_y: None
                 height: dp(45)
                 hint_text: 'Search the Database' 
-                size_hint_min_x: dp(275)
+                size_hint_min_x: dp(320)
+                halign: 'center'
+                font_size: dp(15)
+                on_text: root.search_limit()
+                background_color:  app.color['middle']
+                background_normal: ''
+                foreground_color: app.color['font']
+                padding: 6,(self.height-self.line_height)/2,6,6
+                multiline: False
+                background_disabled_normal: ''
+                font_name: 'Fonts/Montserrat-Light.ttf'
+                cursor_color: app.color['main']
+                hint_text_color: app.color['darkgrey']
+                write_tab: False
+                disabled_foreground_color: self.foreground_color if self.text else self.hint_text_color
+                disabled_background_color: self.background_color if self.text else self.hint_text_color
             Widget:
         BoxLayout:
             opacity: 0 if app.database == [] else 1
@@ -746,16 +767,6 @@ Screen_Manager:
                             background_down: 'UI/Mainbuttondown.png'
                             color: app.color['main']
                             size_hint_x: 0.1
-                        UIButton:
-                            text: 'Category'
-                            color: app.color['main']
-                            font_size: sp(14)
-                            text_size: self.width - self.width/10, None
-                            shorten: True
-                            halign: 'center'
-                            shorten_from: 'right'
-                            background_down: 'UI/Mainbuttondown.png'
-                            size_hint_x: 0.2
                     BoxLayout:
                         Widget:
                             size_hint_x: 0.1
@@ -823,16 +834,3 @@ Screen_Manager:
     UIButton:
         id: open_url
         size_hint_x: 0.1
-    BoxLayout:
-        canvas.before:
-            Color:
-                rgba:(30/255,30/255,30/255,1)
-            Rectangle:
-                size: self.size
-                pos: self.pos
-        id: database_and_category
-        size_hint_x: 0.2
-        orientation: 'vertical'
-        UIButton:
-            text: root.category
-            background_down: 'UI/Mainbuttondown.png'
