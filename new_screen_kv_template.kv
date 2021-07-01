@@ -1,0 +1,100 @@
+<AddEntry>:
+    name: 'add_entry'
+    #on_pre_enter: root.set_layout()
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba:app.color["main"]
+            Line:
+                points: [root.width/3, root.height-dp(80), 5, root.height-dp(80), 5, 0]
+                width: 5
+                cap: "square"
+            Line:
+                points: [root.width - root.width/3, root.height-dp(80), root.width - 5, root.height-dp(80), root.width-5, 0]
+                width: 5
+                cap: "square"
+        orientation: 'vertical'
+        GridLayout:
+            id: navigation_bar
+            cols: 4
+            size_hint_y: None
+            height: dp(70)
+            padding: dp(10)
+            Image:
+                id: logo
+                size_hint: None, None
+                size: dp(55), dp(55)
+                source: 'UI/logowithborder.png'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(10)
+                spacing: dp(25)
+                CustomLabel:
+                    width: self.texture_size[0]
+                    size_hint_x: None
+                    text: 'Reminiscor'
+                    font_name: 'Fonts/Colchester.ttf'
+                    font_size: sp(40)
+            BoxLayout:
+                id: nav_bar_buttons
+                Widget:
+                UIButton:
+                    id: logout
+                    text: 'Logout'
+                    size_hint: None, None
+                    size: dp(80), dp(40)
+                    pos_hint: {'center_y': 0.5}
+                    on_release: root.logout()
+                Widget:
+                    size_hint_x: None
+                    width: dp(45)
+                UIButton:
+                    canvas.before:
+                        Color:
+                            rgba: app.color['background'] 
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: app.color['font'] if self.state == 'normal' else app.color['darkgrey']
+                        Ellipse: 
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.center_y - dp(2.5)
+                        Ellipse:
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.y 
+                        Ellipse:
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.y + self.height - dp(5)  
+
+                    id: nav
+                    size_hint: None, None
+                    background_down: ''
+                    background_normal:''
+                    background_color: 0,0,0,0
+                    pos_hint: {'center_y': 0.5}
+                    size: dp(40), dp(30)
+                    on_release: root.navigation()
+        BoxLayout:
+            size_hint_y: None
+            height: dp(45) 
+            Widget:
+            CustomLabel:
+                canvas.before:
+                    Color:
+                        rgba: app.color['background']
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                    Color:
+                        rgba: app.color['main']
+                    Line:
+                        points: [self.x, self.y, self.x, self.y + self.height, self.x + self.width, self.y + self.height, self.x + self.width, self.y, self.x, self.y]
+                        width: dp(1.2)
+                color: app.color['font']
+                text: 'Add Entry'
+                font_size: sp(24)
+                valign: 'top'
+                size_hint_x: 1
+            Widget:
+        Widget:

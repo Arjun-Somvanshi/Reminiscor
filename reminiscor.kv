@@ -52,6 +52,21 @@ Screen_Manager:
     disabled_foreground_color: self.foreground_color if self.text else self.hint_text_color
     disabled_background_color: self.background_color if self.text else self.hint_text_color
 
+<EntryTextInput>:
+    background_color:  app.color['middle']
+    background_normal: ''
+    foreground_color: app.color['font']
+    padding: 6,(self.height-self.line_height)/2,6,6
+    multiline: False
+    background_disabled_normal: ''
+    font_name: 'Fonts/Montserrat-Light.ttf'
+    cursor_color: app.color['main']
+    hint_text_color: app.color['darkgrey']
+    size_hint_y: None
+    write_tab: False
+    disabled_foreground_color: self.foreground_color if self.text else self.hint_text_color
+    disabled_background_color: self.background_color if self.text else self.hint_text_color
+
 <UIDropDownItem>:
     canvas.before:
         Color:
@@ -620,7 +635,7 @@ Screen_Manager:
             size_hint_y: None
             height: dp(45)
             Widget:
-            TextInput:
+            EntryTextInput:
                 id: search_bar
                 size_hint_y: None
                 height: dp(45)
@@ -629,18 +644,6 @@ Screen_Manager:
                 halign: 'center'
                 font_size: dp(15)
                 on_text: root.search_limit()
-                background_color:  app.color['middle']
-                background_normal: ''
-                foreground_color: app.color['font']
-                padding: 6,(self.height-self.line_height)/2,6,6
-                multiline: False
-                background_disabled_normal: ''
-                font_name: 'Fonts/Montserrat-Light.ttf'
-                cursor_color: app.color['main']
-                hint_text_color: app.color['darkgrey']
-                write_tab: False
-                disabled_foreground_color: self.foreground_color if self.text else self.hint_text_color
-                disabled_background_color: self.background_color if self.text else self.hint_text_color
             Widget:
         BoxLayout:
             opacity: 0 if app.database == [] else 1
@@ -664,6 +667,9 @@ Screen_Manager:
                             background_down: ''
                             background_normal: ''
                             background_color: 0,0,0,0
+                            on_release:
+                                root.manager.transition = SlideTransition(direction = 'up')
+                                root.manager.current = 'add_entry'
                             canvas.before:
                                 Color:
                                     rgba: [40/255,40/255,40/255,1] if self.state == 'normal' else app.color['middle']
@@ -834,3 +840,176 @@ Screen_Manager:
     UIButton:
         id: open_url
         size_hint_x: 0.1
+
+<AddEntry>:
+    name: 'add_entry'
+    #on_pre_enter: root.set_layout()
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba:app.color["main"]
+            Line:
+                points: [root.width/3, root.height-dp(80), 5, root.height-dp(80), 5, 0]
+                width: 5
+                cap: "square"
+            Line:
+                points: [root.width - root.width/3, root.height-dp(80), root.width - 5, root.height-dp(80), root.width-5, 0]
+                width: 5
+                cap: "square"
+        orientation: 'vertical'
+        GridLayout:
+            id: navigation_bar
+            cols: 4
+            size_hint_y: None
+            height: dp(70)
+            padding: dp(10)
+            Image:
+                id: logo
+                size_hint: None, None
+                size: dp(55), dp(55)
+                source: 'UI/logowithborder.png'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(10)
+                spacing: dp(25)
+                CustomLabel:
+                    width: self.texture_size[0]
+                    size_hint_x: None
+                    text: 'Reminiscor'
+                    font_name: 'Fonts/Colchester.ttf'
+                    font_size: sp(40)
+            BoxLayout:
+                id: nav_bar_buttons
+                Widget:
+                UIButton:
+                    id: logout
+                    text: 'Logout'
+                    size_hint: None, None
+                    size: dp(80), dp(40)
+                    pos_hint: {'center_y': 0.5}
+                    on_release: root.logout()
+                Widget:
+                    size_hint_x: None
+                    width: dp(45)
+                UIButton:
+                    canvas.before:
+                        Color:
+                            rgba: app.color['background'] 
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: app.color['font'] if self.state == 'normal' else app.color['darkgrey']
+                        Ellipse: 
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.center_y - dp(2.5)
+                        Ellipse:
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.y 
+                        Ellipse:
+                            size: dp(5) , dp(5)
+                            pos: self.center_x - dp(2.5), self.y + self.height - dp(5)  
+
+                    id: nav
+                    size_hint: None, None
+                    background_down: ''
+                    background_normal:''
+                    background_color: 0,0,0,0
+                    pos_hint: {'center_y': 0.5}
+                    size: dp(40), dp(30)
+                    on_release: root.navigation()
+        BoxLayout:
+            size_hint_y: None
+            height: dp(45) 
+            Widget:
+            CustomLabel:
+                canvas.before:
+                    Color:
+                        rgba: app.color['background']
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                    Color:
+                        rgba: app.color['main']
+                    Line:
+                        points: [self.x, self.y, self.x, self.y + self.height, self.x + self.width, self.y + self.height, self.x + self.width, self.y, self.x, self.y]
+                        width: dp(1.2)
+                color: app.color['font']
+                text: 'Add Entry'
+                font_size: sp(24)
+                valign: 'top'
+                size_hint_x: 1
+            Widget:
+        Widget:
+            size_hint_y: None
+            height: dp(30)
+        BoxLayout:
+            BoxLayout:
+                Widget:
+                    size_hint_x: 0.1
+                BoxLayout:
+                    spacing: dp(15)
+                    orientation: 'vertical'
+                    CustomLabel:
+                        text: 'Enter the following details:'
+                        size_hint: None, None
+                        size: self.texture_size
+                        color: app.color['font']
+                    BoxLayout:
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: dp(10)
+                        EntryTextInput:
+                            id: title
+                            hint_text: 'Title'
+                            height: dp(50)
+                            size_hint_x: 0.8
+                            font_size: sp(18)
+                            size_hint_min_x: dp(300)
+                        CustomLabel:
+                            size_hint: None, None
+                            size: dp(50), self.texture_size[1]
+                            font_size: dp(16)
+                            text: str(len(title.text)) + '/32' 
+                    BoxLayout:
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: dp(10)
+                        EntryTextInput:
+                            id: username
+                            hint_text: 'Username'
+                            height: dp(40)
+                            size_hint_x: 0.6
+                            size_hint_min_x: dp(250)
+                        CustomLabel:
+                            size_hint: None, None
+                            size: dp(30), self.texture_size[1]
+                            font_size: dp(16)
+                            text: str(len(username.text)) 
+                        Widget:
+                            size_hint_y: None
+                            height: 0
+                            size_hint_x: 0.2
+                    BoxLayout:
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: dp(10)
+                        EntryTextInput: 
+                            hint_text: 'Password'
+                            height: dp(40)
+                            size_hint_x: 0.6
+                            password: True
+                            size_hint_min_x: dp(250)
+                        CustomLabel:
+                            size_hint: None, None
+                            size: dp(30), self.texture_size[1]
+                            font_size: dp(16)
+                            text: str(len(title.text))
+                        Widget:
+                            size_hint_y: None
+                            height: 0
+                            size_hint_x: 0.2
+                    Widget:
+                Widget:
+                    size_hint_x: 0.1
+

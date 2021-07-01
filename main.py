@@ -40,7 +40,9 @@ Window.clearcolor = (30/255,30/255,30/255,1)
 if platform != 'android' and 1==0:
     Window.minimum_width = dp(490)
     Window.minimum_height = dp(550)
-
+if platform == 'win':
+    import ctypes
+    ctypes.windll.shcore.SetProcessDpiAwareness(1)
 '''-------------------Global------------------------------'''
 app = None
 app_path = None
@@ -142,6 +144,10 @@ class UIDropDown(Button):
             self.text = self.content.selected_item
 
 class CustomTextInput(TextInput):
+    def on_parent(self, *_):
+        self._refresh_text(self.text)
+
+class EntryTextInput(TextInput):
     def on_parent(self, *_):
         self._refresh_text(self.text)
 
