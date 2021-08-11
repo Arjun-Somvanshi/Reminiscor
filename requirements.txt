@@ -1,0 +1,4 @@
+kivy==2.0.0
+pyperclip
+pbkdf2
+pyaes

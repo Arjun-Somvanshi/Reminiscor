@@ -101,18 +101,15 @@ class LoginWindow(Screen):
                 ColorChange(self.username, False, 'Username')
                 ColorChange(self.p, False, 'Master Password')
                 if (os.path.isdir(ReminiscorFiles_Dir(''))):
-                    File_dir0 = os.path.expanduser('~') + '/Reminiscor Files'
-                    direc0 = "Export"
-                    File_dir1 = os.path.expanduser('~') + "/Reminiscor Files"
+                    File_dir0 = os.path.expanduser('~') + '/Desktop'
+                    direc0 = "Reminiscor Files/Export"
+                    File_dir1 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
                     direc1 = "Import"
-                    File_dir2 = os.path.expanduser('~') + "/Reminiscor Files"
+                    File_dir2 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
                     direc2 = "Backup"
-                    try:
-                        os.makedirs(os.path.join(File_dir0, direc0))
-                        os.makedirs(os.path.join(File_dir1, direc1))
-                        os.makedirs(os.path.join(File_dir2, direc2))
-                    except:
-                        pass
+                    os.makedirs(os.path.join(File_dir0, direc0))
+                    os.makedirs(os.path.join(File_dir1, direc1))
+                    os.makedirs(os.path.join(File_dir2, direc2))
                 return True
             else:
                 self.errortext.text = '[u]Wrong credentials were entered. Try again![/u]'
@@ -163,19 +160,16 @@ class SignUp_Pop(FloatLayout):
             directory = "Reminiscor"
             os.makedirs(os.path.join(parent_dir, directory))
             try:
-                File_dir0 = os.path.expanduser('~') + '/Reminiscor Files'
-                direc0 = "Export"
-                File_dir1 = os.path.expanduser('~') + "/Reminiscor Files"
+                File_dir0 = os.path.expanduser('~') + '/Desktop'
+                direc0 = "Reminiscor Files/Export"
+                File_dir1 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
                 direc1 = "Import"
-                File_dir2 = os.path.expanduser('~') + "/Reminiscor Files"
+                File_dir2 = os.path.expanduser('~') + "/Desktop/Reminiscor Files"
                 direc2 = "Backup"
-                from icecream import ic
-                ic(os.path.join(File_dir0, direc0))
                 os.makedirs(os.path.join(File_dir0, direc0))
                 os.makedirs(os.path.join(File_dir1, direc1))
                 os.makedirs(os.path.join(File_dir2, direc2))
-            except Exception as e:
-                print(e)
+            except:
                 salt = b'\x05;iBi\x17Q\xe0'
                 key_32 = pbkdf2.PBKDF2(self.p1.text, salt).read(32)
                 Default_Unique_User_EnigmaSettings(key_32)
@@ -380,7 +374,7 @@ class Choose_Export(FloatLayout):
             ShareSelected(usernames, self.ids.commonpassw.text,
                           Entries, Master_Password_key)
             result = resultpop()
-            result.ids.info.text = 'The password entries choosen from [color=00abae]your data[/color] have been exported to a share file in [color=ffcc00]Reminiscor Files directory[/color]\nYou can now share this file with the intended users.'
+            result.ids.info.text = 'The password entries choosen from [color=00abae]your data[/color] have been exported to a share file in [color=ffcc00]Desktop/Reminiscor Files directory[/color]\nYou can now share this file with the intended users.'
             rwin = Popup(title='Share File Successfully Created!', title_align='center', content=result, size_hint=(None, None),
                          size=(400, 200), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x200.png')
             rwin.open()
@@ -399,7 +393,7 @@ class Choose_Export(FloatLayout):
             global Master_Password_key
             ShareAll(usernames, self.ids.commonpassw.text, Master_Password_key)
             result = resultpop()
-            result.ids.info.text = 'All password entries from [color=00abae]your data[/color] have been exported to a share file in [color=ffcc00]Reminiscor Files directory[/color]\nYou can now share this file with the intended users.'
+            result.ids.info.text = 'All password entries from [color=00abae]your data[/color] have been exported to a share file in [color=ffcc00]Desktop/Reminiscor Files directory[/color]\nYou can now share this file with the intended users.'
             rwin = Popup(title='Share File Successfully Created!', title_align='center', content=result, size_hint=(None, None),
                          size=(400, 200), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x200.png')
             rwin.open()
@@ -738,7 +732,7 @@ class Backup(FloatLayout):
     def backup(self):
         Backup_Data()
         result = resultpop()
-        result.ids.info.text = 'Backup has been successfully created at [color=00abae]Reminiscor Files/Backup![/color]'
+        result.ids.info.text = 'Backup has been successfully created at [color=00abae]Desktop/Reminiscor Files/Backup![/color]'
         rwin = Popup(title='Imported Successfully', title_align='center', content=result, size_hint=(None, None),
                      size=(400, 200), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x200.png', auto_dismiss=False)
         result.ids.close.bind(on_release=rwin.dismiss)
@@ -749,14 +743,14 @@ class Backup(FloatLayout):
             ImportBackup()
         except:
             result = resultpop()
-            result.ids.info.text = 'Backup was not imported! Check [color=c30101]Reminiscor Files/Backup![/color]'
+            result.ids.info.text = 'Backup was not imported! Check [color=c30101]Desktop/Reminiscor Files/Backup![/color]'
             rwin = Popup(title='Imported Successfully', title_align='center', content=result, size_hint=(None, None),
                          size=(400, 200), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x200.png', auto_dismiss=False)
             result.ids.close.bind(on_release=rwin.dismiss)
             rwin.open()
         else:
             result = resultpop()
-            result.ids.info.text = 'Backup has been successfully imported from [color=00abae]Reminiscor Files/Backup![/color]'
+            result.ids.info.text = 'Backup has been successfully imported from [color=00abae]Desktop/Reminiscor Files/Backup![/color]'
             rwin = Popup(title='Imported Successfully', title_align='center', content=result, size_hint=(None, None),
                          size=(400, 200), separator_color=[0, 171/255, 174/255, 1], background='UI/popup400x200.png', auto_dismiss=False)
             result.ids.close.bind(on_release=rwin.dismiss)
