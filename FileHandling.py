@@ -60,7 +60,6 @@ def CheckModified(a, b):
     else:
         return True
 
-<<<<<<< HEAD
 # Used to write the appconfiguration to the json file
 '''WARNING before calling this function all data should be decrypted, new key should be generated to re-encrypt all data'''
 def write_AppConfig(time_cost = 2, memory_cost = 51200, parallelism = 8):
@@ -96,7 +95,6 @@ def test_read_write():
     json_data = json.loads(read_remfile('new2.json'))
     print(json_data['entry']['password']) 
     #write_remfile('arjun', 'new1.txt', 'hello2', append = True)
-=======
 
 def ReminiscorFiles_Dir(filename):
     homedir = os.path.expanduser('~')
@@ -115,4 +113,3 @@ def deleteContent(pfile):
     pfile.truncate()
     pfile.seek(0)
     return pfile
->>>>>>> AES_integration
