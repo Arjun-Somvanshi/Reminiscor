@@ -58,13 +58,13 @@ def CheckModified(a, b):
 
 def ReminiscorFiles_Dir(filename):
     homedir = os.path.expanduser('~')
-    if os.path.isdir(homedir + '/Desktop/Reminiscor Files/'):
-        newdir = homedir + '/Desktop/Reminiscor Files/' + filename
+    if os.path.isdir(homedir + '/Reminiscor Files/'):
+        newdir = homedir + '/Reminiscor Files/' + filename
     else:
-        File_dir = os.path.expanduser('~') + '/Desktop'
+        File_dir = os.path.expanduser('~') 
         direc = "Reminiscor Files"
         os.makedirs(os.path.join(File_dir, direc))
-        newdir = homedir + '/Desktop/Reminiscor Files/' + filename
+        newdir = homedir + '/Reminiscor Files/' + filename
     return newdir
 
 
