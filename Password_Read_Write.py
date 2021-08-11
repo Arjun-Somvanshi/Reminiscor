@@ -382,7 +382,7 @@ def Backup_Data():
     data3 = open(HomeDir("Data3.dat"), 'br')
     data3_content = data3.read()
     data3.close()
-    dir = homedir = os.path.expanduser('~')+'/Desktop/Reminiscor Files/Backup/'
+    dir = homedir = os.path.expanduser('~')+'/Reminiscor Files/Backup/'
     file1 = open(dir+"Data1_backup.dat", 'bw')
     file2 = open(dir+"Data2_backup.dat", 'bw')
     file3 = open(dir+"Data3_backup.dat", 'bw')
@@ -395,7 +395,7 @@ def Backup_Data():
 
 
 def ImportBackup():
-    dir = homedir = os.path.expanduser('~')+'/Desktop/Reminiscor Files/Backup/'
+    dir = homedir = os.path.expanduser('~')+'/Reminiscor Files/Backup/'
     file1 = open(dir+"Data1_backup.dat", 'br')
     file2 = open(dir+"Data2_backup.dat", 'br')
     file3 = open(dir+"Data3_backup.dat", 'br')
