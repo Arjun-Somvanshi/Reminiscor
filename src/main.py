@@ -31,7 +31,7 @@ from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from functools import partial
-from kivy.properties import ListProperty, NumericProperty, StringProperty, ObjectProperty, BooleanProperty, OptionProperty
+from kivy.properties import ListProperty, NumericProperty, StringProperty, ObjectProperty, BooleanProperty, OptionProperty, DictProperty
 from response import *
 from kivy.logger import Logger, LOG_LEVELS
 Logger.setLevel(LOG_LEVELS["debug"])
@@ -239,6 +239,9 @@ class DropDownModalView(ModalView):
     def finish_dismiss(self, *args):
         super(DropDownModalView, self).dismiss()
 
+class Scaffold(GridLayout):
+    pass
+
 '''------------------------------------------------------'''
 
 
@@ -291,8 +294,7 @@ class NavigationView(BoxLayout):
     def on_touch_down(self, touch):
         global app
         if not (touch.x > self.x and touch.x<self.right and touch.y > self.y and touch.y<self.top):
-            main = app.root.get_screen('main')
-            main.nav.dismiss({'right': 2, 'center_y': 0.5}, 'linear', 0.5, 0.55)
+            app.nav.dismiss({'right': 2, 'center_y': 0.5}, 'linear', 0.5, 0.55)
         super(NavigationView, self).on_touch_down(touch)
 
 class Tutorial(BoxLayout):
@@ -440,33 +442,11 @@ class Entry(RecycleDataViewBehavior, GridLayout):
     index = NumericProperty()
 
 class Main(Screen):
-    username = StringProperty()
     def on_enter_main(self):
-        self.username = return_username()
         self.refactor_layout()
     def refactor_layout(self):
-        if platform == 'android':
-            self.ids.navigation_bar.remove_widget(self.ids.logo)
-    def logout(self):
-        '''This function logs the user out, deletes/unassigns all decrypted data from memory'''
-        # for now I am just switching screens need to rewrite this code later
-        self.manager.transition = SlideTransition(direction = 'right') 
-        self.manager.current = 'login'
-    def navigation(self):
-        global app
-        nav_content = NavigationView() 
-        self.nav = CustomModalView(
-                            size_hint = (0.5, 1),
-                            size_hint_max = (dp(250), None),
-                            size_hint_min = (dp(100), None),
-                            background = 'UI/popup400x400.png',
-                            auto_dismiss = False,
-                            overlay_color= (0,0,0,0.5),
-                            opacity = 0, 
-                            pos_hint = {'right': 2, 'center_y': 0.5}
-                        )
-        self.nav.add_widget(nav_content)
-        self.nav.open({'right':2, 'center_y': 0.5}, {'right': 1, 'center_y': 0.5}, 'linear', 0.5, 0.55)
+        if platform == "android":
+           self.ids.scaffold.remove_widget(self.ids.scaffold.ids.logo)
     def search_limit(self):
         '''This limits the search bars characters from exeding 32'''
         if len(self.ids.search_bar.text) > 32:
@@ -474,7 +454,6 @@ class Main(Screen):
         
 class AddEntry(Screen):
     pass
-
 class Screen_Manager(ScreenManager):
     pass
 
@@ -489,8 +468,33 @@ class ReminiscorApp(App):
              }
     popups = []
     animations = True # Remmeber to add an option to disable this in the settings
-    database = ListProperty()
+    database = ListProperty([]) # The database to be used for recycle view on entry view screen
+    databases = ListProperty(['db1', 'db2', 'db3', 'db4', 'db5']) # list of all the names of different databases
+    categories = ListProperty(['c1', 'c2', 'c3', 'c4', 'c5'])
     portable = BooleanProperty(True)
+    username = StringProperty()
+
+    def navigation(self):
+        nav_content = NavigationView() 
+        self.nav = CustomModalView(
+                            size_hint = (0.5, 1),
+                            size_hint_max = (dp(250), None),
+                            size_hint_min = (dp(100), None),
+                            background = 'UI/popup400x400.png',
+                            auto_dismiss = False,
+                            overlay_color= (0,0,0,0.5),
+                            opacity = 0, 
+                            pos_hint = {'right': 2, 'center_y': 0.5}
+                        )
+        self.nav.add_widget(nav_content)
+        self.nav.open({'right':2, 'center_y': 0.5}, {'right': 1, 'center_y': 0.5}, 'linear', 0.5, 0.55)
+    
+    def logout(self):
+        '''This function logs the user out, deletes/unassigns all decrypted data from memory'''
+        # for now I am just switching screens need to rewrite this code later
+        app.root.transition = SlideTransition(direction = 'right') 
+        app.root.current = 'login'
+
     def close_popup(self, *args):
         if self.popups:
             self.popups[-1].dismiss()
@@ -537,6 +541,8 @@ class ReminiscorApp(App):
             Logger.debug('Path Search: For Android')
             app_path, external_path = set_app_path(self._platform, '/Reminiscor', self.portable, '/sdcard')
         Logger.info('Path: %s', app_path) #/sdcard/
+        # get the username for the app session
+        self.username = return_username()
 
     def on_start(self):
         '''This function is an event to handle the start of the app, here we are going to ask for permissions'''

@@ -36,6 +36,15 @@ Screen_Manager:
     background_disabled_normal: self.background_normal
     background_disabled_down: self.background_down
     disabled_color: self.color
+<ViewButton@ToggleButton>:
+    text: 'View'
+    color: app.color['main']
+    markup: True
+    size_hint: 0.2, None
+    height: dp(30)
+    size_hint_min_x: dp(42)
+    background_normal: 'UI/Mainbuttondown.png'
+    background_down: 'UI/editondown.png'
 <CustomTextInput>:
     background_color:  app.color['middle']
     background_normal: ''
@@ -56,8 +65,8 @@ Screen_Manager:
     background_color:  app.color['middle']
     background_normal: ''
     foreground_color: app.color['font']
-    padding: 6,(self.height-self.line_height)/2,6,6
     multiline: False
+    padding: dp(10)
     background_disabled_normal: ''
     font_name: 'Fonts/Montserrat-Light.ttf'
     cursor_color: app.color['main']
@@ -229,20 +238,16 @@ Screen_Manager:
                             size_hint_x: 0.8
                             size_hint_min_x: dp(160)
                             pos_hint: {'center_x': 0.5}
+                            focus: True
                     BoxLayout:
                         size_hint_y: None
                         height: dp(25)
                         Widget:
-                        ToggleButton:
-                            id:view
-                            text: 'View'
-                            color: app.color['main']
-                            markup: True
-                            size_hint: 0.2, None
-                            height: dp(25)
-                            size_hint_min_x: dp(42)
+                        ViewButton:
+                            id: view
                             background_normal: 'UI/Mainbutton.png'
-                            background_down: 'UI/editondown.png'
+                            size_hint_x: None
+                            width: dp(70)
                         Widget:
                 BoxLayout:
                     orientation: 'vertical'
@@ -526,19 +531,87 @@ Screen_Manager:
         size_hint_y: None
         height: root.height*2/3
         UIButton:
+            text: 'Entry View'
+        UIButton:
             text: 'New Entry'
         UIButton:
-            text: 'Import Entries'
-        UIButton:
-            text: 'Export Entries'
+            text: 'Import/Export Entries'
         UIButton:
             text: 'Backup'
         UIButton:
-            text:'Settings'
+            text: 'Settings'
         CustomLabel:
             text: 'Version 2.0.0'
 
+<Scaffold>:
+    cols: 4
+    size_hint_y: None
+    height: dp(70)
+    padding: dp(10)
+    Image:
+        id: logo
+        size_hint: None, None
+        size: dp(55), dp(55)
+        source: 'UI/logowithborder.png'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(25)
+        CustomLabel:
+            width: self.texture_size[0]
+            size_hint_x: None
+            text: 'Reminiscor'
+            font_name: 'Fonts/Colchester.ttf'
+            font_size: sp(40)
+        CustomLabel:
+            size_hint_x: None
+            width: self.texture_size[0] + dp(5)
+            text: 'Welcome, ' + app.username
+            text_size: dp(160), None
+            shorten: True 
+            shorten_from: 'right'
+            font_size: sp(16) if self.texture_size[0]<=dp(150) else sp(14)
+    BoxLayout:
+        id: nav_bar_buttons
+        Widget:
+        UIButton:
+            id: logout
+            text: 'Logout'
+            size_hint: None, None
+            size: dp(80), dp(40)
+            pos_hint: {'center_y': 0.5}
+            on_release: app.logout()
+        Widget:
+            size_hint_x: None
+            width: dp(45)
+        UIButton:
+            canvas.before:
+                Color:
+                    rgba: app.color['background'] 
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: app.color['font'] if self.state == 'normal' else app.color['darkgrey']
+                Ellipse: 
+                    size: dp(5) , dp(5)
+                    pos: self.center_x - dp(2.5), self.center_y - dp(2.5)
+                Ellipse:
+                    size: dp(5) , dp(5)
+                    pos: self.center_x - dp(2.5), self.y 
+                Ellipse:
+                    size: dp(5) , dp(5)
+                    pos: self.center_x - dp(2.5), self.y + self.height - dp(5)  
 
+            id: nav
+            size_hint: None, None
+            background_down: ''
+            background_normal:''
+            background_color: 0,0,0,0
+            pos_hint: {'center_y': 0.5}
+            size: dp(40), dp(30)
+            on_release: app.navigation()
+    
 <Main>:
     name: "main"
     on_pre_enter: root.on_enter_main()
@@ -562,75 +635,8 @@ Screen_Manager:
                 cap: "square"
         orientation: 'vertical'
         spacing: dp(4)
-        GridLayout:
-            id: navigation_bar
-            cols: 4
-            size_hint_y: None
-            height: dp(70)
-            padding: dp(10)
-            Image:
-                id: logo
-                size_hint: None, None
-                size: dp(55), dp(55)
-                source: 'UI/logowithborder.png'
-            BoxLayout:
-                orientation: 'vertical'
-                padding: dp(10)
-                spacing: dp(25)
-                CustomLabel:
-                    width: self.texture_size[0]
-                    size_hint_x: None
-                    text: 'Reminiscor'
-                    font_name: 'Fonts/Colchester.ttf'
-                    font_size: sp(40)
-                CustomLabel:
-                    size_hint_x: None
-                    width: self.texture_size[0] + dp(5)
-                    text: 'Welcome, ' + root.username
-                    text_size: dp(160), None
-                    shorten: True 
-                    shorten_from: 'right'
-                    font_size: sp(16) if self.texture_size[0]<=dp(150) else sp(14)
-            BoxLayout:
-                id: nav_bar_buttons
-                Widget:
-                UIButton:
-                    id: logout
-                    text: 'Logout'
-                    size_hint: None, None
-                    size: dp(80), dp(40)
-                    pos_hint: {'center_y': 0.5}
-                    on_release: root.logout()
-                Widget:
-                    size_hint_x: None
-                    width: dp(45)
-                UIButton:
-                    canvas.before:
-                        Color:
-                            rgba: app.color['background'] 
-                        Rectangle:
-                            pos: self.pos
-                            size: self.size
-                        Color:
-                            rgba: app.color['font'] if self.state == 'normal' else app.color['darkgrey']
-                        Ellipse: 
-                            size: dp(5) , dp(5)
-                            pos: self.center_x - dp(2.5), self.center_y - dp(2.5)
-                        Ellipse:
-                            size: dp(5) , dp(5)
-                            pos: self.center_x - dp(2.5), self.y 
-                        Ellipse:
-                            size: dp(5) , dp(5)
-                            pos: self.center_x - dp(2.5), self.y + self.height - dp(5)  
-
-                    id: nav
-                    size_hint: None, None
-                    background_down: ''
-                    background_normal:''
-                    background_color: 0,0,0,0
-                    pos_hint: {'center_y': 0.5}
-                    size: dp(40), dp(30)
-                    on_release: root.navigation()
+        Scaffold:
+            id: scaffold
         BoxLayout:
             size_hint_y: None
             height: dp(45)
@@ -649,11 +655,13 @@ Screen_Manager:
             opacity: 0 if app.database == [] else 1
             padding: 0,dp(40),0,0
             BoxLayout:
-                orientation: 'vertical'
+                Widget:
+                    size_hint_x: 0.1
                 BoxLayout:
                     id: container
-                    size_hint_x: None if Window.width>dp(800) else 1
-                    width: Window.width - Window.width/8
+                    #size_hint_x: None if Window.width>dp(800) else 1
+                    #width: Window.width - Window.width/8
+                    size_hint_max_x: dp(121200)
                     pos_hint: {'center_x': 0.5}
                     orientation: 'vertical'
                     BoxLayout:
@@ -795,6 +803,8 @@ Screen_Manager:
                                 height: self.minimum_height
                         Widget:        
                             size_hint_x: 0.1
+                Widget:        
+                    size_hint_x: 0.1
 <Entry>:
     cols: 5
     canvas.before:
@@ -857,67 +867,8 @@ Screen_Manager:
                 width: 5
                 cap: "square"
         orientation: 'vertical'
-        GridLayout:
-            id: navigation_bar
-            cols: 4
-            size_hint_y: None
-            height: dp(70)
-            padding: dp(10)
-            Image:
-                id: logo
-                size_hint: None, None
-                size: dp(55), dp(55)
-                source: 'UI/logowithborder.png'
-            BoxLayout:
-                orientation: 'vertical'
-                padding: dp(10)
-                spacing: dp(25)
-                CustomLabel:
-                    width: self.texture_size[0]
-                    size_hint_x: None
-                    text: 'Reminiscor'
-                    font_name: 'Fonts/Colchester.ttf'
-                    font_size: sp(40)
-            BoxLayout:
-                id: nav_bar_buttons
-                Widget:
-                UIButton:
-                    id: logout
-                    text: 'Logout'
-                    size_hint: None, None
-                    size: dp(80), dp(40)
-                    pos_hint: {'center_y': 0.5}
-                    on_release: root.logout()
-                Widget:
-                    size_hint_x: None
-                    width: dp(45)
-                UIButton:
-                    canvas.before:
-                        Color:
-                            rgba: app.color['background'] 
-                        Rectangle:
-                            pos: self.pos
-                            size: self.size
-                        Color:
-                            rgba: app.color['font'] if self.state == 'normal' else app.color['darkgrey']
-                        Ellipse: 
-                            size: dp(5) , dp(5)
-                            pos: self.center_x - dp(2.5), self.center_y - dp(2.5)
-                        Ellipse:
-                            size: dp(5) , dp(5)
-                            pos: self.center_x - dp(2.5), self.y 
-                        Ellipse:
-                            size: dp(5) , dp(5)
-                            pos: self.center_x - dp(2.5), self.y + self.height - dp(5)  
-
-                    id: nav
-                    size_hint: None, None
-                    background_down: ''
-                    background_normal:''
-                    background_color: 0,0,0,0
-                    pos_hint: {'center_y': 0.5}
-                    size: dp(40), dp(30)
-                    on_release: root.navigation()
+        Scaffold:
+            id: scaffold
         BoxLayout:
             size_hint_y: None
             height: dp(45) 
@@ -950,6 +901,8 @@ Screen_Manager:
                 BoxLayout:
                     spacing: dp(15)
                     orientation: 'vertical'
+                    size_hint_max_x: dp(800)
+                    padding: 0, dp(15)
                     CustomLabel:
                         text: 'Enter the following details:'
                         size_hint: None, None
@@ -975,6 +928,21 @@ Screen_Manager:
                         size_hint_y: None
                         height: self.minimum_height
                         spacing: dp(10)
+                        EntryTextInput: 
+                            id: password
+                            hint_text: 'URL'
+                            height: dp(40)
+                            size_hint_x: 0.6
+                            size_hint_min_x: dp(250)
+                        CustomLabel:
+                            size_hint: None, None
+                            size: dp(50), self.texture_size[1]
+                            font_size: dp(16)
+                            text: ''
+                    BoxLayout:
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: dp(10)
                         EntryTextInput:
                             id: username
                             hint_text: 'Username'
@@ -995,21 +963,129 @@ Screen_Manager:
                         height: self.minimum_height
                         spacing: dp(10)
                         EntryTextInput: 
+                            id: password
                             hint_text: 'Password'
                             height: dp(40)
                             size_hint_x: 0.6
-                            password: True
+                            password: True if view.state == "normal" else False
                             size_hint_min_x: dp(250)
                         CustomLabel:
                             size_hint: None, None
                             size: dp(30), self.texture_size[1]
                             font_size: dp(16)
-                            text: str(len(title.text))
+                            text: str(len(password.text))
+                        ViewButton:
+                            id: view
+                    CustomLabel:
+                        text: "Entry's Category:"
+                        size_hint: None, None
+                        size: self.texture_size
+                        color: app.color['font']
+                    BoxLayout:
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: dp(10)
+                        UIDropDown:
+                            canvas.before:
+                                Color:
+                                    rgba: app.color['font']
+                                Line:
+                                    points: [self.x, self.y, self.right, self.y]
+                            elements: app.categories 
+                            default_item: 'Select Category' 
+                            dd_background_color: app.color['background'] 
+                            dd_item_height: dp(40)
+                            dd_item_img_down: ''
+                            dd_item_img_normal: ''
+                            dd_item_color: [app.color['background'], app.color['darkgrey']]
+                            dd_item_isrounded: False 
+                            dd_item_font_color: app.color['font'] 
+                            dd_item_font: 'Fonts/Montserrat-Light.ttf'
+                            dd_item_size_hint_x: 1 
+                            size_hint_x: 1.5 
+                            dd_width: self.width + dp(40) 
+                            dd_open_vertical: 'down'
+                            dd_open_horizontal: 'center'
+                            calculate_ddheight: True
+                            show_items: len(app.categories) if len(app.categories) <= 5 else 5
                         Widget:
+                            size_hint_x: None
+                            width: dp(50)
+                        UIButton:
+                            text: "New Category"
                             size_hint_y: None
-                            height: 0
-                            size_hint_x: 0.2
+                            height: dp(40)
+                    
+                    CustomLabel:
+                        text: "Entry's Database:"
+                        size_hint: None, None
+                        size: self.texture_size
+                        color: app.color['font']
+                    
+                    BoxLayout:
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: dp(10)
+                        UIDropDown:
+                            canvas.before:
+                                Color:
+                                    rgba: app.color['font']
+                                Line:
+                                    points: [self.x, self.y, self.right, self.y]
+                            elements: app.databases 
+                            default_item: 'Database [main]' 
+                            dd_background_color: app.color['background'] 
+                            dd_item_height: dp(40)
+                            dd_item_img_down: ''
+                            dd_item_img_normal: ''
+                            dd_item_color: [app.color['background'], app.color['darkgrey']]
+                            dd_item_isrounded: False 
+                            dd_item_font_color: app.color['font'] 
+                            dd_item_font: 'Fonts/Montserrat-Light.ttf'
+                            dd_item_size_hint_x: 1 
+                            size_hint_x: 1.5 
+                            dd_width: self.width + dp(40) 
+                            dd_open_vertical: 'down'
+                            dd_open_horizontal: 'center'
+                            calculate_ddheight: True
+                            show_items: len(app.databases) if len(app.databases) <= 5 else 5
+                        Widget:
+                            size_hint_x: None
+                            width: dp(50)
+                        UIButton:
+                            text: "New Database"
+                            size_hint_y: None
+                            height: dp(40)
+                    CustomLabel:
+                        text: 'Add Notes (if any):'
+                        size_hint: None, None
+                        size: self.texture_size
+                        color: app.color['font']
+                    BoxLayout:
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: dp(10)
+                        EntryTextInput:
+                            id: Notes
+                            hint_text: 'Notes'
+                            height: dp(250)
+                            size_hint_x: 0.8
+                            font_size: sp(18)
+                            multiline: True
+                            size_hint_min_x: dp(300)
                     Widget:
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(50)
+                        UIButton:
+                            text: 'Back'
+                            on_release:
+                                root.back()
+                        Widget:
+                        UIButton:
+                            text: 'Add Entry'
+                            on_release:
+                                root.back()
                 Widget:
                     size_hint_x: 0.1
 
