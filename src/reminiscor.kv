@@ -908,12 +908,14 @@ Screen_Manager:
                     orientation:'vertical'
                     padding: 0, dp(20)
                     size_hint_max_x: dp((800))
+                    spacing: dp(10)
                     CustomLabel:
                         id: message
                         size_hint: 1, None
                         height: self.texture_size[1]
                         color: app.color['font']
                         font_size: sp(20)
+                        markup: True
                         halign: 'center'
                     ScrollView:
                         do_scroll_x: False
@@ -1126,7 +1128,7 @@ Screen_Manager:
                         UIButton:
                             text: 'Add Entry'
                             on_release:
-                                root.back()
+                                root.add_entry()
                 Widget:
                     size_hint_x: 0.1
 

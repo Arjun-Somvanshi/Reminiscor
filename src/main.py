@@ -460,9 +460,8 @@ class AddEntry(Screen):
     passwordChanged = NumericProperty(0)
     titleChanged = NumericProperty(0)
     def on_enter(self):
-        #self.ids.password.bind(focus=self.monitor_password)
-        #self.ids.title.bind(focus=self.monitor_titleInput_length)
-        pass
+        self.ids.password.bind(focus=self.monitor_password)
+        self.ids.title.bind(focus=self.monitor_titleInput_length)
     def reset_text_input(self, textinput):
         textinput.text = ''
         textinput.error = False
@@ -478,6 +477,8 @@ class AddEntry(Screen):
         self.ids.category_dropdown.error = False
         self.ids.database_dropdown.text = 'Database [main]'
         self.ids.database_dropdown.error = False
+        # reset the message
+        self.ids.message.text = ""
     def back(self):
         # change screen
         self.manager.transition = SlideTransition(direction="down")
@@ -494,7 +495,7 @@ class AddEntry(Screen):
             self.titleChanged = 1
         if value == False and len(title.text)<3:
             title.error = True
-            self.ids.message.text = "Enter a title of three 8 characters."
+            self.ids.message.text = "Enter a title of atleast [color=#770000]3 characters."
         elif value == False and len(title.text)>=3:
             title.error = False
             self.ids.message.text = ""
@@ -505,14 +506,24 @@ class AddEntry(Screen):
             self.passwordChanged = 1
         if value == False and len(password.text)<8:
             password.error = True
-            self.ids.message.text = "Enter a password of atleast 8 characters."
+            self.ids.message.text = "Enter a password of atleast [color=#770000]8 characters."
         elif value == False and len(password.text)>=8:
             password.error = False
             self.ids.message.text = ""
             if self.titleChanged and len(self.ids.title.text)<3:
                self.monitor_titleInput_length(self.ids.title, False)
     def identify_errors(self):
-        pass
+        if len(self.ids.title.text)>=3:
+            if self.ids.title.text.isalnum():
+                if len(self.ids.password.text)>=8:
+                    self.ids.message.text = ""
+                else:
+                    self.ids.message.text = "Enter a password of atleast [color=#770000]8 characters." 
+            else:
+                self.ids.message.text = "Enter a title that is [color=#770000]alpha numeric."
+        else:
+            self.ids.message.text = "Enter a title of atleast [color=#770000]3 characters."
+
     def add_entry(self):
         self.identify_errors()
 
