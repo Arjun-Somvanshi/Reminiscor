@@ -103,8 +103,8 @@ class UIDropDownContent(BoxLayout):
             self.item_size_hint_x = dropdown_instance.dd_item_size_hint_x
 
 class UIDropDown(Button):
-    dd_open_vertical = OptionProperty('down', options = ['up', 'down'])
-    dd_open_horizontal = OptionProperty('center', options = ['left', 'center', 'right'])
+    dd_open_vertical = OptionProperty('down', options = ['up', 'down', "win_center"])
+    dd_open_horizontal = OptionProperty('center', options = ['left', 'center', 'right', "win_center"])
     def calculate_minimum_height(self):
         required_height = 0
         for i in range(self.show_items):
@@ -130,6 +130,10 @@ class UIDropDown(Button):
             horizontal  = ['x', self.x/Window.width]
         elif self.dd_open_horizontal == 'right':
             horizontal = ['right', self.right/Window.width]
+        elif self.dd_open_horizontal == 'win_center' and self.dd_open_vertical == 'win_center':
+            horizontal = ['center_x', 0.5]
+            vertical =  ['center_y',0.5]
+
         self.dropdown_view.pos_hint = {horizontal[0]: horizontal[1], vertical[0]: vertical[1]}
         self.dropdown_view.add_widget(self.content)
         self.dropdown_view.bind(on_dismiss = self.set_selected_item)

@@ -917,8 +917,12 @@ Screen_Manager:
                         halign: 'center'
                     ScrollView:
                         do_scroll_x: False
-                        do_scroll_y: True
+                        do_scroll_y: True if box.height + dp(300)> Window.height else False
+                        bar_width: 5
+                        bar_color:[0,171/255,174/255,1]
+                        scroll_type: ['content', 'bars']
                         BoxLayout:
+                            id: box
                             spacing: dp(15)
                             orientation: 'vertical'
                             size_hint_y: None
@@ -1034,8 +1038,8 @@ Screen_Manager:
                                     dd_item_size_hint_x: 1 
                                     size_hint_x: 1.5 
                                     dd_width: self.width + dp(40) 
-                                    dd_open_vertical: 'down'
-                                    dd_open_horizontal: 'center'
+                                    dd_open_vertical: 'win_center'
+                                    dd_open_horizontal: 'win_center'
                                     calculate_ddheight: True
                                     show_items: len(app.categories) if len(app.categories) <= 5 else 5
                                 Widget:
@@ -1083,13 +1087,13 @@ Screen_Manager:
                                     dd_item_size_hint_x: 1 
                                     size_hint_x: 1.5 
                                     dd_width: self.width + dp(40) 
-                                    dd_open_vertical: 'down'
-                                    dd_open_horizontal: 'center'
+                                    dd_open_vertical: 'win_center'
+                                    dd_open_horizontal: 'win_center'
                                     calculate_ddheight: True
                                     show_items: len(app.databases) if len(app.databases) <= 5 else 5
                                 Widget:
-                                    size_hint: None, None
-                                    size: dp(40), dp(50)
+                                    size_hint_x: None
+                                    width: dp(50)
                                 UIButton:
                                     text: "New Database"
                                     size_hint_y: None
