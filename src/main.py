@@ -453,7 +453,65 @@ class Main(Screen):
             self.ids.search_bar.text = self.ids.search_bar.text[:-1]
         
 class AddEntry(Screen):
-    pass
+    passwordChanged = NumericProperty(0)
+    titleChanged = NumericProperty(0)
+    def on_enter(self):
+        #self.ids.password.bind(focus=self.monitor_password)
+        #self.ids.title.bind(focus=self.monitor_titleInput_length)
+        pass
+    def reset_text_input(self, textinput):
+        textinput.text = ''
+        textinput.error = False
+    def reset_screen_attrs(self, *args):
+        # reset the text inputs
+        self.reset_text_input(self.ids.title)
+        self.reset_text_input(self.ids.url)
+        self.reset_text_input(self.ids.username)
+        self.reset_text_input(self.ids.password)
+        self.reset_text_input(self.ids.notes)
+        # reset the drop downs 
+        self.ids.category_dropdown.text = 'Select Category'
+        self.ids.category_dropdown.error = False
+        self.ids.database_dropdown.text = 'Database [main]'
+        self.ids.database_dropdown.error = False
+    def back(self):
+        # change screen
+        self.manager.transition = SlideTransition(direction="down")
+        self.manager.current = "main"
+        # reset the screen attributes
+        # scheduling so that the attributes change after screen switching animation is completed
+        Clock.schedule_once(self.reset_screen_attrs, 0.1)
+    def monitor_titleInput_limit(self):
+        # for checking if number of characters exceeded 32
+        if len(self.ids.title.text) > 32:
+            self.ids.title.text = self.ids.title.text[:-1]
+    def monitor_titleInput_length(self, title, value):
+        if self.titleChanged == 0:
+            self.titleChanged = 1
+        if value == False and len(title.text)<3:
+            title.error = True
+            self.ids.message.text = "Enter a title of three 8 characters."
+        elif value == False and len(title.text)>=3:
+            title.error = False
+            self.ids.message.text = ""
+            if self.passwordChanged == 1 and len(self.ids.password.text)<8:
+                self.monitor_password(self.ids.password, False)
+    def monitor_password(self, password, value):
+        if self.passwordChanged == 0:
+            self.passwordChanged = 1
+        if value == False and len(password.text)<8:
+            password.error = True
+            self.ids.message.text = "Enter a password of atleast 8 characters."
+        elif value == False and len(password.text)>=8:
+            password.error = False
+            self.ids.message.text = ""
+            if self.titleChanged and len(self.ids.title.text)<3:
+               self.monitor_titleInput_length(self.ids.title, False)
+    def identify_errors(self):
+        pass
+    def add_entry(self):
+        self.identify_errors()
+
 class Screen_Manager(ScreenManager):
     pass
 

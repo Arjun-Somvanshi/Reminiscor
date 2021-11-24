@@ -62,6 +62,12 @@ Screen_Manager:
     disabled_background_color: self.background_color if self.text else self.hint_text_color
 
 <EntryTextInput>:
+    canvas.after:
+        Color:
+            rgba: (1,0,0,0.5) if self.error else (0,0,0,0)
+        Line:
+            points: [self.x, self.y, self.x, self.top, self.right, self.top, self.right, self.y, self.x, self.y]
+    error: False
     background_color:  app.color['middle']
     background_normal: ''
     foreground_color: app.color['font']
@@ -899,180 +905,32 @@ Screen_Manager:
                 Widget:
                     size_hint_x: 0.1
                 BoxLayout:
-                    spacing: dp(15)
-                    orientation: 'vertical'
-                    size_hint_max_x: dp(800)
-                    padding: 0, dp(15)
+                    orientation:'vertical'
+                    size_hint_y: None
+                    heigth: self.minimum_height
+                    padding: 0, dp(20)
                     CustomLabel:
-                        text: 'Enter the following details:'
-                        size_hint: None, None
-                        size: self.texture_size
+                        id: message
+                        size_hint: 1, None
+                        height: self.texture_size[1]
                         color: app.color['font']
-                    BoxLayout:
-                        size_hint_y: None
-                        height: self.minimum_height
-                        spacing: dp(10)
-                        EntryTextInput:
-                            id: title
-                            hint_text: 'Title'
-                            height: dp(50)
-                            size_hint_x: 0.8
-                            font_size: sp(18)
-                            size_hint_min_x: dp(300)
-                        CustomLabel:
-                            size_hint: None, None
-                            size: dp(50), self.texture_size[1]
-                            font_size: dp(16)
-                            text: str(len(title.text)) + '/32' 
-                    BoxLayout:
-                        size_hint_y: None
-                        height: self.minimum_height
-                        spacing: dp(10)
-                        EntryTextInput: 
-                            id: password
-                            hint_text: 'URL'
-                            height: dp(40)
-                            size_hint_x: 0.6
-                            size_hint_min_x: dp(250)
-                        CustomLabel:
-                            size_hint: None, None
-                            size: dp(50), self.texture_size[1]
-                            font_size: dp(16)
-                            text: ''
-                    BoxLayout:
-                        size_hint_y: None
-                        height: self.minimum_height
-                        spacing: dp(10)
-                        EntryTextInput:
-                            id: username
-                            hint_text: 'Username'
-                            height: dp(40)
-                            size_hint_x: 0.6
-                            size_hint_min_x: dp(250)
-                        CustomLabel:
-                            size_hint: None, None
-                            size: dp(30), self.texture_size[1]
-                            font_size: dp(16)
-                            text: str(len(username.text)) 
-                        Widget:
+                        font_size: sp(20)
+                        halign: 'center'
+                    ScrollView:
+                        do_scroll_x: False
+                        do_scroll_y: True
+                        BoxLayout:
+                            spacing: dp(15)
+                            orientation: 'vertical'
+                            size_hint_max_x: dp(800)
                             size_hint_y: None
-                            height: 0
-                            size_hint_x: 0.2
-                    BoxLayout:
-                        size_hint_y: None
-                        height: self.minimum_height
-                        spacing: dp(10)
-                        EntryTextInput: 
-                            id: password
-                            hint_text: 'Password'
-                            height: dp(40)
-                            size_hint_x: 0.6
-                            password: True if view.state == "normal" else False
-                            size_hint_min_x: dp(250)
-                        CustomLabel:
-                            size_hint: None, None
-                            size: dp(30), self.texture_size[1]
-                            font_size: dp(16)
-                            text: str(len(password.text))
-                        ViewButton:
-                            id: view
-                    CustomLabel:
-                        text: "Entry's Category:"
-                        size_hint: None, None
-                        size: self.texture_size
-                        color: app.color['font']
-                    BoxLayout:
-                        size_hint_y: None
-                        height: self.minimum_height
-                        spacing: dp(10)
-                        UIDropDown:
-                            canvas.before:
-                                Color:
-                                    rgba: app.color['font']
-                                Line:
-                                    points: [self.x, self.y, self.right, self.y]
-                            elements: app.categories 
-                            default_item: 'Select Category' 
-                            dd_background_color: app.color['background'] 
-                            dd_item_height: dp(40)
-                            dd_item_img_down: ''
-                            dd_item_img_normal: ''
-                            dd_item_color: [app.color['background'], app.color['darkgrey']]
-                            dd_item_isrounded: False 
-                            dd_item_font_color: app.color['font'] 
-                            dd_item_font: 'Fonts/Montserrat-Light.ttf'
-                            dd_item_size_hint_x: 1 
-                            size_hint_x: 1.5 
-                            dd_width: self.width + dp(40) 
-                            dd_open_vertical: 'down'
-                            dd_open_horizontal: 'center'
-                            calculate_ddheight: True
-                            show_items: len(app.categories) if len(app.categories) <= 5 else 5
-                        Widget:
-                            size_hint_x: None
-                            width: dp(50)
-                        UIButton:
-                            text: "New Category"
-                            size_hint_y: None
-                            height: dp(40)
-                    
-                    CustomLabel:
-                        text: "Entry's Database:"
-                        size_hint: None, None
-                        size: self.texture_size
-                        color: app.color['font']
-                    
-                    BoxLayout:
-                        size_hint_y: None
-                        height: self.minimum_height
-                        spacing: dp(10)
-                        UIDropDown:
-                            canvas.before:
-                                Color:
-                                    rgba: app.color['font']
-                                Line:
-                                    points: [self.x, self.y, self.right, self.y]
-                            elements: app.databases 
-                            default_item: 'Database [main]' 
-                            dd_background_color: app.color['background'] 
-                            dd_item_height: dp(40)
-                            dd_item_img_down: ''
-                            dd_item_img_normal: ''
-                            dd_item_color: [app.color['background'], app.color['darkgrey']]
-                            dd_item_isrounded: False 
-                            dd_item_font_color: app.color['font'] 
-                            dd_item_font: 'Fonts/Montserrat-Light.ttf'
-                            dd_item_size_hint_x: 1 
-                            size_hint_x: 1.5 
-                            dd_width: self.width + dp(40) 
-                            dd_open_vertical: 'down'
-                            dd_open_horizontal: 'center'
-                            calculate_ddheight: True
-                            show_items: len(app.databases) if len(app.databases) <= 5 else 5
-                        Widget:
-                            size_hint_x: None
-                            width: dp(50)
-                        UIButton:
-                            text: "New Database"
-                            size_hint_y: None
-                            height: dp(40)
-                    CustomLabel:
-                        text: 'Add Notes (if any):'
-                        size_hint: None, None
-                        size: self.texture_size
-                        color: app.color['font']
-                    BoxLayout:
-                        size_hint_y: None
-                        height: self.minimum_height
-                        spacing: dp(10)
-                        EntryTextInput:
-                            id: Notes
-                            hint_text: 'Notes'
-                            height: dp(250)
-                            size_hint_x: 0.8
-                            font_size: sp(18)
-                            multiline: True
-                            size_hint_min_x: dp(300)
+                            height: self.minimum_height
+                            padding: 0, dp(15)
+                            CustomLabel:
+                                text: 'Enter the following details:'
+                                size_hint: None, None
+                                size: self.texture_size
+                                color: app.color['font']
                     Widget:
                     BoxLayout:
                         size_hint_y: None
