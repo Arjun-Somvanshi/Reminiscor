@@ -68,7 +68,17 @@ class api():
         else:
             m_key = master_key(key1 = hash_of_master, key2 = None)
             result =  auth_hash(m_key)
+        master_password = None
         return [result, m_key]
+
+    def sensitive_data_encrypt(sensitive_data):
+        random_aes_key = get_random_bytes(32)
+        sensitive_data_in_bytes = json.dumps(sensitive_data).encode("utf-8")
+        sensitive_data_encrypted = AES_Encrypt(random_aes_key, sensitive_data_in_bytes)
+        # assigning random things to sensitive_data
+        sensitive_data ={"bs": [1,2,3]}
+        return sensitive_data_encrypted, random_aes_key
 
     def add_entry(database, masterkey, entry):
         pass
+

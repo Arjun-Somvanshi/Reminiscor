@@ -427,20 +427,14 @@ class Login(Screen):
                 app.create_popup((dp(500), dp(500)), (dp(400), dp(400)), False, design, 'Warning')
                 design.ids.message.text = error_message
                 design.ids.close.bind(on_release = app.close_popup)
-            print('from login: ', result)
             if result[0]:
                 self.ids.password.text = ''
-                try:
-                    with open(HomeDir('database.json', 'UserData')) as f:
-                        encrypted_data =  json.load(f)
-                    app.database = AES_Decrypt(result[1], encrypted_data)
-                    # unassigning the derived master key from the result
-                    result = [1,2,''] # random reassignment of the list 
-                except:
-                    pass
                 self.ids.password.error = False
                 self.transition()
-                app.master_key = result[1]
+                self.start_session(result[1])
+                app.master_key_encrypted = result[1]
+                # unassigning the derived master key from the result
+                result = [1,2,''] # random reassignment of the list 
             else:
                 self.ids.password.error = True
 
@@ -539,6 +533,17 @@ class AddEntry(Screen):
 
     def add_entry(self):
         self.identify_errors()
+        database = self.ids.database_dropdown.text
+        category = self.ids.category_dropdown.text
+        from datetime import datetime
+        time_now = datetime.now()
+        time = time_now.strftime("%B %d, %Y@%H:%M:%S")
+        # Now we must secure the sensitive data  
+        sensitive_data = {"url": self.ids.url.text, "username": self.ids.username.text, 
+                          "password": self.ids.password.text, "notes": self.ids.notes.text}
+        encrypted_sensitive_data, random_key = api.encrypted_sensitive_data(sensitive_data)
+        entry = {"title": self.ids.title.text, "sensitive_data": encrypted_sensitive_data, 
+                 "random_key": random_key, "time": now_string}
 
 class Screen_Manager(ScreenManager):
     pass
