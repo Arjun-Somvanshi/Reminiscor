@@ -34,7 +34,7 @@ from functools import partial
 from kivy.properties import ListProperty, NumericProperty, StringProperty, ObjectProperty, BooleanProperty, OptionProperty, DictProperty
 from response import *
 from kivy.logger import Logger, LOG_LEVELS
-Logger.setLevel(LOG_LEVELS["debug"])
+Logger.setLevel(LOG_LEVELS["info"])
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
 if platform != 'android' and 1==0:
@@ -57,7 +57,7 @@ def quickmessage(title, message, *args):
     else:
         max_size = (dp(400), dp(225))
         min_size = (dp(300), dp(225))
-    Logger.debug('max size: %s', max_size)
+    Logger.info('max size: %s', max_size)
     app.create_popup(max_size, min_size, True, design, title,(0.5, 0.5))
     design.ids.close.bind(on_release=app.close_popup)
 '''-------------------------------------------------------'''
@@ -266,19 +266,19 @@ class Signup(BoxLayout):
         self.ids.username.background_color = app.color['middle']
         self.ids.password.background_color = app.color['middle']
         self.ids.c_password.background_color = app.color['middle']
-        result = signup_response(self.ids.username.text, self.ids.password.text, self.ids.c_password.text)
+        result = api.signup_response(self.ids.username.text, self.ids.password.text, self.ids.c_password.text)
         if 0 in result:
             if result[0] == 0: # meaning the username is less than 3 chars
-                self.ids.username.background_color = (1,1,1,1)
-                self.ids.username.background_normal = 'UI/Mainbuttondown.png'
-                self.ids.username.background_active = 'UI/Mainbuttondown.png'
+                self.ids.username.error = True
                 quickmessage('Username Error', "Your username should be atleast 3 characters long")
             elif result[1] == 0: # password less than 8
-                self.ids.password.background_color = app.color['error']
+                self.ids.username.error = False
+                self.ids.password.error = True
                 quickmessage('Master Password Error', "Your password should be atleast 8 characters long")
             elif result[2] == 0: # password do not match
-                self.ids.password.background_color = app.color['error']
-                self.ids.c_password.background_color = app.color['error']
+                self.ids.username.error = False
+                self.ids.password.error = True
+                self.ids.c_password.error  = True
                 quickmessage('Password Match Error', "Your passwords do not match!")
             return False
         else:
@@ -315,7 +315,7 @@ class Login(Screen):
     def refactor_layout(self, signup, design):
         design.ids.keyfile.remove_widget(design.ids.enable)
     def welcome(self, *args):
-        Logger.debug('Welcome was called')
+        Logger.info('Welcome was called')
         welcome_design = Welcome()
         welcome = CustomModalView(
                                 size_hint = (0.7, 0.8),
@@ -354,7 +354,7 @@ class Login(Screen):
         Clock.schedule_once(self.call_signup, 0.75)
     # Function to invoke signup
     def call_signup(self, *args):             
-        rem_exists = check_user()
+        rem_exists = api.check_user()
         if rem_exists is not True:
             design = Signup()
             self.signup = CustomModalView(
@@ -374,7 +374,7 @@ class Login(Screen):
             design.ids.confirm.bind(on_release=partial(self.signup_complete, design))# had to make a separate function for confirm
             if platform =='android':
                 self.refactor_layout(self.signup, design)
-            Logger.debug('Signup was called here')
+            Logger.info('Signup was called here')
             self.signup.open(self.signup.pos_hint, {'center_x': 0.5, 'center_y': 0.5},'out_expo')
 
         else:
@@ -384,22 +384,33 @@ class Login(Screen):
     def signup_complete(self, design, instance):
         confirm = design.on_confirm()
         if confirm:
+            design.ids.username.error = False
+            design.ids.password.error = False
+            design.ids.c_password.error  = False
             self.signup.dismiss({'center_x': 0.5, 'center_y': -2}, 'in_expo', 0.7, 0.85, True)
-            on_sucess_signup(design.ids.username.text, design.ids.password.text, design.ids.enable.active)
+            api.on_success_signup(design.ids.username.text, design.ids.password.text, design.ids.enable.active)
+            try:
+                Logger.info("User created %s", "Fetching username.")
+                global app
+                app.username = return_username()
+            except Exception as e:
+                Logger.info("User Error %s", str(e))
+
+
  
     def auth_login(self):
         result = [False, None]
-        global no_user
-        Logger.debug('User Status: %s', no_user)
+        global no_user, app
+        Logger.info('User Status: %s', no_user)
         if no_user:
-            Logger.debug('User Status: %s', no_user)
+            Logger.info('User Status: %s', no_user)
             quickmessage('User Error', 'No user was found for Reminiscor, Please [color=#00abae]Signup[/color] first.')
         else:
             try:
-                print('hello')
-                result = login_auth(self.ids.password.text, None)
+                Logger.info("User Login %s", "User exists, authentication is being done...")
+                result = api.auth_login(self.ids.password.text, None)
             except Exception as e:
-                Logger.debug("The exception is: %s",e)
+                Logger.info("The exception is: %s",e)
                 missing = []
                 error_message = ''
                 file_list = ['app_config.json', 'master_key_hash.bin', 'master_salt.bin', 'username.txt']
@@ -427,9 +438,11 @@ class Login(Screen):
                     result = [1,2,''] # random reassignment of the list 
                 except:
                     pass
+                self.ids.password.error = False
                 self.transition()
+                app.master_key = result[1]
             else:
-                quickmessage('Login Error', 'The Master Password is [color=#a93226] wrong.[/color]')
+                self.ids.password.error = True
 
     def transition(self, *args):
         app.root.transition = FadeTransition(duration=0.5)
@@ -546,6 +559,7 @@ class ReminiscorApp(App):
     categories = ListProperty(['c1', 'c2', 'c3', 'c4', 'c5'])
     portable = BooleanProperty(True)
     username = StringProperty()
+    master_key = None 
 
     def navigation(self):
         nav_content = NavigationView() 
@@ -606,16 +620,28 @@ class ReminiscorApp(App):
         global app, no_user, app_path, external_path
         Logger.info('Platform: %s', self._platform)
         app=self
-        if self.portable and self._platform != 'android':
-            Logger.debug('Path Search: For Desktop')
-            path = os.path.split(self.get_application_config())[0]
-            app_path, external_path = set_app_path(self._platform, '/Reminiscor', self.portable, path)
+        if self._platform != 'android':
+            Logger.info('Path Search: For Desktop')
+            if self.portable:
+                Logger.info('Mode: Portable')
+                path = os.path.split(self.get_application_config())[0]
+                Logger.info("application config path: %s", path)
+                path_as_list= path.split(os.path.sep)
+                path_as_list.pop(-1)
+                path = os.path.sep.join(path_as_list) 
+                app_path, external_path = set_app_path(self._platform, 'Reminiscor', self.portable, path)
+            else:
+                Logger.info('Mode: Install')
+                app_path, external_path = set_app_path(self._platform, 'Reminiscor', self.portable)
         else:
-            Logger.debug('Path Search: For Android')
+            Logger.info('Path Search: For Android')
             app_path, external_path = set_app_path(self._platform, '/Reminiscor', self.portable, '/sdcard')
-        Logger.info('Path: %s', app_path) #/sdcard/
+        Logger.info('Set Path: %s', app_path) #/sdcard/
         # get the username for the app session
-        self.username = return_username()
+        try:
+            self.username = return_username()
+        except Exception as e:
+            Logger.info("User Error: %s", str(e))
 
     def on_start(self):
         '''This function is an event to handle the start of the app, here we are going to ask for permissions'''
@@ -647,10 +673,10 @@ class ReminiscorApp(App):
                     print(time)
                     time+=1
         # here we are ensuring that the welcome screen is called and if it's a first use of the app
-        no_user = not check_user()        
+        no_user = not api.check_user()        
         if no_user:
             login_screen = app.root.get_screen('login')
-            Logger.debug('Welcome is called from here the first time.')
+            Logger.info('Welcome is called from here the first time.')
             Clock.schedule_once(login_screen.welcome, 1)
         self.database.append({'serial_no': '1', 'name':'Empty Database', 'url': '', 'database_name': '', 'category': 'some', 'owner': self})
 if __name__ == '__main__':

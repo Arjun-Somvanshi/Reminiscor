@@ -56,7 +56,15 @@ def keyfile_decrypt(key1, keyfile_dir):
     keyfile_data = ECB_decrypt(keyfile_cipher, key1[:16])
     return keyfile_data
 
-def master_key(key1, first = False, re_encrypting = False, key2 = None): #used to derive the master key from argon 2 using keyfile and master password
+def master_key(key1, first = False, re_encrypting = False, key2 = None): 
+    '''
+        Description
+        ***********
+            Used to derive the master key from argon 2 using keyfile and master password
+        Paramerters:
+        ************
+            key1 = The master
+    '''
     # read the argon2 parameters before kdf
     param = read_remfile('app_config.json')
     print("these are the configs: ", param)
@@ -78,7 +86,6 @@ def master_key(key1, first = False, re_encrypting = False, key2 = None): #used t
     #unassigning the sensitive data
     key1 = None
     key2 = None
-    composite_key = composite_key
     #print(composite_key) uncomment to test the compostie key value
     #print(salt)
     masterkey = argon2.low_level.hash_secret_raw(secret = composite_key, 
@@ -132,9 +139,10 @@ def AES_Decrypt(key, encrypted_data): # enrypted_data is a dictionary which cont
 
 '''this function is for testing the key generation'''
 def composite_key_test(first):
-    k1 = blake('manu')
-    k2= blake('arjun')
-    return master_key(key1 = k1,key2 = k2, first = first)
+    k1 = blake('arjun2000')
+    #k2= blake('arjun')
+    return master_key(key1 = k1,key2 = None, first = first)
+
 def test_encryption(): # to test the encryption
     database = {'entries':{'username': 'arjun somvanshi', 'password': 'arjun2000123455667'}}
     database_as_bytes = json.dumps(database).encode('utf-8')

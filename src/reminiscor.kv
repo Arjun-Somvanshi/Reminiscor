@@ -232,7 +232,7 @@ Screen_Manager:
                     BoxLayout:
                         padding: dp(5)
                         spacing: dp(10)
-                        CustomTextInput:
+                        EntryTextInput:
                             id: password
                             text: 'arjun2000'#remove this
                             hint_text: 'Master Password'
@@ -377,18 +377,18 @@ Screen_Manager:
         font_size: root.width/11
         size_hint_max_y: dp(60)
         size_hint_y: 0.2
-    CustomTextInput:
+    EntryTextInput:
         id: username
         size_hint_y: 0.15
         size_hint_max_y: dp(60)
         hint_text: 'Username (minimum: 3)'
-    CustomTextInput:
+    EntryTextInput:
         id: password
         size_hint_y: 0.15
         size_hint_max_y: dp(60)
         password: True
         hint_text: 'Master Password (minimum: 8)'
-    CustomTextInput:
+    EntryTextInput:
         id: c_password
         size_hint_y: 0.15
         size_hint_max_y: dp(60)

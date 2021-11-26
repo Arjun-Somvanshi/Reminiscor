@@ -44,7 +44,7 @@ def set_app_path(platform, app_name, portable = False, path = ""):
             from android.storage import app_storage_path, primary_external_storage_path
             app_path = app_storage_path()
             external_path = primary_external_storage_path()
-    app_path += '/'
+    app_path += os.path.sep
     return app_path, external_path
 
 def HomeDir(filename, sub_directory = ''): # Appends the subdirectory and filename to the path of the app
@@ -97,6 +97,7 @@ def write_remfile(filename = '', data = None, write = False, *args): # before se
     the content you want to write, write is only to be used when using this function for the first time (during signup)'''
     if write: # This is to be made on signup, this initaializes the file
         create_directory('UserData')
+        create_directory('UserData'+os.path.sep+'Databases')
     else:
         file_type = filename.split('.')[1]
         if file_type =='json':
