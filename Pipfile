@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-kivy = {extras = ["base"], version = "*"}
 pycryptodome = "*"
 argon2-cffi = "*"
+kivy = {extras = ["base"], version = "*"}
 
 [dev-packages]
 
