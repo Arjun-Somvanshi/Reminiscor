@@ -1,0 +1,280 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/zephyrus/python_projects/Reminiscor/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/p5.9.20210905.0/
+0	src/tutorial.json	/^                      "content": ["Reminiscor uses [color=#00abae]AES-256[\/color] (as the main /;"	s	array:tutorials.tutorial1.content
+1	src/tutorial.json	/^                                  "to secure a user's data, the process is fast and secure, due /;"	s	array:tutorials.tutorial1.content
+10	src/tutorial.json	/^                                  "\\n\\n[color=#00abae]\\u2022 A Strong Master Password\\n\\u20/;"	s	array:tutorials.tutorial1.content
+11	src/tutorial.json	/^                                  "\\n\\n[b]A Strong Master Password[\/b]\\n",$/;"	s	array:tutorials.tutorial1.content
+12	src/tutorial.json	/^                                  "\\nA Strong Master Password is very important for avoiding br/;"	s	array:tutorials.tutorial1.content
+13	src/tutorial.json	/^                                  "According to mordern research, it takes about 3 months to bre/;"	s	array:tutorials.tutorial1.content
+14	src/tutorial.json	/^                                  "the most powerful non-quantum computation abilities. Hence th/;"	s	array:tutorials.tutorial1.content
+15	src/tutorial.json	/^                                  "random (as much as possible) and lengthy password.",$/;"	s	array:tutorials.tutorial1.content
+16	src/tutorial.json	/^                                  "\\n\\n[b]What is a KeyFile?[\/b]\\n",$/;"	s	array:tutorials.tutorial1.content
+17	src/tutorial.json	/^                                  "\\nA KeyFile is a file that contains a key, which is used to /;"	s	array:tutorials.tutorial1.content
+18	src/tutorial.json	/^                                  "key, this key is then used to encrypt all of the user data al/;"	s	array:tutorials.tutorial1.content
+19	src/tutorial.json	/^                                  "Reminiscor doesn't allow the only KeyFile option, here things/;"	s	array:tutorials.tutorial1.content
+2	src/tutorial.json	/^                                  "and having layers of diffusion, making it secure to most of t/;"	s	array:tutorials.tutorial1.content
+20	src/tutorial.json	/^                                  "component of the hash digest of the master password which is /;"	s	array:tutorials.tutorial1.content
+21	src/tutorial.json	/^                                  "storage device safely, like a disk, hardrive etc, though it's/;"	s	array:tutorials.tutorial1.content
+22	src/tutorial.json	/^                                  "misplaced, if it's misplaced the data is lost forever, unless/;"	s	array:tutorials.tutorial1.content
+23	src/tutorial.json	/^                                  "to this KeyFile, choose this option with caution during the s/;"	s	array:tutorials.tutorial1.content
+24	src/tutorial.json	/^                                  ", hence this feature is not available for it."       $/;"	s	array:tutorials.tutorial1.content
+3	src/tutorial.json	/^                                  "Reminiscor uses a part of the [color=#00abae]Blake2[\/color] /;"	s	array:tutorials.tutorial1.content
+4	src/tutorial.json	/^                                  "of the master password to generate a", $/;"	s	array:tutorials.tutorial1.content
+5	src/tutorial.json	/^                                  "[color=#00abae]Master key[\/color] (without a KeyFile), if a /;"	s	array:tutorials.tutorial1.content
+6	src/tutorial.json	/^                                  "to a key derivation function, which returns the Master AES ke/;"	s	array:tutorials.tutorial1.content
+7	src/tutorial.json	/^                                  "Enigma encryption to increase diffusion of the entry data bef/;"	s	array:tutorials.tutorial1.content
+8	src/tutorial.json	/^                                  "of security, while keeping the time complexity fairly simple\\/;"	s	array:tutorials.tutorial1.content
+9	src/tutorial.json	/^                                  "This password is set during the Signup process. There are two/;"	s	array:tutorials.tutorial1.content
+AES_Decrypt	src/security.py	/^def AES_Decrypt(key, encrypted_data): # enrypted_data is a dictionary which contains the encrypt/;"	f
+AES_Encrypt	src/security.py	/^def AES_Encrypt(key, data): # The data should be in bytes here$/;"	f
+AddEntry	src/main.py	/^class AddEntry(Screen):$/;"	c
+Alpha	src/Password_Read_Write.py	/^Alpha = string.ascii_letters$/;"	v
+Api	src/main.py	/^Api = api()$/;"	v
+Backup_Data	src/Password_Read_Write.py	/^def Backup_Data():$/;"	f
+CheckCredentials	src/LoginScreenResponse.py	/^def CheckCredentials(usrName, paswrd, key):$/;"	f
+CheckFunction	src/Password_Read_Write.py	/^def CheckFunction(List, LOL):$/;"	f
+CheckModified	src/FileHandling.py	/^def CheckModified(a, b):$/;"	f
+CheckUser	src/LoginScreenResponse.py	/^def CheckUser():$/;"	f
+ColorChange	src/PassGen.py	/^def ColorChange(n, error, error_text='', color=(45\/255, 45\/255, 45\/255, 1)):$/;"	f
+CustomModalView	src/main.py	/^class CustomModalView(ModalView): # here I have made a custom modal view so that it can handle a/;"	c
+CustomPopup	src/main.py	/^class CustomPopup(Popup):$/;"	c
+CustomTextInput	src/main.py	/^class CustomTextInput(TextInput):$/;"	c
+Default_Unique_User_EnigmaSettings	src/EnigmaModule.py	/^def Default_Unique_User_EnigmaSettings(master_password):$/;"	f
+DelPassword	src/Password_Read_Write.py	/^def DelPassword(entry, AESkey):$/;"	f
+DescriptionCheck	src/PassGen.py	/^def DescriptionCheck(description, key):$/;"	f
+DropDownModalView	src/main.py	/^class DropDownModalView(ModalView):$/;"	c
+ECB_decrypt	src/security.py	/^def ECB_decrypt(cipher_text, key):$/;"	f
+ECB_encrypt	src/security.py	/^def ECB_encrypt(plaintext, key):$/;"	f
+EOF	src/FileHandling.py	/^def EOF(file):  # This checks if pointer has reached end of file$/;"	f
+EditPassword	src/Password_Read_Write.py	/^def EditPassword(iniEntry, entry, AESkey):  # replaces iniEntry with entry$/;"	f
+Elements	src/main.py	/^    Elements = ListProperty([]) $/;"	v	class:UIDropDownContent
+EnigmaMachine	src/EnigmaModule.py	/^def EnigmaMachine(msg_str, enigma_setting_str):$/;"	f
+Entry	src/main.py	/^class Entry(RecycleDataViewBehavior, GridLayout):$/;"	c
+EntryTextInput	src/main.py	/^class EntryTextInput(TextInput):$/;"	c
+GetAllPasswordTitles	src/Password_Read_Write.py	/^def GetAllPasswordTitles(AESkey):$/;"	f
+HomeDir	src/FileHandling.py	/^def HomeDir(filename, sub_directory = ''): # Appends the subdirectory and filename to the path o/;"	f
+Import	src/Password_Read_Write.py	/^def Import(CommonPassword, Username, AESkey):$/;"	f
+ImportBackup	src/Password_Read_Write.py	/^def ImportBackup():$/;"	f
+KeyDerivationFunction	src/EnigmaModule.py	/^def KeyDerivationFunction(master_password, skey):$/;"	f
+Login	src/main.py	/^class Login(Screen):$/;"	c
+Main	code_examples/popup_while_screen_changes.py	/^class Main(Screen):$/;"	c
+Main	src/main.py	/^class Main(Screen):$/;"	c
+MapAlphaNum	src/Password_Read_Write.py	/^def MapAlphaNum(ch):$/;"	f
+MapNumAlpha	src/Password_Read_Write.py	/^def MapNumAlpha(n):$/;"	f
+ModifiedFileTime	src/FileHandling.py	/^def ModifiedFileTime(filepath):$/;"	f
+MyApp	code_examples/popup_while_screen_changes.py	/^class MyApp(App):$/;"	c
+NavigationView	src/main.py	/^class NavigationView(BoxLayout):$/;"	c
+One_Setting_Generator	src/EnigmaModule.py	/^def One_Setting_Generator():  # Generates one enigma setting with 'qwertyuiop***asdfghjklzxcvbnm/;"	f
+PassCheck	src/PassGen.py	/^def PassCheck(n):$/;"	f
+PasswordGen	src/PassGen.py	/^def PasswordGen(n):$/;"	f
+QuickMessage	src/main.py	/^class QuickMessage(BoxLayout):$/;"	c
+ReadDecrypt	src/Password_Read_Write.py	/^def ReadDecrypt(filename, AESkey):$/;"	f
+ReadFile	src/FileHandling.py	/^def ReadFile(file):  # This reads whole file line by line and returns it as list$/;"	f
+ReadFileLine	src/FileHandling.py	/^def ReadFileLine(file):  # This reads one line from file$/;"	f
+ReminiscorApp	src/main.py	/^class ReminiscorApp(App):$/;"	c
+Scaffold	src/main.py	/^class Scaffold(GridLayout):$/;"	c
+Screen_Manager	code_examples/popup_while_screen_changes.py	/^class Screen_Manager(ScreenManager):$/;"	c
+Screen_Manager	src/main.py	/^class Screen_Manager(ScreenManager):$/;"	c
+SearchFile	src/Password_Read_Write.py	/^def SearchFile(Str, AESkey):$/;"	f
+ShareAll	src/Password_Read_Write.py	/^def ShareAll(UsernameList, CommonPassword, AESkey):$/;"	f
+ShareSelected	src/Password_Read_Write.py	/^def ShareSelected(UsernameList, CommonPassword, EntryList, AESkey):$/;"	f
+Side	code_examples/popup_while_screen_changes.py	/^class Side(Screen):$/;"	c
+Signup	src/main.py	/^class Signup(BoxLayout):$/;"	c
+Tutorial	src/main.py	/^class Tutorial(BoxLayout):$/;"	c
+UIDropDown	src/main.py	/^class UIDropDown(Button):$/;"	c
+UIDropDownContent	src/main.py	/^class UIDropDownContent(BoxLayout):$/;"	c
+UIDropDownItem	src/main.py	/^class UIDropDownItem(Button):$/;"	c
+Welcome	src/main.py	/^class Welcome(BoxLayout):$/;"	c
+WriteEncrypt	src/Password_Read_Write.py	/^def WriteEncrypt(fileName, message, AESkey):$/;"	f
+WriteLine	src/FileHandling.py	/^def WriteLine(file, info):  # Writes line with \\n included$/;"	f
+__init__	src/main.py	/^    def __init__(self, **kwargs):$/;"	m	class:Login
+__init__	src/main.py	/^    def __init__(self, **kwargs):$/;"	m	class:Welcome
+__init__	src/main.py	/^    def __init__(self, dropdown_instance, elements: list, background_color: list, item_height = /;"	m	class:UIDropDownContent
+_platform	src/main.py	/^    _platform = platform #to check the platform for sizing$/;"	v	class:ReminiscorApp
+a	code_examples/testencyption.py	/^    a = str(decrypted, 'utf-8')$/;"	v
+a	code_examples/testencyption.py	/^a = input()$/;"	v
+add_entry	src/main.py	/^    def add_entry(self):$/;"	m	class:AddEntry
+add_entry	src/response.py	/^    def add_entry(self, database, masterkey, entry):$/;"	m	class:api
+aes	code_examples/testencyption.py	/^aes = pyaes.AESModeOfOperationCTR(key_32_bytes)$/;"	v
+animations	src/main.py	/^    animations = True # Remmeber to add an option to disable this in the settings$/;"	v	class:ReminiscorApp
+api	src/response.py	/^class api():$/;"	c
+api_obj	src/response.py	/^    api_obj = api() $/;"	v
+app	src/main.py	/^app = None$/;"	v
+app_path	src/FileHandling.py	/^app_path = ''$/;"	v
+app_path	src/main.py	/^app_path = None$/;"	v
+argon2_settings	UserData/app_config.json	/^  "argon2_settings": {$/;"	o
+auth_hash	src/security.py	/^def auth_hash(master_key):$/;"	f
+auth_login	src/main.py	/^    def auth_login(self):$/;"	m	class:Login
+auth_login	src/response.py	/^    def auth_login(self, master_password, keyfile_dir):$/;"	m	class:api
+back	src/main.py	/^    def back(self):$/;"	m	class:AddEntry
+background_color	src/main.py	/^    background_color = ListProperty([0,0,0,1])$/;"	v	class:UIDropDownContent
+background_img_down	src/main.py	/^    background_img_down = StringProperty('')$/;"	v	class:UIDropDownItem
+background_img_normal	src/main.py	/^    background_img_normal = StringProperty('')$/;"	v	class:UIDropDownItem
+blake	src/security.py	/^def blake (data): # send strings or bytes$/;"	f
+build	code_examples/popup_while_screen_changes.py	/^    def build(self):$/;"	m	class:MyApp
+build	src/main.py	/^    def build(self):$/;"	m	class:ReminiscorApp
+calculate_minimum_height	src/main.py	/^    def calculate_minimum_height(self):$/;"	m	class:UIDropDown
+call_signup	src/main.py	/^    def call_signup(self, *args):             $/;"	m	class:Login
+categories	src/main.py	/^    categories = ListProperty(['c1', 'c2', 'c3', 'c4', 'c5'])$/;"	v	class:ReminiscorApp
+category	src/main.py	/^    category = StringProperty()$/;"	v	class:Entry
+check_user	src/response.py	/^    def check_user(self):$/;"	m	class:api
+ciphertext	code_examples/testencyption.py	/^ciphertext = aes.encrypt(txt)$/;"	v
+close_all_popups	src/main.py	/^    def close_all_popups(self, *args):$/;"	m	class:ReminiscorApp
+close_popup	src/main.py	/^    def close_popup(self, *args):$/;"	m	class:ReminiscorApp
+color	src/main.py	/^    color = {'background': (30\/255,30\/255,30\/255,1), $/;"	v	class:ReminiscorApp
+composite_key_test	src/security.py	/^def composite_key_test(first):$/;"	f
+content	src/tutorial.json	/^                      "content": ["Reminiscor uses [color=#00abae]AES-256[\/color] (as the main /;"	a	object:tutorials.tutorial1
+create_directory	src/FileHandling.py	/^def create_directory(subdirectory): # creates a subdirectory$/;"	f
+create_entry	code_examples/demo.py	/^def create_entry():$/;"	f
+create_popup	src/main.py	/^    def create_popup(self, max_size, min_size, multiple_allow, $/;"	m	class:ReminiscorApp
+create_test_database	code_examples/demo2.py	/^def create_test_database():$/;"	f
+createuser	src/EnigmaModule.py	/^def createuser(master_password):$/;"	f
+data	code_examples/demo2.py	/^data = {}$/;"	v
+data	code_examples/zip.py	/^    data = dbfile.read()$/;"	v
+data	code_examples/zip.py	/^data = pickle.dumps(database)$/;"	v
+data_decrypt	src/response.py	/^    def data_decrypt(self, encrypted_data, key):$/;"	m	class:api
+data_encrypt	src/response.py	/^    def data_encrypt(self, data, key):$/;"	m	class:api
+database	code_examples/zip.py	/^database = pickle.loads(data)$/;"	v
+database	code_examples/zip.py	/^database = {'entries':{'username': 'arjun somvanshi', 'password': 'arjun2000123455667'}}$/;"	v
+database	src/main.py	/^    database = ListProperty([]) # The database to be used for recycle view on entry view screen$/;"	v	class:ReminiscorApp
+database_name	src/main.py	/^    database_name = StringProperty()$/;"	v	class:Entry
+databases	src/main.py	/^    databases = ListProperty(['db1', 'db2', 'db3', 'db4', 'db5']) # list of all the names of dif/;"	v	class:ReminiscorApp
+date	src/main.py	/^    date = ListProperty()$/;"	v	class:Entry
+dd_object	src/main.py	/^    dd_object = ObjectProperty()$/;"	v	class:UIDropDownItem
+dd_open_horizontal	src/main.py	/^    dd_open_horizontal = OptionProperty('center', options = ['left', 'center', 'right', "win_cen/;"	v	class:UIDropDown
+dd_open_vertical	src/main.py	/^    dd_open_vertical = OptionProperty('down', options = ['up', 'down', "win_center"])$/;"	v	class:UIDropDown
+decrypt_database	code_examples/popup_while_screen_changes.py	/^    def decrypt_database(self):$/;"	m	class:Side
+decrypted	code_examples/testencyption.py	/^    decrypted = aes.decrypt(something)$/;"	v
+decrypted	code_examples/testencyption.py	/^decrypted = aes.decrypt(something)$/;"	v
+delete	code_examples/demo.py	/^def delete(entry):$/;"	f
+dismiss	src/main.py	/^    def dismiss(self, animate = True, *largs, **kwargs):$/;"	m	class:CustomPopup
+dismiss	src/main.py	/^    def dismiss(self, fast = False, *largs, **kwargs):$/;"	m	class:DropDownModalView
+dismiss	src/main.py	/^    def dismiss(self, pos_hint_final = {}, t = '', d1=0.7, d2=0.75, animate = True, *largs, **kw/;"	m	class:CustomModalView
+diss	code_examples/popup_while_screen_changes.py	/^    def diss(self,*args):$/;"	m	class:Side
+edit	code_examples/demo.py	/^def edit(entry, username = 'Arjun', password = 'Arjun1234567890', notes = 'this is a new passwor/;"	f
+enable_popup	src/main.py	/^    def enable_popup(self, *args):$/;"	m	class:CustomModalView
+enable_popup	src/main.py	/^    def enable_popup(self, *args):$/;"	m	class:CustomPopup
+enigmakey	code_examples/testencyption.py	/^enigmakey = One_Setting_Generator()$/;"	v
+enigmakey1	code_examples/testencyption.py	/^enigmakey1 = One_Setting_Generator()$/;"	v
+external_path	src/FileHandling.py	/^external_path = ''$/;"	v
+external_path	src/main.py	/^external_path = None$/;"	v
+file	code_examples/testencyption.py	/^file = open("Newfile.dat", "bw")$/;"	v
+file1	code_examples/testencyption.py	/^file1 = open("Newfile.dat", "br")$/;"	v
+finish_dismiss	src/main.py	/^    def finish_dismiss(self, *args):$/;"	m	class:CustomModalView
+finish_dismiss	src/main.py	/^    def finish_dismiss(self, *args):$/;"	m	class:DropDownModalView
+finish_dismiss	src/main.py	/^    def finish_dismiss(self, instance, *args):$/;"	m	class:CustomPopup
+first_signup	src/main.py	/^    def first_signup(self, *args):$/;"	m	class:Login
+first_use	src/main.py	/^    def first_use(self):$/;"	m	class:ReminiscorApp
+get_time	src/main.py	/^    def get_time(self):$/;"	m	class:AddEntry
+heading	src/tutorial.json	/^        "tutorial1": {"heading":"How does the app secure my passwords?", $/;"	s	object:tutorials.tutorial1
+identify_errors	src/main.py	/^    def identify_errors(self):$/;"	m	class:AddEntry
+increment_value	code_examples/popup_while_screen_changes.py	/^    def increment_value(self, value, *args):$/;"	m	class:Side
+index	src/main.py	/^    index = NumericProperty()$/;"	v	class:Entry
+item_color	src/main.py	/^    item_color = ListProperty([[1,1,1,1], [1,1,1,0.5]])$/;"	v	class:UIDropDownItem
+item_font	src/main.py	/^    item_font = StringProperty('Roboto')$/;"	v	class:UIDropDownItem
+item_font_color	src/main.py	/^    item_font_color = ListProperty([0,0,0,1])$/;"	v	class:UIDropDownItem
+item_font_size	src/main.py	/^    item_font_size = NumericProperty(sp(15))$/;"	v	class:UIDropDownItem
+item_height	src/main.py	/^    item_height = NumericProperty(dp(30))$/;"	v	class:UIDropDownContent
+item_size_hint_x	src/main.py	/^    item_size_hint_x = NumericProperty(1)$/;"	v	class:UIDropDownContent
+key1_32_bytes	code_examples/testencyption.py	/^key1_32_bytes = pbkdf2.PBKDF2(master_password, salt).read(32)$/;"	v
+key_32_bytes	code_examples/testencyption.py	/^key_32_bytes = pbkdf2.PBKDF2("Arjun2000@!", salt).read(32)$/;"	v
+keyfile_decrypt	src/security.py	/^def keyfile_decrypt(key1, keyfile_dir):$/;"	f
+keyfile_encryption	src/security.py	/^def keyfile_encryption(key1):$/;"	f
+kv	code_examples/popup_while_screen_changes.py	/^kv = '''$/;"	v
+l	code_examples/testencyption.py	/^    l = a.split('\\n')$/;"	v
+loaded_data_base	src/main.py	/^    loaded_data_base = DictProperty({}) # The database as loaded from the datbase file$/;"	v	class:ReminiscorApp
+logout	src/main.py	/^    def logout(self):$/;"	m	class:ReminiscorApp
+master_key	src/security.py	/^def master_key(key1, first = False, re_encrypting = False, key2 = None): $/;"	f
+master_key_encrypt	src/response.py	/^    def master_key_encrypt(self, master_key):$/;"	m	class:api
+master_key_encrypted	src/main.py	/^    master_key_encrypted = None$/;"	v	class:ReminiscorApp
+master_key_store	src/security.py	/^def master_key_store(master_key): # This stores the master key's hash value$/;"	f
+master_password	code_examples/testencyption.py	/^master_password = input("Enter password: ")$/;"	v
+memory_cost	UserData/app_config.json	/^    "memory_cost": 51200,$/;"	n	object:argon2_settings
+monitor_password	src/main.py	/^    def monitor_password(self, password, value):$/;"	m	class:AddEntry
+monitor_titleInput_length	src/main.py	/^    def monitor_titleInput_length(self, title, value):$/;"	m	class:AddEntry
+monitor_titleInput_limit	src/main.py	/^    def monitor_titleInput_limit(self):$/;"	m	class:AddEntry
+move_rotor	src/EnigmaModule.py	/^    def move_rotor(rotor):$/;"	f	function:EnigmaMachine	file:
+name	src/main.py	/^    name = StringProperty()$/;"	v	class:Entry
+navigation	src/main.py	/^    def navigation(self):$/;"	m	class:ReminiscorApp
+no_user	src/main.py	/^no_user = None$/;"	v
+on_confirm	src/main.py	/^    def on_confirm(self):$/;"	m	class:Signup
+on_enter	src/main.py	/^    def on_enter(self):$/;"	m	class:AddEntry
+on_enter_main	src/main.py	/^    def on_enter_main(self):$/;"	m	class:Main
+on_keyfile_enable	src/main.py	/^    def on_keyfile_enable(self, value, *args):$/;"	m	class:Signup
+on_parent	src/main.py	/^    def on_parent(self, *_):$/;"	m	class:CustomTextInput
+on_parent	src/main.py	/^    def on_parent(self, *_):$/;"	m	class:EntryTextInput
+on_release	src/main.py	/^    def on_release(self):$/;"	m	class:UIDropDown
+on_release	src/main.py	/^    def on_release(self):$/;"	m	class:UIDropDownItem
+on_start	src/main.py	/^    def on_start(self):$/;"	m	class:ReminiscorApp
+on_success_signup	src/response.py	/^    def on_success_signup(self, username, password, keyfile = False):$/;"	m	class:api
+on_touch_down	src/main.py	/^    def on_touch_down(self, touch):$/;"	m	class:NavigationView
+open	src/main.py	/^    def open(self, animate = True, *largs, **kwargs):$/;"	m	class:CustomPopup
+open	src/main.py	/^    def open(self, final_height, *largs, **kwargs):$/;"	m	class:DropDownModalView
+open	src/main.py	/^    def open(self, pos_hint_initial = {}, pos_hint_final = {}, $/;"	m	class:CustomModalView
+owner	src/main.py	/^    owner = ObjectProperty()$/;"	v	class:Entry
+owner	src/main.py	/^    owner = ObjectProperty()$/;"	v	class:UIDropDownItem
+parallelism	UserData/app_config.json	/^    "parallelism": 8$/;"	n	object:argon2_settings
+passwordChanged	src/main.py	/^    passwordChanged = NumericProperty(0)$/;"	v	class:AddEntry
+pop	code_examples/popup_while_screen_changes.py	/^    def pop(self):$/;"	m	class:Main
+pop	code_examples/popup_while_screen_changes.py	/^class pop(BoxLayout):$/;"	c
+popups	src/main.py	/^    popups = []$/;"	v	class:ReminiscorApp
+portable	src/main.py	/^    portable = BooleanProperty(True)$/;"	v	class:ReminiscorApp
+quickmessage	src/main.py	/^def quickmessage(title, message, *args):$/;"	f
+random_code	code_examples/demo.py	/^def random_code(size):$/;"	f
+random_key	src/response.py	/^    sensitive_data_encrypted, random_key = api_obj.sensitive_data_encrypt(sensitive_data)$/;"	v
+read	code_examples/demo2.py	/^def read():$/;"	f
+read_remfile	src/FileHandling.py	/^def read_remfile(filename):$/;"	f
+refactor_layout	src/main.py	/^    def refactor_layout(self):$/;"	m	class:Main
+refactor_layout	src/main.py	/^    def refactor_layout(self, signup, design):$/;"	m	class:Login
+reset_screen_attrs	src/main.py	/^    def reset_screen_attrs(self, *args):$/;"	m	class:AddEntry
+reset_text_input	src/main.py	/^    def reset_text_input(self, textinput):$/;"	m	class:AddEntry
+return_username	src/FileHandling.py	/^def return_username():$/;"	f
+rounded	src/main.py	/^    rounded = BooleanProperty(False)$/;"	v	class:UIDropDownItem
+salt	code_examples/testencyption.py	/^salt = b'\\x05;iBi\\x17Q\\xe0'$/;"	v
+search_limit	src/main.py	/^    def search_limit(self):$/;"	m	class:Main
+selected_item	src/main.py	/^    selected_item = StringProperty('')$/;"	v	class:UIDropDownContent
+sensitive_data	src/response.py	/^    sensitive_data = api_obj.data_decrypt(sensitive_data_encrypted, random_key)$/;"	v
+sensitive_data	src/response.py	/^    sensitive_data = {"url": "https:\/\/mullvad-vpn.com", "username": "none", $/;"	v
+sensitive_data	src/response.py	/^    sensitive_data = {}$/;"	v
+sensitive_data_encrypt	src/response.py	/^    def sensitive_data_encrypt(self, sensitive_data):$/;"	m	class:api
+sensitive_data_encrypted	src/response.py	/^    sensitive_data_encrypted, random_key = api_obj.sensitive_data_encrypt(sensitive_data)$/;"	v
+serial_no	src/main.py	/^    serial_no = StringProperty()$/;"	v	class:Entry
+session_key	src/main.py	/^    session_key = None$/;"	v	class:ReminiscorApp
+set_app_path	src/FileHandling.py	/^def set_app_path(platform, app_name, portable = False, path = ""):$/;"	f
+set_dropdown	src/main.py	/^    def set_dropdown(self):$/;"	m	class:UIDropDown
+set_selected_item	src/main.py	/^    def set_selected_item(self, instance):$/;"	m	class:UIDropDown
+signup_complete	src/main.py	/^    def signup_complete(self, design, instance):$/;"	m	class:Login
+signup_response	src/response.py	/^    def signup_response(self, username, password, c_password):$/;"	m	class:api
+something	code_examples/testencyption.py	/^something = file1.read()$/;"	v
+start_session	src/main.py	/^    def start_session(self, master_key):$/;"	m	class:ReminiscorApp
+test_encryption	src/security.py	/^def test_encryption(): # to test the encryption$/;"	f
+test_read_write	src/FileHandling.py	/^def test_read_write():$/;"	f
+testmodule	src/EnigmaModule.py	/^def testmodule():$/;"	f
+text	src/main.py	/^    text = StringProperty('')$/;"	v	class:Tutorial
+text	src/main.py	/^    text = StringProperty('')$/;"	v	class:Welcome
+time_cost	UserData/app_config.json	/^    "time_cost": 2,$/;"	n	object:argon2_settings
+titleChanged	src/main.py	/^    titleChanged = NumericProperty(0)$/;"	v	class:AddEntry
+transition	code_examples/popup_while_screen_changes.py	/^    def transition(self):$/;"	m	class:Side
+transition	code_examples/popup_while_screen_changes.py	/^    def transition(self, *args):$/;"	m	class:Main
+transition	src/main.py	/^    def transition(self, *args):$/;"	m	class:Login
+tutorial	src/main.py	/^    def tutorial(self, *args):$/;"	m	class:Login
+tutorial1	src/tutorial.json	/^        "tutorial1": {"heading":"How does the app secure my passwords?", $/;"	o	object:tutorials
+tutorial_initiate	src/main.py	/^    def tutorial_initiate(self, welcome, instance):$/;"	m	class:Login
+tutorials	src/tutorial.json	/^"tutorials": $/;"	o
+txt	code_examples/testencyption.py	/^txt = enigmakey+'\\n'+enigmakey1$/;"	v
+url	src/main.py	/^    url =  StringProperty()$/;"	v	class:Entry
+username	src/FileHandling.py	/^username = '' # make this empty string later$/;"	v
+username	src/main.py	/^    username = StringProperty()$/;"	v	class:ReminiscorApp
+welcome	src/main.py	/^    def welcome(self, *args):$/;"	m	class:Login
+write_AppConfig	src/FileHandling.py	/^def write_AppConfig(keyfile, time_cost = 2, memory_cost = 51200, parallelism = 8):$/;"	f
+write_json	code_examples/demo.py	/^def write_json():$/;"	f
+write_remfile	src/FileHandling.py	/^def write_remfile(filename = '', data = None, write = False, *args): # before sending json data /;"	f
