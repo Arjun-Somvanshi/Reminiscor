@@ -67,7 +67,7 @@ def master_key(key1, first = False, re_encrypting = False, key2 = None):
     '''
     # read the argon2 parameters before kdf
     param = read_remfile('app_config.json')
-    print("these are the configs: ", param)
+    #print("these are the configs: ", param)
     # gotta get random salt only when database is re-encrypted
     if first or re_encrypting: # re_encrypting should be true when reencrypting the database
         salt = get_random_bytes(16)
@@ -76,12 +76,12 @@ def master_key(key1, first = False, re_encrypting = False, key2 = None):
         salt = read_remfile('master_salt.bin') # reading the defined salt
     
     if key2 is not None: # incase there is no keyfile involved
-        print('password hash: ', key1,'\nkeyfile: ', key2)
-        print(key1, key2)
+        #print('password hash: ', key1,'\nkeyfile: ', key2)
+        #print(key1, key2)
         composite_key = key1[:16].encode('utf-16') + key2[:16]
     
     else:
-        print(key1)
+        #print(key1)
         composite_key = key1[:32].encode('utf-16')
     #unassigning the sensitive data
     key1 = None
