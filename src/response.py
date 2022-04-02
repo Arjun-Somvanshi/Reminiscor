@@ -119,25 +119,25 @@ class api():
                 mid_successor_cmp = self.nat_cmp(database[mid+1]["title"], title)
             else:
                 mid_successor_cmp = 1
-            print("***")
-            print(mid, mid_cmp, mid_successor_cmp)
+            #print("***")
+            #print(mid, mid_cmp, mid_successor_cmp)
             if mid == -1:
                 return 0
             elif mid_cmp in (0,-1) and mid_successor_cmp in (0, 1):
-                print("found")
+                #print("found")
                 return mid + 1
             elif mid_cmp == 1: 
-                print("1")
+                #print("1")
                 last = mid - 1  
             elif mid_cmp == -1:
-                print("2")
+                #print("2")
                 beg = mid + 1
-            print("***")
+            #print("***")
 
     def add_entry(self, database_name, masterkey, entry):
         #decrypt database
         database = self.decrypt_database(masterkey)
-        print("This is the database", database)
+        #print("This is the database", database)
         if database[database_name] == []:
             database[database_name].append(entry)
         else:
@@ -145,8 +145,6 @@ class api():
             insertion_index = self.entry_insertion_index(entry["title"], database[database_name])
             #insert element 
             database[database_name].insert(insertion_index, entry)
-        for i in database[database_name]:
-            print(i)
         self.encrypt_database(database, masterkey)
         database = None
 

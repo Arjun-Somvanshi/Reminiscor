@@ -768,11 +768,6 @@ Screen_Manager:
                         UIButton:
                             background_down: 'UI/Mainbuttondown.png'
                             color: app.color['main']
-                            size_hint_x: None
-                            width: cm(0.7)
-                        UIButton:
-                            background_down: 'UI/Mainbuttondown.png'
-                            color: app.color['main']
                             text: 'Entry Name'
                             size_hint_x: 0.3
                             size_hint_min_x: cm(2)
@@ -791,8 +786,10 @@ Screen_Manager:
                         Widget:
                             size_hint_x: 0.1
                         RecycleView:
+                            id: rv
                             viewclass: "Entry"
                             data: app.database
+                            always_overscroll: False
                             RecycleGridLayout:
                                 id: rv
                                 canvas.before:
@@ -806,11 +803,15 @@ Screen_Manager:
                                 default_size_hint: 1, None
                                 default_size: None, dp(80)
                                 size_hint: 1, None
+                                spacing: dp(15)
                                 height: self.minimum_height
                         Widget:        
                             size_hint_x: 0.1
                 Widget:        
                     size_hint_x: 0.1
+        Widget:
+            size_hint_y: None
+            height: dp(30)
 <Entry>:
     cols: 5
     canvas.before:
@@ -819,20 +820,17 @@ Screen_Manager:
         Line:
             points: [self.x, self.y + dp(1), self.x, self.y + self.height - dp(1)]
             width: dp(1.2)
-    UIButton:
-        background_down: 'UI/Mainbuttondown.png'
-        id: entry_serial_no
-        text: root.serial_no
-        size_hint_x: None
-        width: cm(0.7)
+        Line:
+            points: [self.x, self.top, self.right, self.top]
+            width: dp(1.2)
     UIButton:
         id: entry_name_url
-        font_size: sp(14.5)
+        font_size: sp(18)
         shorten: True
         shorten_from: 'right'
         text_size: self.width-self.width/10, None
         halign: 'center'
-        text: root.name
+        text: root.title
         size_hint_x: 0.3
         size_hint_min_x: cm(2)
     BoxLayout:

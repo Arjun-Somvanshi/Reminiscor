@@ -436,6 +436,8 @@ class Login(Screen):
                 app.master_key = result[1]
                 # unassigning the derived master key from the result
                 result = [1,2,''] # random reassignment of the list 
+                mainscreen = app.root.get_screen("main")
+                mainscreen.loadview()
             else:
                 self.ids.password.error = True
 
@@ -444,14 +446,10 @@ class Login(Screen):
         app.root.current = "main"
 
 class Entry(RecycleDataViewBehavior, GridLayout):
-    serial_no = StringProperty()
-    name = StringProperty()
-    url =  StringProperty()
-    database_name = StringProperty()
-    category = StringProperty()
-    date = ListProperty()
-    owner = ObjectProperty()
-    index = NumericProperty()
+    title = StringProperty('')
+    sensitive_data = DictProperty({})
+    random_key = StringProperty('')
+    time = StringProperty('')
 
 class Main(Screen):
     def on_enter_main(self):
@@ -463,6 +461,13 @@ class Main(Screen):
         '''This limits the search bars characters from exeding 32'''
         if len(self.ids.search_bar.text) > 32:
             self.ids.search_bar.text = self.ids.search_bar.text[:-1]
+    def loadview(self):
+        global app
+        if checkfile("database.remdb"):
+            app.database = api.decrypt_database(app.master_key)["main"]
+    def on_pre_enter(self):
+        if app.master_key != None:
+            self.loadview()
         
 class AddEntry(Screen):
     passwordChanged = NumericProperty(0)
@@ -507,8 +512,8 @@ class AddEntry(Screen):
         elif value == False and len(title.text)>=3:
             title.error = False
             self.ids.message.text = ""
-            if self.passwordChanged == 1 and len(self.ids.password.text)<8:
-                self.monitor_password(self.ids.password, False)
+            #if self.passwordChanged == 1 and len(self.ids.password.text)<8:
+                #self.monitor_password(self.ids.password, False)
     def monitor_password(self, password, value):
         if self.passwordChanged == 0:
             self.passwordChanged = 1
@@ -689,6 +694,5 @@ class ReminiscorApp(App):
             login_screen = app.root.get_screen('login')
             Logger.info('Welcome is called from here the first time.')
             Clock.schedule_once(login_screen.welcome, 1)
-        self.database.append({'serial_no': '1', 'name':'Empty Database', 'url': '', 'database_name': '', 'category': 'some', 'owner': self})
 if __name__ == '__main__':
     ReminiscorApp().run()
