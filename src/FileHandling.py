@@ -103,7 +103,7 @@ def write_remfile(filename = '', data = None, write = False, *args): # before se
         if file_type =='json':
             with open(HomeDir(filename, 'UserData'), 'w') as f:
                 json.dump(data,f,indent =2)
-        elif file_type == 'bin' or file_type == 'dat' or file_type == 'reminiscor':
+        elif file_type == 'bin' or file_type == 'dat' or file_type == 'remdb':
             with open(HomeDir(filename, 'UserData'), 'wb') as f:
                 f.write(data)
         elif file_type == 'txt':
@@ -117,7 +117,7 @@ def read_remfile(filename):
         with open(HomeDir(filename, 'UserData'), 'r') as f:
             data = json.load(f)
             print("this is hte data from read_remfile ", data)
-    elif file_type == 'bin' or file_type == 'dat' or file_type == 'reminiscor':
+    elif file_type == 'bin' or file_type == 'dat' or file_type == 'remdb':
         with open(HomeDir(filename, 'UserData'), 'rb') as f:
             data = f.read()
     elif file_type == 'txt':
@@ -125,6 +125,8 @@ def read_remfile(filename):
             data = f.read()
     return data
 
+def checkfile(filename):
+    return os.path.isfile(HomeDir(filename, 'UserData'))
 '''Test the read and write methods'''
 def test_read_write():
     write_remfile( write = True)
@@ -133,6 +135,7 @@ def test_read_write():
     json_data = json.loads(read_remfile('new2.json'))
     print(json_data['entry']['password']) 
     #write_remfile('arjun', 'new1.txt', 'hello2', append = True)
+
 '''app_config = json.loads(read_remfile('app_config.json'))
 app_config["This will work"] = True
 write_remfile('app_config.json', json.dumps(app_config))'''
