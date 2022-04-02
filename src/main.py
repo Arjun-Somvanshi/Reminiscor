@@ -32,8 +32,9 @@ from kivy.clock import Clock
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from functools import partial
 from kivy.properties import ListProperty, NumericProperty, StringProperty, ObjectProperty, BooleanProperty, OptionProperty, DictProperty
-from response import *
+from response import * 
 from kivy.logger import Logger, LOG_LEVELS
+from datetime import datetime
 Logger.setLevel(LOG_LEVELS["info"])
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
@@ -431,8 +432,8 @@ class Login(Screen):
                 self.ids.password.text = ''
                 self.ids.password.error = False
                 self.transition()
-                self.start_session(result[1])
-                app.master_key_encrypted = result[1]
+                #self.start_session(result[1])
+                app.master_key = result[1]
                 # unassigning the derived master key from the result
                 result = [1,2,''] # random reassignment of the list 
             else:
@@ -519,6 +520,7 @@ class AddEntry(Screen):
             self.ids.message.text = ""
             if self.titleChanged and len(self.ids.title.text)<3:
                self.monitor_titleInput_length(self.ids.title, False)
+
     def identify_errors(self):
         if len(self.ids.title.text)>=3:
             if self.ids.title.text.isalnum():
@@ -533,17 +535,21 @@ class AddEntry(Screen):
 
     def add_entry(self):
         self.identify_errors()
-        database = self.ids.database_dropdown.text
+        if self.ids.database_dropdown.text == "Database [main]":
+            database_name = "main"
+        else:
+            database_name = self.ids.database_dropdown.text
         category = self.ids.category_dropdown.text
-        from datetime import datetime
         time_now = datetime.now()
         time = time_now.strftime("%B %d, %Y@%H:%M:%S")
         # Now we must secure the sensitive data  
         sensitive_data = {"url": self.ids.url.text, "username": self.ids.username.text, 
                           "password": self.ids.password.text, "notes": self.ids.notes.text}
-        encrypted_sensitive_data, random_key = api.encrypted_sensitive_data(sensitive_data)
+        encrypted_sensitive_data, random_key = api.sensitive_data_encrypt(sensitive_data)
         entry = {"title": self.ids.title.text, "sensitive_data": encrypted_sensitive_data, 
-                 "random_key": random_key, "time": now_string}
+                 "random_key": str(random_key), "time": time}
+        api.add_entry(database_name, app.master_key, entry)
+        quickmessage("Success", "The entry was added to database.")
 
 class Screen_Manager(ScreenManager):
     pass
