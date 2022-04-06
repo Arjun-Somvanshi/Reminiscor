@@ -531,30 +531,38 @@ class AddEntry(Screen):
             if self.ids.title.text.isalnum():
                 if len(self.ids.password.text)>=8:
                     self.ids.message.text = ""
+                    return False 
                 else:
                     self.ids.message.text = "Enter a password of atleast [color=#770000]8 characters." 
+                    self.ids.password.error = True
+                    return True 
             else:
                 self.ids.message.text = "Enter a title that is [color=#770000]alpha numeric."
+                self.ids.title.error = True
+                return True 
         else:
             self.ids.message.text = "Enter a title of atleast [color=#770000]3 characters."
+            self.ids.title.error = True
+            return True 
 
     def add_entry(self):
-        self.identify_errors()
-        if self.ids.database_dropdown.text == "Database [main]":
-            database_name = "main"
-        else:
-            database_name = self.ids.database_dropdown.text
-        category = self.ids.category_dropdown.text
-        time_now = datetime.now()
-        time = time_now.strftime("%B %d, %Y@%H:%M:%S")
-        # Now we must secure the sensitive data  
-        sensitive_data = {"url": self.ids.url.text, "username": self.ids.username.text, 
-                          "password": self.ids.password.text, "notes": self.ids.notes.text}
-        encrypted_sensitive_data, random_key = api.sensitive_data_encrypt(sensitive_data)
-        entry = {"title": self.ids.title.text, "sensitive_data": encrypted_sensitive_data, 
-                 "random_key": str(random_key), "time": time}
-        api.add_entry(database_name, app.master_key, entry)
-        quickmessage("Success", "The entry was added to database.")
+        if not self.identify_errors():
+            if self.ids.database_dropdown.text == "Database [main]":
+                database_name = "main"
+            else:
+                database_name = self.ids.database_dropdown.text
+            category = self.ids.category_dropdown.text
+            time_now = datetime.now()
+            time = time_now.strftime("%B %d, %Y@%H:%M:%S")
+            # Now we must secure the sensitive data  
+            sensitive_data = {"url": self.ids.url.text, "username": self.ids.username.text, 
+                              "password": self.ids.password.text, "notes": self.ids.notes.text}
+            encrypted_sensitive_data, random_key = api.sensitive_data_encrypt(sensitive_data)
+            entry = {"title": self.ids.title.text, "sensitive_data": encrypted_sensitive_data, 
+                     "random_key": str(random_key), "time": time}
+            api.add_entry(database_name, app.master_key, entry)
+            quickmessage("Success", "The entry was added to database.")
+            self.reset_screen_attrs()
 
 class Screen_Manager(ScreenManager):
     pass

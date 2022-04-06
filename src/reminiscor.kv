@@ -45,6 +45,25 @@ Screen_Manager:
     size_hint_min_x: dp(42)
     background_normal: 'UI/Mainbuttondown.png'
     background_down: 'UI/editondown.png'
+
+
+<ImageContainer@BoxLayout+ButtonBehavior>:
+    canvas.before:
+        Color:
+            rgba: app.color["background"]
+        Rectangle:
+            size: self.size
+            pos: self.pos
+        Color:
+            rgba: app.color["main"]
+        Line:
+            points: [self.x, self.y + dp(1), self.right, self.y + dp(1), self.right, self.top - dp(1)]
+            width: dp(1.5)
+    src: ''
+    padding: dp(10)
+    Image:
+        source: root.src
+
 <CustomTextInput>:
     background_color:  app.color['middle']
     background_normal: ''
@@ -658,7 +677,6 @@ Screen_Manager:
                 on_text: root.search_limit()
             Widget:
         BoxLayout:
-            opacity: 0 if app.database == [] else 1
             padding: 0,dp(40),0,0
             BoxLayout:
                 Widget:
@@ -772,16 +790,16 @@ Screen_Manager:
                             size_hint_x: 0.3
                             size_hint_min_x: cm(2)
                         UIButton:
-                            text: 'Copy Data'
+                            text: 'Copy'
                             background_down: 'UI/Mainbuttondown.png'
                             color: app.color['main']
                             font_size: sp(14)
-                            size_hint_x: 0.2
+                            size_hint_x: 0.1
                         UIButton:
                             text: 'URL'
                             background_down: 'UI/Mainbuttondown.png'
                             color: app.color['main']
-                            size_hint_x: 0.1
+                            size_hint_x: 0.05
                     BoxLayout:
                         Widget:
                             size_hint_x: 0.1
@@ -803,7 +821,7 @@ Screen_Manager:
                                 default_size_hint: 1, None
                                 default_size: None, dp(80)
                                 size_hint: 1, None
-                                spacing: dp(15)
+                                #spacing: dp(15)
                                 height: self.minimum_height
                         Widget:        
                             size_hint_x: 0.1
@@ -820,9 +838,6 @@ Screen_Manager:
         Line:
             points: [self.x, self.y + dp(1), self.x, self.y + self.height - dp(1)]
             width: dp(1.2)
-        Line:
-            points: [self.x, self.top, self.right, self.top]
-            width: dp(1.2)
     UIButton:
         id: entry_name_url
         font_size: sp(18)
@@ -835,25 +850,13 @@ Screen_Manager:
         size_hint_min_x: cm(2)
     BoxLayout:
         id: copy_col
-        orientation: 'vertical'
-        size_hint_x: 0.2
-        UIButton:
-            text: "Copy Username" 
-            text_size: self.width - self.width/10, None
-            halign: 'center'
-            font_size: sp(14)
-            shorten: True
-            shorten_from: 'right'
-        UIButton:
-            text: "Copy Password"
-            text_size: self.width - self.width/10, None
-            halign: 'center'
-            shorten: True
-            shorten_from: 'right'
-            font_size: sp(14)
-    UIButton:
-        id: open_url
-        size_hint_x: 0.1
+        size_hint_x: 0.15
+        ImageContainer: 
+            src: "UI/icons/username-icon.png"
+        ImageContainer:
+            src: "UI/icons/password-icon.png"
+        ImageContainer:
+            src: "UI/icons/web-icon.png"
 
 <AddEntry>:
     name: 'add_entry'
