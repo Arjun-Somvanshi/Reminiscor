@@ -58,7 +58,7 @@ Screen_Manager:
             rgba: app.color["main"]
         Line:
             points: [self.x, self.y + dp(1), self.right, self.y + dp(1), self.right, self.top - dp(1)]
-            width: dp(1.5)
+            width: dp(1.25)
     src: ''
     padding: dp(10)
     Image:
@@ -900,6 +900,12 @@ Screen_Manager:
                             font_size: sp(14)
                             size_hint_x: 0.1
                         UIButton:
+                            canvas.before:
+                                Color:
+                                    rgba: app.color["main"]
+                                Line:
+                                    points: [self.right, self.y, self.right, self.top]
+                                    width: dp(1.25)
                             text: 'URL'
                             background_down: 'UI/Mainbuttondown.png'
                             color: app.color['main']

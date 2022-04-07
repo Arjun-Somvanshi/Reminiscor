@@ -546,7 +546,7 @@ class AddEntry(Screen):
         self.reset_text_input(self.ids.password)
         self.reset_text_input(self.ids.notes)
         # reset the drop downs 
-        self.ids.category_dropdown.text = 'Select Category'
+        self.ids.category_dropdown.text = 'Default'
         self.ids.category_dropdown.error = False
         self.ids.database_dropdown.text = 'Database [main]'
         self.ids.database_dropdown.error = False
@@ -622,6 +622,7 @@ class AddEntry(Screen):
             encrypted_sensitive_data, random_key = api.sensitive_data_encrypt(sensitive_data)
             entry = {"title": self.ids.title.text, "sensitive_data": encrypted_sensitive_data, 
                      "random_key": str(random_key), "time": time}
+            print(category)
             api.add_entry(database_name, category, app.master_key, entry)
             quickmessage("Success", "The entry was added to database.")
             self.reset_screen_attrs()
