@@ -636,7 +636,107 @@ Screen_Manager:
             pos_hint: {'center_y': 0.5}
             size: dp(40), dp(30)
             on_release: app.navigation()
+
+<NewCategory>:
+    orientation: 'vertical'
+    padding: dp(25)
+    spacing: dp(15)
+    CustomLabel:
+        text: "Choose Database:"
+        size_hint: None, None
+        size: self.texture_size
+        color: app.color['font']
+    BoxLayout:
+        size_hint_y: None
+        height: self.minimum_height
+        UIDropDown:
+            id: database_dropdown
+            canvas.before:
+                Clear
+                Color:
+                    rgba: [40/255,40/255,40/255,1] if self.state == 'normal' else app.color['middle']
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                Color:
+                    rgba: app.color['font'] if not self.error else (1,0,0,0.5)
+                Line:
+                    points: [self.x, self.top, self.x, self.y, self.right, self.y]
+            error: False
+            elements: app.databases 
+            default_item: 'Database [main]' 
+            dd_background_color: app.color['background'] 
+            dd_item_height: dp(40)
+            dd_item_img_down: ''
+            dd_item_img_normal: ''
+            dd_item_color: [app.color['background'], app.color['darkgrey']]
+            dd_item_isrounded: False 
+            dd_item_font_color: app.color['font'] 
+            dd_item_font: 'Fonts/Montserrat-Light.ttf'
+            dd_item_size_hint_x: 1 
+            size_hint_x: 1.5 
+            size_hint_y: None
+            height: dp(40)
+            dd_width: self.width
+            dd_open_vertical: 'down'
+            dd_open_horizontal: 'center'
+            calculate_ddheight: True
+            show_items: len(app.databases) if len(app.databases) <= 3 else 3
+    EntryTextInput:
+        id: category
+        hint_text: "Category Name"
+        size_hint_y: None
+        height: dp(45)
+    Widget:
+    GridLayout:
+        spacing: dp(40)
+        cols: 2
+        padding: dp(10)
+        size_hint_y: 0.2
+        UIButton:
+            id: cancel 
+            text: 'Cancel'
+            size_hint_max_y: dp(50)
+            size_hint_min_y: dp(40)
+            size_hint_min_x: dp(30)
+            on_release: app.close_popup()
+        UIButton:
+            id: add 
+            text: 'Add'
+            size_hint_max_x: dp(300)
+            size_hint_max_y: dp(50)
+            size_hint_min_y: dp(40)
+            on_release: root.add_category()
     
+<NewDatabase>:
+    orientation: 'vertical'
+    padding: dp(25)
+    spacing: dp(15)
+    EntryTextInput:
+        id: database
+        hint_text: "Database Name"
+        size_hint_y: None
+        height: dp(45)
+    Widget:
+    GridLayout:
+        spacing: dp(40)
+        cols: 2
+        padding: dp(10)
+        size_hint_y: 0.2
+        UIButton:
+            id: cancel 
+            text: 'Cancel'
+            size_hint_max_y: dp(50)
+            size_hint_min_y: dp(40)
+            size_hint_min_x: dp(30)
+            on_release: app.close_popup()
+        UIButton:
+            id: add 
+            text: 'Add'
+            size_hint_max_x: dp(300)
+            size_hint_max_y: dp(50)
+            size_hint_min_y: dp(40)
+            on_release: root.add_database()
 <Main>:
     name: "main"
     on_pre_enter: root.on_enter_main()
@@ -727,7 +827,8 @@ Screen_Manager:
                             calculate_ddheight: True
                             show_items: 5 
                         UIDropDown:
-                            elements: ['Database [main]', 'placeholder-1', 'placeholder-2']
+                            id: database
+                            elements: app.databases 
                             default_item: 'Database [main]'
                             dd_background_color: app.color['background'] 
                             dd_item_height: dp(40)
@@ -742,9 +843,11 @@ Screen_Manager:
                             dd_open_vertical: 'down'
                             dd_open_horizontal: 'center'
                             calculate_ddheight: True
-                            show_items: 3
+                            show_items: len(self.elements) if len(self.elements)<5 else 5
+                            on_set: root.set_database_and_load_categories(self.text)
                         UIDropDown:
-                            elements: ['Category', 'category-1', 'category-2', 'category-3']
+                            id: category
+                            elements: app.categories 
                             default_item: 'Category'
                             dd_background_color: app.color['background'] 
                             dd_item_height: dp(40)
@@ -759,7 +862,8 @@ Screen_Manager:
                             dd_open_vertical: 'down'
                             dd_open_horizontal: 'center'
                             calculate_ddheight: True
-                            show_items: 3
+                            show_items: len(self.elements) if len(self.elements)<5 else 5
+                            on_set: root.show_category(self.text)
                     Widget:
                         size_hint_y: None
                         height: dp(20)
@@ -1006,54 +1110,6 @@ Screen_Manager:
                                 ViewButton:
                                     id: view
                             CustomLabel:
-                                text: "Entry's Category:"
-                                size_hint: None, None
-                                size: self.texture_size
-                                color: app.color['font']
-                            BoxLayout:
-                                size_hint_y: None
-                                height: self.minimum_height
-                                spacing: dp(10)
-                                UIDropDown:
-                                    id: category_dropdown
-                                    canvas.before:
-                                        Clear
-                                        Color:
-                                            rgba: [40/255,40/255,40/255,1] if self.state == 'normal' else app.color['middle']
-                                        Rectangle:
-                                            size: self.size
-                                            pos: self.pos
-                                        Color:
-                                            rgba: app.color['font'] if not self.error else (1,0,0,0.5)
-                                        Line:
-                                            points: [self.x, self.top, self.x, self.y, self.right, self.y]
-                                    error: False
-                                    elements: app.categories 
-                                    default_item: 'Default Category' 
-                                    dd_background_color: app.color['background'] 
-                                    dd_item_height: dp(40)
-                                    dd_item_img_down: ''
-                                    dd_item_img_normal: ''
-                                    dd_item_color: [app.color['background'], app.color['darkgrey']]
-                                    dd_item_isrounded: False 
-                                    dd_item_font_color: app.color['font'] 
-                                    dd_item_font: 'Fonts/Montserrat-Light.ttf'
-                                    dd_item_size_hint_x: 1 
-                                    size_hint_x: 1.5 
-                                    dd_width: self.width + dp(40) 
-                                    dd_open_vertical: 'win_center'
-                                    dd_open_horizontal: 'win_center'
-                                    calculate_ddheight: True
-                                    show_items: len(app.categories) if len(app.categories) <= 5 else 5
-                                Widget:
-                                    size_hint_x: None
-                                    width: dp(50)
-                                UIButton:
-                                    text: "New Category"
-                                    size_hint_y: None
-                                    height: dp(40)
-                            
-                            CustomLabel:
                                 text: "Entry's Database:"
                                 size_hint: None, None
                                 size: self.texture_size
@@ -1094,6 +1150,7 @@ Screen_Manager:
                                     dd_open_horizontal: 'win_center'
                                     calculate_ddheight: True
                                     show_items: len(app.databases) if len(app.databases) <= 5 else 5
+                                    on_set: root.load_categories(self.text)
                                 Widget:
                                     size_hint_x: None
                                     width: dp(50)
@@ -1101,6 +1158,56 @@ Screen_Manager:
                                     text: "New Database"
                                     size_hint_y: None
                                     height: dp(40)
+                                    on_release: root.new_database()
+                            CustomLabel:
+                                text: "Entry's Category:"
+                                size_hint: None, None
+                                size: self.texture_size
+                                color: app.color['font']
+                            BoxLayout:
+                                size_hint_y: None
+                                height: self.minimum_height
+                                spacing: dp(10)
+                                UIDropDown:
+                                    id: category_dropdown
+                                    canvas.before:
+                                        Clear
+                                        Color:
+                                            rgba: [40/255,40/255,40/255,1] if self.state == 'normal' else app.color['middle']
+                                        Rectangle:
+                                            size: self.size
+                                            pos: self.pos
+                                        Color:
+                                            rgba: app.color['font'] if not self.error else (1,0,0,0.5)
+                                        Line:
+                                            points: [self.x, self.top, self.x, self.y, self.right, self.y]
+                                    error: False
+                                    elements: app.categories 
+                                    default_item: 'Default' 
+                                    dd_background_color: app.color['background'] 
+                                    dd_item_height: dp(40)
+                                    dd_item_img_down: ''
+                                    dd_item_img_normal: ''
+                                    dd_item_color: [app.color['background'], app.color['darkgrey']]
+                                    dd_item_isrounded: False 
+                                    dd_item_font_color: app.color['font'] 
+                                    dd_item_font: 'Fonts/Montserrat-Light.ttf'
+                                    dd_item_size_hint_x: 1 
+                                    size_hint_x: 1.5 
+                                    dd_width: self.width + dp(40) 
+                                    dd_open_vertical: 'win_center'
+                                    dd_open_horizontal: 'win_center'
+                                    calculate_ddheight: True
+                                    show_items: len(app.categories) if len(app.categories) <= 5 else 5
+                                Widget:
+                                    size_hint_x: None
+                                    width: dp(50)
+                                UIButton:
+                                    text: "New Category"
+                                    size_hint_y: None
+                                    height: dp(40)
+                                    on_release: root.new_category()
+                            
                             CustomLabel:
                                 text: 'Add Notes (if any):'
                                 size_hint: None, None

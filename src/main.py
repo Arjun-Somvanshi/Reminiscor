@@ -58,7 +58,6 @@ def quickmessage(title, message, *args):
     else:
         max_size = (dp(400), dp(225))
         min_size = (dp(300), dp(225))
-    Logger.info('max size: %s', max_size)
     app.create_popup(max_size, min_size, True, design, title,(0.5, 0.5))
     design.ids.close.bind(on_release=app.close_popup)
 '''-------------------------------------------------------'''
@@ -104,13 +103,20 @@ class UIDropDownContent(BoxLayout):
             self.item_size_hint_x = dropdown_instance.dd_item_size_hint_x
 
 class UIDropDown(Button):
-    dd_open_vertical = OptionProperty('down', options = ['up', 'down', "win_center"])
-    dd_open_horizontal = OptionProperty('center', options = ['left', 'center', 'right', "win_center"])
+    dd_open_vertical = OptionProperty('down', options = ['up', 'down', 'win_center'])
+    dd_open_horizontal = OptionProperty('center', options = ['left', 'center', 'right', 'win_center'])
     def calculate_minimum_height(self):
         required_height = 0
         for i in range(self.show_items):
             required_height += self.dd_item_height + dp(15)
         return required_height + dp(15)
+    
+    def __init__(self, **kwargs):
+        self.register_event_type('on_set')
+        super(UIDropDown, self).__init__(**kwargs)
+    
+    def on_set(self):
+        pass
 
     def set_dropdown(self):
         self.content = UIDropDownContent(self, self.elements, self.dd_background_color, self.dd_item_height)
@@ -131,10 +137,9 @@ class UIDropDown(Button):
             horizontal  = ['x', self.x/Window.width]
         elif self.dd_open_horizontal == 'right':
             horizontal = ['right', self.right/Window.width]
-        elif self.dd_open_horizontal == 'win_center' and self.dd_open_vertical == 'win_center':
+        if self.dd_open_vertical == 'win_center' or self.dd_open_horizontal == 'win_center':
             horizontal = ['center_x', 0.5]
-            vertical =  ['center_y',0.5]
-
+            vertical = ['center_y', 0.5]
         self.dropdown_view.pos_hint = {horizontal[0]: horizontal[1], vertical[0]: vertical[1]}
         self.dropdown_view.add_widget(self.content)
         self.dropdown_view.bind(on_dismiss = self.set_selected_item)
@@ -147,6 +152,7 @@ class UIDropDown(Button):
     def set_selected_item(self, instance):
         if self.content.selected_item:
             self.text = self.content.selected_item
+        self.dispatch('on_set')
 
 class CustomTextInput(TextInput):
     def on_parent(self, *_):
@@ -302,6 +308,34 @@ class NavigationView(BoxLayout):
             app.nav.dismiss({'right': 2, 'center_y': 0.5}, 'linear', 0.5, 0.55)
         super(NavigationView, self).on_touch_down(touch)
 
+class NewCategory(BoxLayout):
+    def add_category(self):
+        global app
+        # check if category already exists for given database
+        if api.isalnum_with_space(self.ids.category.text):
+            if api.add_category(self.ids.database_dropdown.text, self.ids.category.text, app.master_key):
+                app.categories = api.return_category_keys(self.ids.database_dropdown.text, app.master_key)
+                app.close_popup()
+                quickmessage("Succes", "Category Added.")
+            else:
+                quickmessage("Category Error", "This category already exists in database.")
+        else:
+            quickmessage("Category Error", "The category name should be alpha-numeric.")
+
+class NewDatabase(BoxLayout):
+    def add_database(self):
+        global app
+        # check if category already exists for given database
+        if api.isalnum_with_space(self.ids.database.text):
+            if api.add_database(self.ids.database.text, app.master_key):
+                app.databases = api.return_database_keys(app.master_key)
+                app.close_popup()
+                quickmessage("Succes", "Database Added.")
+            else:
+                quickmessage("Database Error", "This database already exists.")
+        else:
+            quickmessage("Database Error", "The database name should be alpha-numeric.")
+
 class Tutorial(BoxLayout):
     text = StringProperty('')
 
@@ -436,7 +470,8 @@ class Login(Screen):
                 app.master_key = result[1]
                 # unassigning the derived master key from the result
                 result = [1,2,''] # random reassignment of the list 
-                mainscreen = app.root.get_screen("main")
+                app.databases = api.return_database_keys(app.master_key)
+                mainscreen = app.root.get_screen("main") 
                 mainscreen.loadview()
             else:
                 self.ids.password.error = True
@@ -452,6 +487,8 @@ class Entry(RecycleDataViewBehavior, GridLayout):
     time = StringProperty('')
 
 class Main(Screen):
+    first_entry = BooleanProperty(True)
+    loaded_database = StringProperty("Database [main]")
     def on_enter_main(self):
         self.refactor_layout()
     def refactor_layout(self):
@@ -464,10 +501,33 @@ class Main(Screen):
     def loadview(self):
         global app
         if checkfile("database.remdb"):
-            app.database = api.decrypt_database(app.master_key)["main"]
+            if self.first_entry:
+                app.database = api.decrypt_database(app.master_key)["Database [main]"]
+                app.categories = ['Category'] + api.return_category_keys("Database [main]", app.master_key)
+                self.first_entry = False
+            else:
+                if self.ids.category.text == 'Category':
+                    app.database = api.decrypt_database(app.master_key)[self.ids.database.text]
+                else:
+                    app.database = api.decrypt_database(app.master_key)[self.ids.database.text + '_categories'][self.ids.category.text]
+                app.categories = ['Category'] + api.return_category_keys(self.ids.database.text, app.master_key)
+
     def on_pre_enter(self):
         if app.master_key != None:
             self.loadview()
+    def set_database_and_load_categories(self, database_name):
+        global app
+        if database_name != self.loaded_database:
+            app.database = api.decrypt_database(app.master_key)[database_name]
+            app.categories = ['Category'] + api.return_category_keys(database_name, app.master_key)
+            self.loaded_database = database_name
+            self.ids.category.text = 'Category'
+    
+    def show_category(self, category):
+        if category != "Category":
+            app.database = api.decrypt_database(app.master_key)[self.ids.database.text + '_categories'][category]
+        else:
+            app.database = api.decrypt_database(app.master_key)[self.ids.database.text]
         
 class AddEntry(Screen):
     passwordChanged = NumericProperty(0)
@@ -528,7 +588,7 @@ class AddEntry(Screen):
 
     def identify_errors(self):
         if len(self.ids.title.text)>=3:
-            if self.ids.title.text.isalnum():
+            if api.isalnum_with_space(self.ids.title.text):
                 if len(self.ids.password.text)>=8:
                     self.ids.message.text = ""
                     return False 
@@ -545,12 +605,14 @@ class AddEntry(Screen):
             self.ids.title.error = True
             return True 
 
+    def load_categories(self, database_name):
+        global app
+        app.categories = api.return_category_keys(database_name, app.master_key)
+        self.ids.category_dropdown.text = "Default"
+         
     def add_entry(self):
         if not self.identify_errors():
-            if self.ids.database_dropdown.text == "Database [main]":
-                database_name = "main"
-            else:
-                database_name = self.ids.database_dropdown.text
+            database_name = self.ids.database_dropdown.text
             category = self.ids.category_dropdown.text
             time_now = datetime.now()
             time = time_now.strftime("%B %d, %Y@%H:%M:%S")
@@ -560,9 +622,20 @@ class AddEntry(Screen):
             encrypted_sensitive_data, random_key = api.sensitive_data_encrypt(sensitive_data)
             entry = {"title": self.ids.title.text, "sensitive_data": encrypted_sensitive_data, 
                      "random_key": str(random_key), "time": time}
-            api.add_entry(database_name, app.master_key, entry)
+            api.add_entry(database_name, category, app.master_key, entry)
             quickmessage("Success", "The entry was added to database.")
             self.reset_screen_attrs()
+
+    def new_category(self):
+        global app
+        content = NewCategory()
+        app.create_popup([dp(600),dp(400)], [dp(400),dp(400)], False, content, 'Add Category')
+
+    def new_database(self):
+        global app
+        content = NewDatabase()
+        app.create_popup([dp(400),dp(300)], [dp(400),dp(400)], False, content, 'Add Database')
+
 
 class Screen_Manager(ScreenManager):
     pass
@@ -579,8 +652,8 @@ class ReminiscorApp(App):
     popups = []
     animations = True # Remmeber to add an option to disable this in the settings
     database = ListProperty([]) # The database to be used for recycle view on entry view screen
-    databases = ListProperty(['db1', 'db2', 'db3', 'db4', 'db5']) # list of all the names of different databases
-    categories = ListProperty(['c1', 'c2', 'c3', 'c4', 'c5'])
+    databases = ListProperty([]) # list of all the names of different databases
+    categories = ListProperty([])
     portable = BooleanProperty(True)
     username = StringProperty()
     master_key = None 

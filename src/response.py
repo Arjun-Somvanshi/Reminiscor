@@ -19,6 +19,15 @@ from security import *
 import re
 import pickle
 class api():
+    def isalnum_with_space(self, string):
+        wordlist = string.split(' ')
+        print(wordlist)
+        for word in wordlist:
+            if word.isalnum:
+                pass
+            else:
+                return False
+        return True 
     def check_user(self):
         rem_exists = False
         try:
@@ -54,6 +63,7 @@ class api():
         if keyfile:
             key2 = keyfile_encryption(password_hash.encode('utf-8')) # if key file is there then it's generated
         m_key = master_key(key1 = password_hash, key2 = key2, first = True)
+        self.create_database(m_key)
         master_key_store(m_key)
         m_key = None
         password_hash = None
@@ -79,17 +89,19 @@ class api():
         # assigning random things to sensitive_data
         sensitive_data ={"bs": [1,2,3]}
         return sensitive_data_encrypted, random_aes_key
+    
+    def create_database(self, masterkey):
+        if not checkfile("database.remdb"):
+            database = {"Database [main]": [], "Database [main]_categories":{"Default": []}, "$$databases$$": ["Database [main]"]}
+            self.encrypt_database(database, masterkey)
 
     def decrypt_database(self, masterkey):
-        if checkfile("database.remdb"):
-            encrypt_database = read_remfile("database.remdb")
-            encrypt_database = pickle.loads(encrypt_database)
-            database_in_bytes = AES_Decrypt(masterkey, encrypt_database) 
-            database = json.loads(database_in_bytes)
-            masterkey = None
-            return database
-        else:
-            return {"main": []}
+        encrypt_database = read_remfile("database.remdb")
+        encrypt_database = pickle.loads(encrypt_database)
+        database_in_bytes = AES_Decrypt(masterkey, encrypt_database) 
+        database = json.loads(database_in_bytes)
+        masterkey = None
+        return database
 
     def encrypt_database(self, database, masterkey):
         database_in_bytes = json.dumps(database).encode("utf-8")
@@ -134,7 +146,7 @@ class api():
                 beg = mid + 1
             #print("***")
 
-    def add_entry(self, database_name, masterkey, entry):
+    def add_entry(self, database_name, category, masterkey, entry):
         #decrypt database
         database = self.decrypt_database(masterkey)
         #print("This is the database", database)
@@ -145,7 +157,52 @@ class api():
             insertion_index = self.entry_insertion_index(entry["title"], database[database_name])
             #insert element 
             database[database_name].insert(insertion_index, entry)
+            # adding in categories
+        category_key = database_name + '_categories'
+        if database[category_key][category] == []:
+            database[category_key][category].append(entry)
+        else:
+            insertion_index = self.entry_insertion_index(entry["title"], database[category_key][category])
+            database[category_key][category].insert(insertion_index, entry)
+        # encrypt the database after adding the entry
         self.encrypt_database(database, masterkey)
         database = None
+        masterkey = None
 
+    def add_category(self, database_name, category, masterkey):
+        database = self.decrypt_database(masterkey)
+        if category in database[database_name+'_categories']:
+            database = None
+            masterkey = None
+            return False
+        else:
+            database[database_name + '_categories'][category] = []
+            self.encrypt_database(database, masterkey)
+            database = None
+            masterkey = None
+            return True
+    
+    def add_database(self, database_name, masterkey):
+        database = self.decrypt_database(masterkey)
+        if database_name in database:
+            database = None
+            masterkey = None
+            return False
+        else:
+            database[database_name] = []
+            database[database_name + '_categories'] = {"Default": []}
+            database["$$databases$$"].append(database_name)
+            self.encrypt_database(database, masterkey)
+            database = None
+            masterkey = None
+            return True
+
+    def return_database_keys(self, masterkey):
+        database = self.decrypt_database(masterkey)
+        return database["$$databases$$"]
+
+    def return_category_keys(self, database_name, masterkey):
+        database = self.decrypt_database(masterkey)
+        return list(database[database_name + '_categories'].keys())
+    
 api = api()
