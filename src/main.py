@@ -489,6 +489,7 @@ class Entry(RecycleDataViewBehavior, GridLayout):
 class Main(Screen):
     first_entry = BooleanProperty(True)
     loaded_database = StringProperty("Database [main]")
+    temp = ListProperty([])
     def on_enter_main(self):
         self.refactor_layout()
     def refactor_layout(self):
@@ -498,6 +499,7 @@ class Main(Screen):
         '''This limits the search bars characters from exeding 32'''
         if len(self.ids.search_bar.text) > 32:
             self.ids.search_bar.text = self.ids.search_bar.text[:-1]
+        self.search()
     def loadview(self):
         global app
         if checkfile("database.remdb"):
@@ -528,7 +530,20 @@ class Main(Screen):
             app.database = api.decrypt_database(app.master_key)[self.ids.database.text + '_categories'][category]
         else:
             app.database = api.decrypt_database(app.master_key)[self.ids.database.text]
-        
+
+    def search(self):
+        global app
+        if self.temp == []:
+            self.temp = app.database
+        else:
+            app.database = self.temp
+        temp1 = []
+        searched_entry = self.ids.search_bar.text
+        for entry in self.temp:
+            #print(searched_entry.lower() in entry['title'].lower(), entry['title'])
+            if searched_entry.lower() in entry['title'].lower():
+                temp1.append(entry)
+        app.database = temp1
 class AddEntry(Screen):
     passwordChanged = NumericProperty(0)
     titleChanged = NumericProperty(0)
