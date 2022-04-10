@@ -795,7 +795,7 @@ class ReminiscorApp(App):
         # here we are ensuring that the welcome screen is called and if it's a first use of the app
         no_user = not api.check_user()        
         if no_user:
-            login_screen = app.root.get_screen('login')
+            login_screen = self.root.get_screen('login')
             Logger.info('Welcome is called from here the first time.')
             Clock.schedule_once(login_screen.welcome, 1)
 if __name__ == '__main__':
