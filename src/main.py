@@ -521,6 +521,7 @@ class Main(Screen):
 
     def on_pre_enter(self):
         app = App.get_running_app()
+        self.temp = [] # to refresh the version of database in case entries are deleted or added
         if app.master_key != None:
             self.loadview()
     def set_database_and_load_categories(self, database_name):
