@@ -26,6 +26,7 @@ from kivy.metrics import dp, sp
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.modalview import ModalView
 from kivy.animation import Animation
 from kivy.clock import Clock
@@ -63,6 +64,8 @@ def quickmessage(title, message, *args):
 '''-------------------------------------------------------'''
 
 '''-----------------Custom Classes-----------------------'''
+class ImageContainer(ButtonBehavior, BoxLayout):
+    pass
 class UIDropDownItem(Button):
     owner = ObjectProperty()
     dd_object = ObjectProperty()
@@ -799,5 +802,6 @@ class ReminiscorApp(App):
             login_screen = self.root.get_screen('login')
             Logger.info('Welcome is called from here the first time.')
             Clock.schedule_once(login_screen.welcome, 1)
+
 if __name__ == '__main__':
     ReminiscorApp().run()

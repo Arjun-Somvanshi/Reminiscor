@@ -47,10 +47,10 @@ Screen_Manager:
     background_down: 'UI/editondown.png'
 
 
-<ImageContainer@BoxLayout+ButtonBehavior>:
+<ImageContainer>:
     canvas.before:
         Color:
-            rgba: app.color["background"]
+            rgba: app.color["background"] if self.state == "normal" else app.color["middle"]
         Rectangle:
             size: self.size
             pos: self.pos
