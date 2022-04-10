@@ -45,11 +45,11 @@ if platform == 'win':
     import ctypes
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 '''-------------------Global------------------------------'''
-app = None
 app_path = None
 external_path = None
 no_user = None
 def quickmessage(title, message, *args):
+    app = App.get_running_app()
     design = QuickMessage()
     design.ids.message.text = message
     if app._platform == 'android':
@@ -165,7 +165,7 @@ class EntryTextInput(TextInput):
 class CustomPopup(Popup):
     
     def open(self, animate = True, *largs, **kwargs):
-        global app
+        app = App.get_running_app()
         if animate and app.animations:
             self.disabled = True
             size_hint_y = self.size_hint_y
@@ -182,6 +182,7 @@ class CustomPopup(Popup):
         self.disabled = False
 
     def dismiss(self, animate = True, *largs, **kwargs):
+        app = App.get_running_app()
         self.disabled = True
         if animate and app.animations:
             anim = Animation(size_hint_y = self.size_hint_y*4,size_hint_max_y = dp(3000), opacity=0, duration = 0.5)
@@ -196,7 +197,7 @@ class CustomModalView(ModalView): # here I have made a custom modal view so that
                                   # instead of typing the whole deal over and over, the open and dismiss are new                  
     def open(self, pos_hint_initial = {}, pos_hint_final = {}, 
              t = '', d1=0.7, d2=0.7, animate = True, *largs, **kwargs):
-        global app
+        app = App.get_running_app()
         #print(app.animations)
         if animate and app.animations: # we have to parameters to decide whether animation should occur or
         # not, incase, the user decides to not use animations on slow hardware, app.animations will be set to false, 
@@ -216,6 +217,7 @@ class CustomModalView(ModalView): # here I have made a custom modal view so that
         self.disabled = False
     
     def dismiss(self, pos_hint_final = {}, t = '', d1=0.7, d2=0.75, animate = True, *largs, **kwargs):
+        app = App.get_running_app()
         #print('dismissing')
         self.disabled = True
         if animate and app.animations:
@@ -261,7 +263,7 @@ class Signup(BoxLayout):
     def on_keyfile_enable(self, value, *args):
         if self.ids.enable.state == 'down':
             message = '''A KeyFile adds an extra layer of security apart from the master password. You are supposed to store this file on external hardware securely. If you lose this file your database of passwords will be [color=00abae]lost forever.[/color] If you still decide to enable this feature, you will be asked to provide a path to the keyfile after Signup, this is the path where Reminiscor will look for the file. To know more take the tutorial.'''
-            global app
+            app = App.get_running_app()
             design = QuickMessage()
             design.ids.message.text = message
             design.ids.close.size_hint_x = 0.5
@@ -270,6 +272,7 @@ class Signup(BoxLayout):
             app.create_popup( (dp(400), dp(400)), (dp(400), dp(400)), True, design, 'What is a KeyFile?', (0.5,0.5))
     
     def on_confirm(self):
+        app = App.get_running_app()
         self.ids.username.background_color = app.color['middle']
         self.ids.password.background_color = app.color['middle']
         self.ids.c_password.background_color = app.color['middle']
@@ -303,14 +306,14 @@ class Welcome(BoxLayout):
 
 class NavigationView(BoxLayout):
     def on_touch_down(self, touch):
-        global app
+        app = App.get_running_app()
         if not (touch.x > self.x and touch.x<self.right and touch.y > self.y and touch.y<self.top):
             app.nav.dismiss({'right': 2, 'center_y': 0.5}, 'linear', 0.5, 0.55)
         super(NavigationView, self).on_touch_down(touch)
 
 class NewCategory(BoxLayout):
     def add_category(self):
-        global app
+        app = App.get_running_app()
         # check if category already exists for given database
         if api.isalnum_with_space(self.ids.category.text):
             if api.add_category(self.ids.database_dropdown.text, self.ids.category.text, app.master_key):
@@ -324,7 +327,7 @@ class NewCategory(BoxLayout):
 
 class NewDatabase(BoxLayout):
     def add_database(self):
-        global app
+        app = App.get_running_app()
         # check if category already exists for given database
         if api.isalnum_with_space(self.ids.database.text):
             if api.add_database(self.ids.database.text, app.master_key):
@@ -374,7 +377,7 @@ class Login(Screen):
 
     # This is a guided tutorial for reminiscor
     def tutorial_initiate(self, welcome, instance):
-        global app
+        app = App.get_running_app()
         welcome.dismiss(self.final_dismiss_pos_hint, 'in_expo', 0.7, 0.75, True)
         Clock.schedule_once(self.tutorial, 0.8)
     def tutorial(self, *args):
@@ -426,7 +429,7 @@ class Login(Screen):
             api.on_success_signup(design.ids.username.text, design.ids.password.text, design.ids.enable.active)
             try:
                 Logger.info("User created %s", "Fetching username.")
-                global app
+                app = App.get_running_app()
                 app.username = return_username()
             except Exception as e:
                 Logger.info("User Error %s", str(e))
@@ -435,7 +438,8 @@ class Login(Screen):
  
     def auth_login(self):
         result = [False, None]
-        global no_user, app
+        global no_user
+        app = App.get_running_app()
         Logger.info('User Status: %s', no_user)
         if no_user:
             Logger.info('User Status: %s', no_user)
@@ -477,6 +481,7 @@ class Login(Screen):
                 self.ids.password.error = True
 
     def transition(self, *args):
+        app = App.get_running_app()
         app.root.transition = FadeTransition(duration=0.5)
         app.root.current = "main"
 
@@ -501,7 +506,7 @@ class Main(Screen):
             self.ids.search_bar.text = self.ids.search_bar.text[:-1]
         self.search()
     def loadview(self):
-        global app
+        app = App.get_running_app()
         if checkfile("database.remdb"):
             if self.first_entry:
                 app.database = api.decrypt_database(app.master_key)["Database [main]"]
@@ -515,10 +520,11 @@ class Main(Screen):
                 app.categories = ['Category'] + api.return_category_keys(self.ids.database.text, app.master_key)
 
     def on_pre_enter(self):
+        app = App.get_running_app()
         if app.master_key != None:
             self.loadview()
     def set_database_and_load_categories(self, database_name):
-        global app
+        app = App.get_running_app()
         if database_name != self.loaded_database:
             app.database = api.decrypt_database(app.master_key)[database_name]
             app.categories = ['Category'] + api.return_category_keys(database_name, app.master_key)
@@ -526,13 +532,14 @@ class Main(Screen):
             self.ids.category.text = 'Category'
     
     def show_category(self, category):
+        app = App.get_running_app()
         if category != "Category":
             app.database = api.decrypt_database(app.master_key)[self.ids.database.text + '_categories'][category]
         else:
             app.database = api.decrypt_database(app.master_key)[self.ids.database.text]
 
     def search(self):
-        global app
+        app = App.get_running_app()
         if self.temp == []:
             self.temp = app.database
         else:
@@ -621,11 +628,12 @@ class AddEntry(Screen):
             return True 
 
     def load_categories(self, database_name):
-        global app
+        app = App.get_running_app()
         app.categories = api.return_category_keys(database_name, app.master_key)
         self.ids.category_dropdown.text = "Default"
          
     def add_entry(self):
+        app = App.get_running_app()
         if not self.identify_errors():
             database_name = self.ids.database_dropdown.text
             category = self.ids.category_dropdown.text
@@ -643,12 +651,12 @@ class AddEntry(Screen):
             self.reset_screen_attrs()
 
     def new_category(self):
-        global app
+        app = App.get_running_app()
         content = NewCategory()
         app.create_popup([dp(600),dp(400)], [dp(400),dp(400)], False, content, 'Add Category')
 
     def new_database(self):
-        global app
+        app = App.get_running_app()
         content = NewDatabase()
         app.create_popup([dp(400),dp(300)], [dp(400),dp(400)], False, content, 'Add Database')
 
@@ -692,8 +700,8 @@ class ReminiscorApp(App):
     def logout(self):
         '''This function logs the user out, deletes/unassigns all decrypted data from memory'''
         # for now I am just switching screens need to rewrite this code later
-        app.root.transition = SlideTransition(direction = 'right') 
-        app.root.current = 'login'
+        self.root.transition = SlideTransition(direction = 'right') 
+        self.root.current = 'login'
 
     def close_popup(self, *args):
         if self.popups:
@@ -732,7 +740,6 @@ class ReminiscorApp(App):
     def build(self):
         global app, no_user, app_path, external_path
         Logger.info('Platform: %s', self._platform)
-        app=self
         if self._platform != 'android':
             Logger.info('Path Search: For Desktop')
             if self.portable:
