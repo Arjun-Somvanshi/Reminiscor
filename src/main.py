@@ -314,13 +314,49 @@ class NavigationView(BoxLayout):
             app.nav.dismiss({'right': 2, 'center_y': 0.5}, 'linear', 0.5, 0.55)
         super(NavigationView, self).on_touch_down(touch)
 
+class EntryView(BoxLayout):
+    title = StringProperty('')
+    username = StringProperty('arjun.somvanshi2019@vitstudent.ac.in')
+    password = StringProperty('Arjun2000ThenLupinSaidPi200')
+    time = StringProperty('')
+    last_modified = StringProperty('')
+    notes = StringProperty('')
+    url = StringProperty('https://vtop.vit.ac.in')
+    database = StringProperty('')
+    category = StringProperty('')
+    random_key = StringProperty('')
+    sensitive_data = DictProperty({})
+
+    def __init__(self, title, sensitive_data, random_key, database, category, time, last_modified, **kwargs):
+        super(EntryView, self).__init__(**kwargs)
+        self.title = title
+        self.sensitive_data = sensitive_data
+        self.random_key = random_key
+        self.database = database
+        self.category = category
+        self.time = time
+        self.last_modified = last_modified
+
+    def on_touch_down(self, touch):
+        app = App.get_running_app()
+        main_screen = app.root.get_screen("main")
+        if main_screen.disabled == False:
+            if not (touch.x > self.x and touch.x<self.right and touch.y > self.y and touch.y<self.top):
+                main_screen.entry_view.dismiss({'center_x': 0.5, 'center_y': -2}, 'linear', 0.25, 0.25)
+        super(EntryView, self).on_touch_down(touch)
+
+    def switch(self, screen_name):
+        self.ids.sm.transition = SlideTransition(direction="down")
+        self.ids.sm.current = screen_name
+
 class NewCategory(BoxLayout):
     def add_category(self):
         app = App.get_running_app()
         # check if category already exists for given database
         if api.isalnum_with_space(self.ids.category.text):
             if api.add_category(self.ids.database_dropdown.text, self.ids.category.text, app.master_key):
-                app.categories = api.return_category_keys(self.ids.database_dropdown.text, app.master_key)
+                add_entry_screen = app.root.get_screen("add_entry")
+                app.categories = api.return_category_keys(add_entry_screen.ids.database_dropdown.text, app.master_key)
                 app.close_popup()
                 quickmessage("Succes", "Category Added.")
             else:
@@ -491,8 +527,48 @@ class Login(Screen):
 class Entry(RecycleDataViewBehavior, GridLayout):
     title = StringProperty('')
     sensitive_data = DictProperty({})
+    category = StringProperty('')
+    database = StringProperty('')
     random_key = StringProperty('')
     time = StringProperty('')
+    last_modified = StringProperty('')
+
+    def view_entry(self):
+        app = App.get_running_app()
+        main_screen = app.root.get_screen("main")
+        main_screen.disabled = True
+        # To prevent the user to disable the view before it's created
+        entry_view_content = EntryView(self.title, self.sensitive_data, self.random_key, self.database, self.category, self.time, self.last_modified)
+        Clock.schedule_once(partial(self.enable_main_screen, entry_view_content), 0.55)
+        main_screen.entry_view = CustomModalView(
+                            size_hint = (0.9, 0.4),
+                            size_hint_max = (dp(800), dp(600)),
+                            size_hint_min = (None, dp(200)),
+                            background = 'UI/popup400x400.png',
+                            auto_dismiss = False,
+                            overlay_color= (0,0,0,0.5),
+                            opacity = 0, 
+                            pos_hint = {'center_x': 0.5, 'center_y': -2}
+                        )
+        main_screen.entry_view.add_widget(entry_view_content)
+        main_screen.entry_view.open({'center_x':0.5, 'center_y': -2}, {'center_x': 0.5, 'center_y': 0.2}, 'linear', 0.5, 0.55)
+
+    def enable_main_screen(self, content, dt):
+        app = App.get_running_app()
+        main_screen = app.root.get_screen("main")
+        main_screen.disabled = False
+        content.ids.info_button.disabled = False
+        content.ids.notes_button.disabled = False
+        content.ids.properties_button.disabled = False
+
+    def copy_username(self):
+        pass
+    
+    def copy_password(self):
+        pass
+
+    def open_url(self):
+        pass
 
 class Main(Screen):
     first_entry = BooleanProperty(True)
@@ -648,7 +724,8 @@ class AddEntry(Screen):
                               "password": self.ids.password.text, "notes": self.ids.notes.text}
             encrypted_sensitive_data, random_key = api.sensitive_data_encrypt(sensitive_data)
             entry = {"title": self.ids.title.text, "sensitive_data": encrypted_sensitive_data, 
-                     "random_key": str(random_key), "time": time}
+                    "random_key": str(random_key), "time": time, "database": database_name,
+                    "category": category, "last_modified":"$$0$$"}
             print(category)
             api.add_entry(database_name, category, app.master_key, entry)
             quickmessage("Success", "The entry was added to database.")

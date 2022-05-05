@@ -21,7 +21,7 @@ import pickle
 class api():
     def isalnum_with_space(self, string):
         wordlist = string.split(' ')
-        print(wordlist)
+        #print(wordlist)
         for word in wordlist:
             if word.isalnum:
                 pass
@@ -33,7 +33,7 @@ class api():
         try:
             for fname in os.listdir(HomeDir('', 'UserData')):
                 if fname.endswith('master_key_hash.bin'): #if master key hash file exists then signup won't be called
-                    print("Master Key Hash Bin is found :(")
+                    #print("Master Key Hash Bin is found :(")
                     rem_exists = True
                     break
         except:

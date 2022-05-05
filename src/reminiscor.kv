@@ -45,6 +45,9 @@ Screen_Manager:
     size_hint_min_x: dp(42)
     background_normal: 'UI/Mainbuttondown.png'
     background_down: 'UI/editondown.png'
+    background_disabled_normal: self.background_normal
+    background_disabled_down: self.background_down
+    disabled_color: self.color
 
 
 <ImageContainer>:
@@ -737,6 +740,146 @@ Screen_Manager:
             size_hint_max_y: dp(50)
             size_hint_min_y: dp(40)
             on_release: root.add_database()
+
+<EntryView>:
+    orientation: 'vertical'
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: app.color["main"]
+            Line:
+                points: [self.x + dp(2), self.y, self.x + dp(2), root.y]
+                width: dp(2)
+                cap: "square"
+            Line:
+                points: [self.x + dp(2), self.y, self.right - dp(2), self.y]
+                width: dp(2)
+                cap: "square"
+        size_hint_y: None
+        height: dp(40)
+        ViewButton:
+            id: info_button
+            text: 'Information'
+            state: 'down'
+            size_hint_x: None
+            width: dp(150)
+            height: dp(40)
+            disabled: True
+            group: "viewentry"
+            on_release: root.switch("entry_information")
+        ViewButton:
+            id: notes_button
+            text: 'Notes'
+            size_hint_x: None
+            width: dp(150)
+            height: dp(40)
+            disabled: True
+            group: "viewentry"
+            on_release: root.switch("entry_notes")
+        ViewButton:
+            id: properties_button
+            text: 'Properties'
+            size_hint_x: None
+            width: dp(150)
+            height: dp(40)
+            disabled: True
+            group: "viewentry"
+            on_release: root.switch("entry_properties")
+        
+    ScreenManager:
+        id: sm
+        Screen:
+            name: "entry_information"
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(20)
+                spacing: dp(10)
+                CustomLabel:
+                    text: root.title
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(50)
+                    font_size: sp(30)
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    CustomLabel:
+                        text: "Username"
+                        size_hint_x: None
+                        width: self.texture_size[0] + dp(25)
+                    Widget:
+                    UIButton:
+                        text: "Copy"
+                        size_hint_x: None
+                        width: self.texture_size[0] + dp(25)
+                    ViewButton:
+                        size_hint_y: 1
+                        size_hint_x: None
+                        width: self.texture_size[0] + dp(25)
+                CustomLabel:
+                    text: root.username
+                    size_hint_x: None
+                    width: self.texture_size[0] + dp(25)
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    CustomLabel:
+                        text: "Password"
+                        size_hint_x: None
+                        width: self.texture_size[0] + dp(25)
+                    Widget:
+                    UIButton:
+                        text: "Copy"
+                        size_hint_x: None
+                        width: self.texture_size[0] + dp(25)
+                    ViewButton:
+                        id: v
+                        size_hint_y: 1
+                        size_hint_x: None
+                        width: self.texture_size[0] + dp(25)
+                CustomLabel:
+                    text: root.password
+                    size_hint_x: None
+                    width: self.texture_size[0] + dp(25)
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    CustomLabel:
+                        text: "URL:"
+                        size_hint_x: None
+                        width: self.texture_size[0] + dp(25)
+                    Widget:
+                    UIButton:
+                        text: "Copy"
+                        size_hint_x: None
+                        width: self.texture_size[0] + dp(25)
+                    UIButton:
+                        text: "Visit"
+                        size_hint_x: None
+                        width: v.width
+                CustomLabel:
+                    text: root.url
+                    size_hint_x: None
+                    width: self.texture_size[0] + dp(25)
+        Screen:
+            name: "entry_notes"
+            BoxLayout:
+                orientation: 'vertical'
+                canvas.before:
+                    Color:
+                        rgba: (1,1,0,1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+        Screen:
+            name: "entry_properties"
+            BoxLayout:
+                orientation: 'vertical'
+                canvas.before:
+                    Color:
+                        rgba: (1,0,1,1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
 <Main>:
     name: "main"
     on_pre_enter: root.on_enter_main()
@@ -779,13 +922,10 @@ Screen_Manager:
         BoxLayout:
             padding: 0,dp(40),0,0
             BoxLayout:
-                Widget:
-                    size_hint_x: 0.1
                 BoxLayout:
                     id: container
                     #size_hint_x: None if Window.width>dp(800) else 1
                     #width: Window.width - Window.width/8
-                    size_hint_max_x: dp(121200)
                     pos_hint: {'center_x': 0.5}
                     orientation: 'vertical'
                     BoxLayout:
@@ -826,6 +966,7 @@ Screen_Manager:
                             dd_open_horizontal: 'center'
                             calculate_ddheight: True
                             show_items: 5 
+                            disabled_color: self.color
                         UIDropDown:
                             id: database
                             elements: app.databases 
@@ -845,6 +986,7 @@ Screen_Manager:
                             calculate_ddheight: True
                             show_items: len(self.elements) if len(self.elements)<5 else 5
                             on_set: root.set_database_and_load_categories(self.text)
+                            disabled_color: self.color
                         UIDropDown:
                             id: category
                             elements: app.categories 
@@ -864,6 +1006,7 @@ Screen_Manager:
                             calculate_ddheight: True
                             show_items: len(self.elements) if len(self.elements)<5 else 5
                             on_set: root.show_category(self.text)
+                            disabled_color: self.color
                     Widget:
                         size_hint_y: None
                         height: dp(20)
@@ -912,7 +1055,7 @@ Screen_Manager:
                             size_hint_x: 0.05
                     BoxLayout:
                         Widget:
-                            size_hint_x: 0.1
+                            size_hint_x: 0.05 if Window.width<=dp(800) else 0.1
                         RecycleView:
                             id: rv
                             viewclass: "Entry"
@@ -934,9 +1077,7 @@ Screen_Manager:
                                 #spacing: dp(15)
                                 height: self.minimum_height
                         Widget:        
-                            size_hint_x: 0.1
-                Widget:        
-                    size_hint_x: 0.1
+                            size_hint_x: 0.05 if Window.width<=dp(800) else 0.1
         Widget:
             size_hint_y: None
             height: dp(30)
@@ -958,6 +1099,7 @@ Screen_Manager:
         text: root.title
         size_hint_x: 0.3
         size_hint_min_x: cm(2)
+        on_release: root.view_entry()
     BoxLayout:
         id: copy_col
         size_hint_x: 0.15
