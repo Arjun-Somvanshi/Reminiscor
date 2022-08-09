@@ -31,11 +31,14 @@ from kivy.uix.modalview import ModalView
 from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
-from functools import partial
 from kivy.properties import ListProperty, NumericProperty, StringProperty, ObjectProperty, BooleanProperty, OptionProperty, DictProperty
-from response import * 
 from kivy.logger import Logger, LOG_LEVELS
 from datetime import datetime
+from functools import partial
+from FileHandling import set_app_path, checkfile, ReadFile, return_username, HomeDir
+from response import api
+import os
+import json
 Logger.setLevel(LOG_LEVELS["info"])
 #Parameters for the app
 Window.clearcolor = (30/255,30/255,30/255,1)
@@ -423,6 +426,7 @@ class Login(Screen):
         design = Tutorial()
         with open('tutorial.json') as f:
             design.text = ' '.join(json.load(f)['tutorials']['tutorial1']['content'])
+        app = App.get_running_app()
         app.create_popup((dp(450),dp(550)), (dp(325), dp(400)), False, design, 'T U T O R I A L')
         design.ids.exit.bind(on_release = app.close_popup)
     
@@ -819,7 +823,7 @@ class ReminiscorApp(App):
         self.popups.append(popup)
 
     def build(self):
-        global app, no_user, app_path, external_path
+        global no_user, app_path, external_path
         Logger.info('Platform: %s', self._platform)
         if self._platform != 'android':
             Logger.info('Path Search: For Desktop')

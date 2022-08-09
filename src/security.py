@@ -30,7 +30,7 @@ import hashlib
 from Crypto.Random import get_random_bytes
 import json
 import argon2
-from FileHandling import *
+from FileHandling import HomeDir, write_remfile, read_remfile
 from base64 import b64encode, b64decode
 import sys
 from Crypto.Cipher import AES

@@ -15,9 +15,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
-from security import *
+from security import blake, master_key, auth_hash, AES_Encrypt, AES_Decrypt, get_random_bytes
+from security import master_key_store
+from FileHandling import HomeDir, write_AppConfig, checkfile
 import re
 import pickle
+import os
+import json
+from FileHandling import write_remfile, read_remfile
+
 class api():
     def isalnum_with_space(self, string):
         wordlist = string.split(' ')
@@ -36,7 +42,8 @@ class api():
                     #print("Master Key Hash Bin is found :(")
                     rem_exists = True
                     break
-        except:
+        except Exception as e:
+            print("[CHECK USER]", str(e))
             rem_exists = False
         return rem_exists
 

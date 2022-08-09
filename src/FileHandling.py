@@ -1,5 +1,4 @@
 import os
-from zipfile import ZipFile
 import json
 from os.path import dirname, join
 
@@ -62,18 +61,6 @@ def create_directory(subdirectory): # creates a subdirectory
         os.makedirs(app_path+subdirectory)
     except:
         pass
-
-def ModifiedFileTime(filepath):
-    return os.stat(filepath).st_mtime
-
-#print(ModifiedFileTime( HomeDir('Data2.txt')))
-
-
-def CheckModified(a, b):
-    if a == b:
-        return False
-    else:
-        return True
 
 def return_username():
     with open(HomeDir('username.txt', 'UserData'), 'r') as f:
