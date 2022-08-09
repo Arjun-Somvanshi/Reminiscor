@@ -232,7 +232,7 @@ Screen_Manager:
                 text: 'Reminiscor'
                 font_name: 'Fonts/Colchester.ttf'
                 #font_size: sp(80) if Window.size[1] < sp(670) else sp(95)
-                font_size: sp(80)
+                font_size: sp(70)
             BoxLayout: # this box layout is messy 
                 canvas.before:
                     Color:
@@ -346,7 +346,8 @@ Screen_Manager:
     spacing: dp(20)
     CustomLabel:
         text: 'Welcome'
-        font_size: root.width/7 if root.width/7<sp(70) else sp(70)
+        #font_size: root.width/7 if root.width/7<sp(70) else sp(70)
+        font_size: sp(50)
         size_hint_max_y: dp(60)
         size_hint_y: 0.2
         font_name: 'Fonts/Colchester.ttf'
