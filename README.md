@@ -16,6 +16,8 @@ exec "$SHELL"
 - Clone and Install Dependencies in a Virtual Environment
 ```
 git clone https://github.com/Arjun-Somvanshi/Reminiscor
+git fetch origin
+git checkout NewGUI
 cd Reminiscor
 pipenv install
 ```
